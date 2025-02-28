@@ -1,6 +1,6 @@
-# Title
+# Proposed Updates to Guidance on Packet Reordering
 
-This is the working area for the individual Internet-Draft, "Title".
+This is the working area for the individual Internet-Draft, "draft-white-intarea-reordering".
 
 * [Editor's Copy](https://gwhiteCL.github.io/draft-white-intarea-reordering/#go.draft-white-intarea-reordering.html)
 * [Datatracker Page](https://datatracker.ietf.org/doc/draft-white-intarea-reordering)
