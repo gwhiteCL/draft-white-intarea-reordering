@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- 
-     draft-rfcxml-general-template-annotated-00
+     draft-white-intarea-reordering-latest
   
      This template includes examples of most of the features of RFCXML with comments explaining 
      how to customise them, and examples of how to achieve specific formatting.
@@ -23,7 +23,7 @@
 <rfc
   xmlns:xi="http://www.w3.org/2001/XInclude"
   category="info"
-  docName="draft-rfcxml-general-template-annotated-00"
+  docName="draft-white-intarea-reordering-latest"
   ipr="trust200902"
   obsoletes=""
   updates=""
@@ -42,7 +42,7 @@
     <title abbrev="Abbreviated Title">Title</title> <!-- https://authors.ietf.org/en/rfcxml-vocabulary#title-4 -->
     <!--  The abbreviated title is required if the full title is longer than 39 characters -->
 
-    <seriesInfo name="Internet-Draft" value="draft-rfcxml-general-template-annotated-00"/> <!-- https://authors.ietf.org/en/rfcxml-vocabulary#seriesinfo -->
+    <seriesInfo name="Internet-Draft" value="draft-white-intarea-reordering-latest"/> <!-- https://authors.ietf.org/en/rfcxml-vocabulary#seriesinfo -->
     <!-- Set value to the name of the draft  -->
    
     <author fullname="Author's Full Name" initials="Author's Initials" role="editor" surname="Author's Surname"> <!-- https://authors.ietf.org/en/rfcxml-vocabulary#author -->
