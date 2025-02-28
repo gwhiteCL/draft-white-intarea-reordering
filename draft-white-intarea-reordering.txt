@@ -1,0 +1,251 @@
+
+
+
+
+Internet Engineering Task Force Author's Initials. Author's Surname, Ed.
+Internet-Draft                                              Organization
+Intended status: Informational                              1 March 2023
+Expires: 2 September 2023
+
+
+                                 Title
+               draft-rfcxml-general-template-annotated-00
+
+Abstract
+
+   Abstract
+
+Status of This Memo
+
+   This Internet-Draft is submitted in full conformance with the
+   provisions of BCP 78 and BCP 79.
+
+   Internet-Drafts are working documents of the Internet Engineering
+   Task Force (IETF).  Note that other groups may also distribute
+   working documents as Internet-Drafts.  The list of current Internet-
+   Drafts is at https://datatracker.ietf.org/drafts/current/.
+
+   Internet-Drafts are draft documents valid for a maximum of six months
+   and may be updated, replaced, or obsoleted by other documents at any
+   time.  It is inappropriate to use Internet-Drafts as reference
+   material or to cite them other than as "work in progress."
+
+   This Internet-Draft will expire on 2 September 2023.
+
+Copyright Notice
+
+   Copyright (c) 2023 IETF Trust and the persons identified as the
+   document authors.  All rights reserved.
+
+   This document is subject to BCP 78 and the IETF Trust's Legal
+   Provisions Relating to IETF Documents (https://trustee.ietf.org/
+   license-info) in effect on the date of publication of this document.
+   Please review these documents carefully, as they describe your rights
+   and restrictions with respect to this document.  Code Components
+   extracted from this document must include Revised BSD License text as
+   described in Section 4.e of the Trust Legal Provisions and are
+   provided without warranty as described in the Revised BSD License.
+
+Table of Contents
+
+   1.  Introduction
+     1.1.  Requirements Language
+   2.  Body
+   3.  List Examples
+     3.1.  Simple Unordered (Bullet) List
+     3.2.  Ordered List With Lowercase Letters in Brackets Instead of
+           Numbers
+     3.3.  Continuous Numbering in a List That is Split by Text or
+           Sections
+       3.3.1.  Section in-between
+     3.4.  Definition Lists
+     3.5.  Lists With Hanging Labels
+   4.  Tables
+   5.  Source Code Examples
+   6.  Adding Diagrams
+   7.  Using xref
+   8.  IANA Considerations
+   9.  Security Considerations
+   10. References
+     10.1.  Normative References
+     10.2.  Informative References
+   Appendix A.  Appendix 1
+   Acknowledgements
+   Contributors
+   Author's Address
+
+1.  Introduction
+
+   Introductory text
+
+1.1.  Requirements Language
+
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
+   "OPTIONAL" in this document are to be interpreted as described in BCP
+   14 [RFC2119] [RFC8174] when, and only when, they appear in all
+   capitals, as shown here.
+
+2.  Body
+
+   Body text
+
+3.  List Examples
+
+3.1.  Simple Unordered (Bullet) List
+
+   Text before the list
+
+   *  First bullet
+
+   *  Second bullet
+
+   Text after the list.
+
+3.2.  Ordered List With Lowercase Letters in Brackets Instead of Numbers
+
+   (a)  List item (a)
+
+   (b)  List item (b)
+
+3.3.  Continuous Numbering in a List That is Split by Text or Sections
+
+   Text to introduce the list
+
+   REQ1:  This will be "REQ1:"
+
+   REQ2:  This will be "REQ2:"
+
+   Some text in between
+
+   REQ3:  This will be "REQ3:"
+
+   REQ4:  This will be "REQ4:"
+
+3.3.1.  Section in-between
+
+   More text in-between
+
+   REQ5:  This will be REQ5:
+
+   REQ6:  This will be REQ6:
+
+3.4.  Definition Lists
+
+   First term:
+      Definition of the first term
+
+   Second term:
+      Definition of the second term
+
+3.5.  Lists With Hanging Labels
+
+   the list item is indented the value of indent
+
+   short  
+           With a label shorter than the indent.
+
+   fantastically long label
+           With a label longer than the indent.
+
+4.  Tables
+
+                +==============+=============+============+
+                | Column 1     | Column 2    | Column 3   |
+                +==============+=============+============+
+                | Left cell    | Colspan cell             |
+                +--------------+-------------+------------+
+                | Rowspan cell | Center cell | Right cell |
+                |              +-------------+------------+
+                |              | Cell        | Cell       |
+                +--------------+-------------+------------+
+                | Colspan footer                          |
+                +-----------------------------------------+
+
+                                  Table 1
+
+5.  Source Code Examples
+
+   This is an example C program
+
+   <CODE BEGINS> file "helloworld.c"
+
+   #include <stdio.h>
+
+   int main() {
+     printf("Hello World");
+     return 0;
+   }
+
+   <CODE ENDS>
+
+6.  Adding Diagrams
+
+    +--------+
+    | A box  |
+    +--------+
+
+                              Figure 1: A Box
+
+7.  Using xref
+
+   A reference to Section 6
+
+   A reference to Section 2 of [RFC8174]
+
+8.  IANA Considerations
+
+   This memo includes no request to IANA.
+
+9.  Security Considerations
+
+   This document should not affect the security of the Internet.
+
+10.  References
+
+10.1.  Normative References
+
+   [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
+              2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
+              May 2017, <https://www.rfc-editor.org/info/rfc8174>.
+
+10.2.  Informative References
+
+   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", BCP 14, RFC 2119,
+              DOI 10.17487/RFC2119, March 1997,
+              <https://www.rfc-editor.org/info/rfc2119>.
+
+   [exampleRefMin]
+              Surname, Initials., "Title", 2006.
+
+   [exampleRefOrg]
+              Organization, "Title", 1984, <http://www.example.com/>.
+
+Appendix A.  Appendix 1
+
+   This becomes an Appendix
+
+Acknowledgements
+
+   This template uses extracts from templates written by Pekka Savola,
+   Elwyn Davies and Henrik Levkowetz.
+
+Contributors
+
+   Thanks to all of the contributors.
+
+   Jane Doe
+   Acme
+   Email: jdoe@example.com
+
+
+Author's Address
+
+   Author's Full Name (editor)
+   Organization
+   Street
+   City
+   Phone: Phone
+   Email: Email
+   URI:   URI
