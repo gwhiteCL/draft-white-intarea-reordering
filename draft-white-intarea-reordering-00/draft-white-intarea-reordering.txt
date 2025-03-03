@@ -1,0 +1,288 @@
+
+
+
+
+Internet Area Working Group                                     G. White
+Internet-Draft                                                 CableLabs
+Intended status: Informational                              I. Johansson
+Expires: 4 September 2025                                       Ericsson
+                                                                  D. Das
+                                                                   Intel
+                                                            3 March 2025
+
+
+         Proposal for Updates to Guidance on Packet Reordering
+                 draft-white-intarea-reordering-latest
+
+Abstract
+
+   Several link technology standards mandate that equipment guarantee
+   in-order delivery of layer 2 frames, apparently due to a belief that
+   this is required by higher layer protocols.  In addition, certain
+   link types can introduce out-of-order arrivals at the end of the
+   layer 2 link, which the receiving equipment is required to rectify by
+   delaying higher sequenced frames until all lower sequenced frames can
+   be delivered or are deemed lost.  The delaying of higher sequenced
+   frames is generally done without any knowledge of the higher layer
+   protocols in use, let alone any knowledge of higher layer protocol
+   contexts (e.g. TCP connections) in the case that the layer 2 link is
+   carrying a multiplex of such contexts.  It could, for example, be the
+   case that all of the higher sequenced frames being delayed are
+   carrying packets for different layer 4 contexts than a single lower-
+   sequenced frame that triggered the delay.  The result is that this
+   "re-sequencing" operation can introduce delays that result in
+   degradation of performance rather than improving it.  Moreover,
+   modern, performant TCP and QUIC implementations support features that
+   significantly improve their tolerance to out-of-order delivery.
+
+   This draft is intended to promote an analysis and discussion of the
+   sensitivity of modern protocols to out-of-order delivery, and to
+   potentially develop new guidance to layer 2 technology standards
+   regarding the need to assure in-order delivery.
+
+Status of This Memo
+
+   This Internet-Draft is submitted in full conformance with the
+   provisions of BCP 78 and BCP 79.
+
+   Internet-Drafts are working documents of the Internet Engineering
+   Task Force (IETF).  Note that other groups may also distribute
+   working documents as Internet-Drafts.  The list of current Internet-
+   Drafts is at https://datatracker.ietf.org/drafts/current/.
+
+   Internet-Drafts are draft documents valid for a maximum of six months
+   and may be updated, replaced, or obsoleted by other documents at any
+   time.  It is inappropriate to use Internet-Drafts as reference
+   material or to cite them other than as "work in progress."
+
+   This Internet-Draft will expire on 4 September 2025.
+
+Copyright Notice
+
+   Copyright (c) 2025 IETF Trust and the persons identified as the
+   document authors.  All rights reserved.
+
+   This document is subject to BCP 78 and the IETF Trust's Legal
+   Provisions Relating to IETF Documents (https://trustee.ietf.org/
+   license-info) in effect on the date of publication of this document.
+   Please review these documents carefully, as they describe your rights
+   and restrictions with respect to this document.  Code Components
+   extracted from this document must include Revised BSD License text as
+   described in Section 4.e of the Trust Legal Provisions and are
+   provided without warranty as described in the Revised BSD License.
+
+Table of Contents
+
+   1.  Introduction
+   2.  Terminology
+   3.  Reordering in L2 Links
+     3.1.  Multi-Link Aggregation
+     3.2.  Layer 2 Retransmissions
+   4.  Resequencing in L2 Standards
+     4.1.  LTE/5G
+     4.2.  Wi-Fi
+     4.3.  DOCSIS
+   5.  IANA Considerations
+   6.  Security Considerations
+   7.  References
+     7.1.  Informative References
+   Acknowledgements
+   Contributors
+   Authors' Addresses
+
+1.  Introduction
+
+   Section 15 of [RFC3819] provides advice to Internet subnetwork
+   designers regarding packet reordering.  The advice seems reasonable:
+   "try to avoid packet reordering whenever possible, but not if doing
+   so compromises efficiency, impairs reliability, or increases average
+   packet delay."  However, along with this guidance come a couple of
+   warnings that appear to have driven subnetwork designers towards
+   assuring in-order delivery even if efficiency is impaired or average
+   packet delay is increased.  These warnings relate to the potential
+   performance cost for TCP (as it was then defined) that arises due to
+   out-of-order arrivals, and to the fact that out-of-order delivery
+   would cause problems for "every header compression scheme currently
+   standardized for the Internet."
+
+   The text of [RFC3819] does mention that research on improving TCP
+   behavior in the face of packet reordering was underway.  In the
+   intervening 20+ years, that research has resulted in the definition
+   of RACK [RFC8985] which significantly reduces TCP's sensitivity to
+   out-of-order arrivals.  In addition, Section 6.1 of [RFC9002]
+   discusses the usefulness of implementing similar mechanisms in QUIC,
+   and provides the protocol tools to do so.  Moreover, neither TCP nor
+   QUIC fail in the presence of some out-of-order packets, even if they
+   don't implement RACK.  The may see reduced performance, but both
+   protocols have the ability to correctly handle the receipt of packets
+   out of order.
+
+   TODO: discuss current state of header compression
+
+   In addition to the warnings about TCP and header compression
+   discussed in [RFC3819], there may be other protocols that are
+   sensitive to reordering.  For instance, Section 4.1 of [RFC2983]
+   discusses IPSec [RFC2401] and L2TP [RFC2661] as being sensitive to
+   packet reordering.
+
+   TODO: describe "resequencing" generally
+
+   The current situation seems to be that several layer 2 technologies
+   implement resequencing functions that increase cost and complexity of
+   equipment, and may in many cases degrade network performance rather
+   than improving it.  Any benefits of resequencing may be primarily
+   limited to older protocol implementations e.g. maintaining the
+   performance of older TCP implementations that are no longer widely
+   used and may not be particularly performant by modern standards.
+
+2.  Terminology
+
+   In this document, we adopt the following terminology.
+
+   Reordering:
+      The process where the packet/frame sequence is made out-of-order
+      from the originally transmitted order.
+
+   Resequencing:
+      The process where an out-of-order packet/frame sequence is
+      returned to the originally transmitted order.
+
+3.  Reordering in L2 Links
+
+   In current L2 link technologies, frame reordering comes from two
+   primary sources: multi-link aggregation and layer-2 retransmission.
+
+3.1.  Multi-Link Aggregation
+
+   Some link technologies support the aggregation (within L2) of
+   multiple links between a pair of nodes for the purpose of increasing
+   the total capacity of the link.  In some cases the individual links
+   within the aggregation could have different capacities and/or
+   latencies from one another.  When this is the case, the frame
+   reception order can differ from the frame transmission order.
+
+3.2.  Layer 2 Retransmissions
+
+   Some link technologies (particularly wireless), are subject to noise
+   and interference that would result in an unacceptably high frame
+   error rate if it were not corrected.  These links commonly implement
+   a method of acknowledgement and retransmission of lost frames,
+   referred to as Automatic Repeat Request (ARQ).  When a frame loss
+   affects one or more frames within a transmission, and the frame(s) at
+   the end are unaffected, the retransmitted frames will arrive out of
+   sequence from the original ordering.
+
+4.  Resequencing in L2 Standards
+
+   This section discusses functions and requirements for resequencing in
+   exising layer 2 standards.
+
+4.1.  LTE/5G
+
+   TBD
+
+4.2.  Wi-Fi
+
+   TBD
+
+4.3.  DOCSIS
+
+   The Data-Over-Cable Service Interface Specifications provide
+   broadband access over hybrid fiber-coaxial networks.  The DOCSIS
+   protocol does not support layer 2 retransmissions, but since the
+   introduction of "channel bonding" functionality (a form of multi-link
+   aggregation) in DOCSIS 3.0 in 2006, reordering can occur due to
+   differences in capacity or latency between the bonded channels.  All
+   equipment built to that and later versions of DOCSIS (including
+   DOCSIS 3.1 and DOCSIS 4.0) is required to support specific
+   resequencing features to guarantee in-order delivery.
+
+   In the downstream direction (i.e. from the network to end-user)
+   individual IP packets are encapsulated in layer 2 frames that
+   generally include a 20-bit Downstream Service ID (DSID), a 1-bit
+   Sequence Change Count, and a 16-bit Packet Sequence Number.  The
+   specifications include detailed, manadatory, requirements on the
+   handling of these fields, including a requirement that cable modems
+   support at least 16 simultaneous resequencing contexts, each of which
+   having sufficient memory to hold packets for up to 13 ms (18 ms in
+   older equipment) at the maximum forwarding rate of the device,
+   mechanisms for rapid loss detection, and significant management and
+   configuration mechanisms to support the feature.
+
+   In the upstream direction (i.e. from the end-user to the network)
+   individual IP packets are encapsulated in layer 2 frames, then
+   concatenated together and fragmented into "segments" for
+   transmission.  The segment boundaries are determined by the size of
+   the transmission opportunities (grants) and generally do not relate
+   to the internal frame or packet boundaries.  So, in general a segment
+   could begin with the tail of one L2 frame, then have zero or more
+   full L2 frames, then the head of a final frame.  Each segment has a
+   segment header which contains a 13-bit sequence number.  The CMTS is
+   required to reassemble the concatenated frame sequence, and forward
+   the individual frames in order.
+
+5.  IANA Considerations
+
+   This memo includes no request to IANA.
+
+6.  Security Considerations
+
+   This document should not affect the security of the Internet.
+
+7.  References
+
+7.1.  Informative References
+
+   [RFC2401]  Kent, S. and R. Atkinson, "Security Architecture for the
+              Internet Protocol", RFC 2401, DOI 10.17487/RFC2401,
+              November 1998, <https://www.rfc-editor.org/info/rfc2401>.
+
+   [RFC2661]  Townsley, W., Valencia, A., Rubens, A., Pall, G., Zorn,
+              G., and B. Palter, "Layer Two Tunneling Protocol "L2TP"",
+              RFC 2661, DOI 10.17487/RFC2661, August 1999,
+              <https://www.rfc-editor.org/info/rfc2661>.
+
+   [RFC2983]  Black, D., "Differentiated Services and Tunnels",
+              RFC 2983, DOI 10.17487/RFC2983, October 2000,
+              <https://www.rfc-editor.org/info/rfc2983>.
+
+   [RFC3819]  Karn, P., Ed., Bormann, C., Fairhurst, G., Grossman, D.,
+              Ludwig, R., Mahdavi, J., Montenegro, G., Touch, J., and L.
+              Wood, "Advice for Internet Subnetwork Designers", BCP 89,
+              RFC 3819, DOI 10.17487/RFC3819, July 2004,
+              <https://www.rfc-editor.org/info/rfc3819>.
+
+   [RFC8985]  Cheng, Y., Cardwell, N., Dukkipati, N., and P. Jha, "The
+              RACK-TLP Loss Detection Algorithm for TCP", RFC 8985,
+              DOI 10.17487/RFC8985, February 2021,
+              <https://www.rfc-editor.org/info/rfc8985>.
+
+   [RFC9002]  Iyengar, J., Ed. and I. Swett, Ed., "QUIC Loss Detection
+              and Congestion Control", RFC 9002, DOI 10.17487/RFC9002,
+              May 2021, <https://www.rfc-editor.org/info/rfc9002>.
+
+Acknowledgements
+
+
+Contributors
+
+   Thanks to all of the contributors.
+
+Authors' Addresses
+
+   Greg White
+   CableLabs
+   United States of America
+   Email: g.white@cablelabs.com
+
+
+   Ingemar Johansson
+   Ericsson
+   Sweden
+   Email: ingemar.s.johansson@ericsson.com
+
+
+   Dibakar Das
+   Intel
+   United States of America
+   Email: dibakar.das@intel.com
