@@ -10,7 +10,7 @@
 <meta content="Dibakar Das" name="author">
 <meta content='
        Several link technology standards mandate that equipment guarantee in-order delivery of layer 2 frames, apparently due to a belief that this is required by higher layer protocols.  In addition, certain link types can introduce out-of-order arrivals at the end of the layer 2 link, which the receiving equipment is required to rectify by delaying higher sequenced frames until all lower sequenced frames can be delivered or are deemed lost.  The delaying of higher sequenced frames is generally done without any knowledge of the higher layer protocols in use, let alone any knowledge of higher layer protocol contexts (e.g. TCP connections) in the case that the layer 2 link is carrying a multiplex of such contexts. It could, for example, be the case that all of the higher sequenced frames being delayed are carrying packets for different layer 4 contexts than a single lower-sequenced frame that triggered the delay. The result is that this "re-sequencing" operation can introduce delays that result in degradation of performance rather than improving it.  Moreover, modern, performant TCP and QUIC implementations support features that significantly improve their tolerance to out-of-order delivery. 
-       This draft is intended to promote an analysis and discussion of the sensitivity of modern protocols to out-of-order delivery, and to potentially develop new guidance to layer 2 technology standards regarding the need to assure in-order delivery, when doing so could degrade performance. 
+       This draft is intended to promote an analysis and discussion of the sensitivity of modern protocols to out-of-order delivery, and to potentially develop new guidance to layer 2 technology standards regarding the need to assure in-order delivery. 
     ' name="description">
 <meta content="xml2rfc 3.28.0" name="generator">
 <meta content="reordering link subnetwork" name="keyword">
@@ -1091,7 +1091,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <section id="section-abstract">
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
 <p id="section-abstract-1">Several link technology standards mandate that equipment guarantee in-order delivery of layer 2 frames, apparently due to a belief that this is required by higher layer protocols.  In addition, certain link types can introduce out-of-order arrivals at the end of the layer 2 link, which the receiving equipment is required to rectify by delaying higher sequenced frames until all lower sequenced frames can be delivered or are deemed lost.  The delaying of higher sequenced frames is generally done without any knowledge of the higher layer protocols in use, let alone any knowledge of higher layer protocol contexts (e.g. TCP connections) in the case that the layer 2 link is carrying a multiplex of such contexts. It could, for example, be the case that all of the higher sequenced frames being delayed are carrying packets for different layer 4 contexts than a single lower-sequenced frame that triggered the delay. The result is that this "re-sequencing" operation can introduce delays that result in degradation of performance rather than improving it.  Moreover, modern, performant TCP and QUIC implementations support features that significantly improve their tolerance to out-of-order delivery.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
-<p id="section-abstract-2">This draft is intended to promote an analysis and discussion of the sensitivity of modern protocols to out-of-order delivery, and to potentially develop new guidance to layer 2 technology standards regarding the need to assure in-order delivery, when doing so could degrade performance.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
+<p id="section-abstract-2">This draft is intended to promote an analysis and discussion of the sensitivity of modern protocols to out-of-order delivery, and to potentially develop new guidance to layer 2 technology standards regarding the need to assure in-order delivery.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
 </section>
 <div id="status-of-memo">
 <section id="section-boilerplate.1">
@@ -1143,40 +1143,57 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <nav class="toc"><ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1">
             <p id="section-toc.1-1.1.1" class="keepWithNext"><a href="#section-1" class="auto internal xref">1</a>.  <a href="#name-introduction" class="internal xref">Introduction</a></p>
-<ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.1">
-                <p id="section-toc.1-1.1.2.1.1" class="keepWithNext"><a href="#section-1.1" class="auto internal xref">1.1</a>.  <a href="#name-requirements-language" class="internal xref">Requirements Language</a></p>
-</li>
-            </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2">
-            <p id="section-toc.1-1.2.1" class="keepWithNext"><a href="#section-2" class="auto internal xref">2</a>.  <a href="#name-body" class="internal xref">Body</a></p>
+            <p id="section-toc.1-1.2.1" class="keepWithNext"><a href="#section-2" class="auto internal xref">2</a>.  <a href="#name-terminology" class="internal xref">Terminology</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3">
-            <p id="section-toc.1-1.3.1"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
-</li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4">
-            <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
-</li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5">
-            <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-references" class="internal xref">References</a></p>
+            <p id="section-toc.1-1.3.1"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-reordering-in-l2-links" class="internal xref">Reordering in L2 Links</a></p>
 <ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1">
-                <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="auto internal xref">5.1</a>.  <a href="#name-normative-references" class="internal xref">Normative References</a></p>
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1">
+                <p id="section-toc.1-1.3.2.1.1" class="keepWithNext"><a href="#section-3.1" class="auto internal xref">3.1</a>.  <a href="#name-multi-link-aggregation" class="internal xref">Multi-Link Aggregation</a></p>
 </li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.2">
-                <p id="section-toc.1-1.5.2.2.1"><a href="#section-5.2" class="auto internal xref">5.2</a>.  <a href="#name-informative-references" class="internal xref">Informative References</a></p>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.2">
+                <p id="section-toc.1-1.3.2.2.1"><a href="#section-3.2" class="auto internal xref">3.2</a>.  <a href="#name-layer-2-retransmissions" class="internal xref">Layer 2 Retransmissions</a></p>
 </li>
             </ul>
 </li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4">
+            <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-resequencing-in-l2-standard" class="internal xref">Resequencing in L2 Standards</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.1">
+                <p id="section-toc.1-1.4.2.1.1"><a href="#section-4.1" class="auto internal xref">4.1</a>.  <a href="#name-lte-5g" class="internal xref">LTE/5G</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.2">
+                <p id="section-toc.1-1.4.2.2.1"><a href="#section-4.2" class="auto internal xref">4.2</a>.  <a href="#name-wi-fi" class="internal xref">Wi-Fi</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.3">
+                <p id="section-toc.1-1.4.2.3.1"><a href="#section-4.3" class="auto internal xref">4.3</a>.  <a href="#name-docsis" class="internal xref">DOCSIS</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5">
+            <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
+</li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
-            <p id="section-toc.1-1.6.1"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-acknowledgements" class="internal xref">Acknowledgements</a></p>
+            <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
-            <p id="section-toc.1-1.7.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-contributors" class="internal xref">Contributors</a></p>
+            <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-references" class="internal xref">References</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.1">
+                <p id="section-toc.1-1.7.2.1.1"><a href="#section-7.1" class="auto internal xref">7.1</a>.  <a href="#name-informative-references" class="internal xref">Informative References</a></p>
+</li>
+            </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
-            <p id="section-toc.1-1.8.1"><a href="#appendix-C" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
+            <p id="section-toc.1-1.8.1"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-acknowledgements" class="internal xref">Acknowledgements</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9">
+            <p id="section-toc.1-1.9.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-contributors" class="internal xref">Contributors</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10">
+            <p id="section-toc.1-1.10.1"><a href="#appendix-C" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
 </li>
         </ul>
 </nav>
@@ -1186,65 +1203,130 @@ svg :is([fill="white"], [fill^="#fff"]) {
       <h2 id="name-introduction">
 <a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
       </h2>
-<p id="section-1-1">Section 15 of RFC3819 provides advice to Internet subnetwork designers regarding packet reordering. The advice seems to be reasonable: try to avoid packet reordering whenever possible, but not if doing so compromises efficiency, impairs reliability, or increases average packet delay.  However, along with this guidance come a couple of warnings that appear to have driven subnetwork designers towards assuring in-order delivery even if efficiency is impaired or average packet delay is increased.  These warnings relate to the potential performance cost for TCP (as it was then defined) that arises due to out-of-order arrivals, and to the fact that out-of-order delivery would cause problems for "every header compression scheme currently standardized for the Internet."<a href="#section-1-1" class="pilcrow">¶</a></p>
-<div id="requirements">
-<section id="section-1.1">
-        <h3 id="name-requirements-language">
-<a href="#section-1.1" class="section-number selfRef">1.1. </a><a href="#name-requirements-language" class="section-name selfRef">Requirements Language</a>
-        </h3>
-<p id="section-1.1-1">The key words "MUST", "MUST NOT", "REQUIRED", "SHALL",
-          "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT
-          RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be
-          interpreted as described in BCP 14 <span>[<a href="#RFC2119" class="cite xref">RFC2119</a>]</span>
-          <span>[<a href="#RFC8174" class="cite xref">RFC8174</a>]</span> when, and only when, they appear in
-          all capitals, as shown here.<a href="#section-1.1-1" class="pilcrow">¶</a></p>
-</section>
-</div>
+<p id="section-1-1"><span><a href="https://rfc-editor.org/rfc/rfc3819#section-15" class="relref">Section 15</a> of [<a href="#RFC3819" class="cite xref">RFC3819</a>]</span> provides advice to Internet subnetwork designers regarding packet reordering.
+      The advice seems reasonable: "try to avoid packet reordering whenever possible, but not if doing so compromises efficiency, impairs reliability, or increases average packet delay."
+      However, along with this guidance come a couple of warnings that appear to have driven subnetwork designers towards assuring in-order delivery even if efficiency is impaired or average packet delay is increased.
+      These warnings relate to the potential performance cost for TCP (as it was then defined) that arises due to out-of-order arrivals, and to the fact that out-of-order delivery would cause problems for "every header compression scheme currently standardized for the Internet."<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-2">The text of <span>[<a href="#RFC3819" class="cite xref">RFC3819</a>]</span> does mention that research on improving TCP behavior in the face of packet reordering was underway.
+      In the intervening 20+ years, that research has resulted in the definition of <span><a href="#RFC8985" class="internal xref">RACK</a> [<a href="#RFC8985" class="cite xref">RFC8985</a>]</span> which significantly reduces TCP's sensitivity to out-of-order arrivals.
+      In addition, <span><a href="https://rfc-editor.org/rfc/rfc9002#section-6.1" class="relref">Section 6.1</a> of [<a href="#RFC9002" class="cite xref">RFC9002</a>]</span> discusses the usefulness of implementing similar mechanisms in QUIC, and provides the protocol tools to do so.
+      Moreover, neither TCP nor QUIC fail in the presence of some out-of-order packets, even if they don't implement RACK. The may see reduced performance, but both protocols have the ability to correctly handle the receipt of packets out of order.<a href="#section-1-2" class="pilcrow">¶</a></p>
+<p id="section-1-3">TODO: discuss current state of header compression<a href="#section-1-3" class="pilcrow">¶</a></p>
+<p id="section-1-4">In addition to the warnings about TCP and header compression discussed in <span>[<a href="#RFC3819" class="cite xref">RFC3819</a>]</span>, there may be other protocols that are sensitive to reordering.  For instance, <span><a href="https://rfc-editor.org/rfc/rfc2983#section-4.1" class="relref">Section 4.1</a> of [<a href="#RFC2983" class="cite xref">RFC2983</a>]</span> discusses <span><a href="#RFC2401" class="internal xref">IPSec</a> [<a href="#RFC2401" class="cite xref">RFC2401</a>]</span> and <span><a href="#RFC2661" class="internal xref">L2TP</a> [<a href="#RFC2661" class="cite xref">RFC2661</a>]</span> as being sensitive to packet reordering.<a href="#section-1-4" class="pilcrow">¶</a></p>
+<p id="section-1-5">TODO: describe "resequencing" generally<a href="#section-1-5" class="pilcrow">¶</a></p>
+<p id="section-1-6">The current situation seems to be that several layer 2 technologies implement resequencing functions that increase cost and complexity of equipment, and may in many cases degrade network performance rather than improving it.  Any benefits of resequencing may be primarily limited to older protocol implementations e.g. maintaining the performance of older TCP implementations that are no longer widely used and may not be particularly performant by modern standards.<a href="#section-1-6" class="pilcrow">¶</a></p>
 </section>
 <section id="section-2">
-      <h2 id="name-body">
-<a href="#section-2" class="section-number selfRef">2. </a><a href="#name-body" class="section-name selfRef">Body</a>
+      <h2 id="name-terminology">
+<a href="#section-2" class="section-number selfRef">2. </a><a href="#name-terminology" class="section-name selfRef">Terminology</a>
       </h2>
-<p id="section-2-1">Body text<a href="#section-2-1" class="pilcrow">¶</a></p>
+<p id="section-2-1">In this document, we adopt the following terminology.<a href="#section-2-1" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlNewline" id="section-2-2">
+        <dt id="section-2-2.1">Reordering:</dt>
+        <dd style="margin-left: 1.5em" id="section-2-2.2">The process where the packet/frame sequence is made out-of-order from the originally transmitted order.<a href="#section-2-2.2" class="pilcrow">¶</a>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-2-2.3">Resequencing:</dt>
+        <dd style="margin-left: 1.5em" id="section-2-2.4">The process where an out-of-order packet/frame sequence is returned to the originally transmitted order.<a href="#section-2-2.4" class="pilcrow">¶</a>
+</dd>
+      <dd class="break"></dd>
+</dl>
+</section>
+<section id="section-3">
+      <h2 id="name-reordering-in-l2-links">
+<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-reordering-in-l2-links" class="section-name selfRef">Reordering in L2 Links</a>
+      </h2>
+<p id="section-3-1">In current L2 link technologies, frame reordering comes from two primary sources: multi-link aggregation and layer-2 retransmission.<a href="#section-3-1" class="pilcrow">¶</a></p>
+<section id="section-3.1">
+        <h3 id="name-multi-link-aggregation">
+<a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-multi-link-aggregation" class="section-name selfRef">Multi-Link Aggregation</a>
+        </h3>
+<p id="section-3.1-1">Some link technologies support the aggregation (within L2) of multiple links between a pair of nodes for the purpose of increasing the total capacity of the link.
+        In some cases the individual links within the aggregation could have different capacities and/or latencies from one another.
+        When this is the case, the frame reception order can differ from the frame transmission order.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
+</section>
+<section id="section-3.2">
+        <h3 id="name-layer-2-retransmissions">
+<a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-layer-2-retransmissions" class="section-name selfRef">Layer 2 Retransmissions</a>
+        </h3>
+<p id="section-3.2-1">Some link technologies (particularly wireless), are subject to noise and interference that would result in an unacceptably high frame error rate if it were not corrected.
+        These links commonly implement a method of acknowledgement and retransmission of lost frames, referred to as Automatic Repeat Request (ARQ).  When a frame loss affects one or more frames within a transmission, and the frame(s) at the end are unaffected, the retransmitted frames will arrive out of sequence from the original ordering.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
+</section>
+</section>
+<section id="section-4">
+      <h2 id="name-resequencing-in-l2-standard">
+<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-resequencing-in-l2-standard" class="section-name selfRef">Resequencing in L2 Standards</a>
+      </h2>
+<p id="section-4-1">This section discusses functions and requirements for resequencing in exising layer 2 standards.<a href="#section-4-1" class="pilcrow">¶</a></p>
+<section id="section-4.1">
+        <h3 id="name-lte-5g">
+<a href="#section-4.1" class="section-number selfRef">4.1. </a><a href="#name-lte-5g" class="section-name selfRef">LTE/5G</a>
+        </h3>
+<p id="section-4.1-1">TBD<a href="#section-4.1-1" class="pilcrow">¶</a></p>
+</section>
+<section id="section-4.2">
+        <h3 id="name-wi-fi">
+<a href="#section-4.2" class="section-number selfRef">4.2. </a><a href="#name-wi-fi" class="section-name selfRef">Wi-Fi</a>
+        </h3>
+<p id="section-4.2-1">TBD<a href="#section-4.2-1" class="pilcrow">¶</a></p>
+</section>
+<section id="section-4.3">
+        <h3 id="name-docsis">
+<a href="#section-4.3" class="section-number selfRef">4.3. </a><a href="#name-docsis" class="section-name selfRef">DOCSIS</a>
+        </h3>
+<p id="section-4.3-1">The Data-Over-Cable Service Interface Specifications provide broadband access over hybrid fiber-coaxial networks. The DOCSIS protocol does not support layer 2 retransmissions, but since the introduction of "channel bonding" functionality (a form of multi-link aggregation) in DOCSIS 3.0 in 2006, reordering can occur due to differences in capacity or latency between the bonded channels.  All equipment built to that and later versions of DOCSIS (including DOCSIS 3.1 and DOCSIS 4.0) is required to support specific resequencing features to guarantee in-order delivery.<a href="#section-4.3-1" class="pilcrow">¶</a></p>
+<p id="section-4.3-2">In the downstream direction (i.e. from the network to end-user) individual IP packets are encapsulated in layer 2 frames that generally include a 20-bit Downstream Service ID (DSID), a 1-bit Sequence Change Count, and a 16-bit Packet Sequence Number. The specifications include detailed, manadatory, requirements on the handling of these fields, including a requirement that cable modems support at least 16 simultaneous resequencing contexts, each of which having sufficient memory to hold packets for up to 13 ms (18 ms in older equipment) at the maximum forwarding rate of the device, mechanisms for rapid loss detection, and significant management and configuration mechanisms to support the feature.<a href="#section-4.3-2" class="pilcrow">¶</a></p>
+<p id="section-4.3-3">In the upstream direction (i.e. from the end-user to the network) individual IP packets are encapsulated in layer 2 frames, then concatenated together and fragmented into "segments" for transmission. The segment boundaries are determined by the size of the transmission opportunities (grants) and generally do not relate to the internal frame or packet boundaries. So, in general a segment could begin with the tail of one L2 frame, then have zero or more full L2 frames, then the head of a final frame. Each segment has a segment header which contains a 13-bit sequence number. The CMTS is required to reassemble the concatenated frame sequence, and forward the individual frames in order.<a href="#section-4.3-3" class="pilcrow">¶</a></p>
+</section>
 </section>
 <div id="IANA">
-<section id="section-3">
+<section id="section-5">
       <h2 id="name-iana-considerations">
-<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
+<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
       </h2>
-<p id="section-3-1">This memo includes no request to IANA.<a href="#section-3-1" class="pilcrow">¶</a></p>
+<p id="section-5-1">This memo includes no request to IANA.<a href="#section-5-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="Security">
-<section id="section-4">
+<section id="section-6">
       <h2 id="name-security-considerations">
-<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
+<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
       </h2>
-<p id="section-4-1">This document should not affect the security of the Internet.<a href="#section-4-1" class="pilcrow">¶</a></p>
+<p id="section-6-1">This document should not affect the security of the Internet.<a href="#section-6-1" class="pilcrow">¶</a></p>
 </section>
 </div>
-<section id="section-5">
+<section id="section-7">
       <h2 id="name-references">
-<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-references" class="section-name selfRef">References</a>
+<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-references" class="section-name selfRef">References</a>
       </h2>
-<section id="section-5.1">
-        <h3 id="name-normative-references">
-<a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
-        </h3>
-<dl class="references">
-<dt id="RFC8174">[RFC8174]</dt>
-        <dd>
-<span class="refAuthor">Leiba, B.</span>, <span class="refTitle">"Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 8174</span>, <span class="seriesInfo">DOI 10.17487/RFC8174</span>, <time datetime="2017-05" class="refDate">May 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8174">https://www.rfc-editor.org/info/rfc8174</a>&gt;</span>. </dd>
-<dd class="break"></dd></dl>
-</section>
-<section id="section-5.2">
+<section id="section-7.1">
         <h3 id="name-informative-references">
-<a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
+<a href="#section-7.1" class="section-number selfRef">7.1. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
         </h3>
 <dl class="references">
-<dt id="RFC2119">[RFC2119]</dt>
+<dt id="RFC8985">[RFC8985]</dt>
+        <dd>
+<span class="refAuthor">Cheng, Y.</span>, <span class="refAuthor">Cardwell, N.</span>, <span class="refAuthor">Dukkipati, N.</span>, and <span class="refAuthor">P. Jha</span>, <span class="refTitle">"The RACK-TLP Loss Detection Algorithm for TCP"</span>, <span class="seriesInfo">RFC 8985</span>, <span class="seriesInfo">DOI 10.17487/RFC8985</span>, <time datetime="2021-02" class="refDate">February 2021</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8985">https://www.rfc-editor.org/info/rfc8985</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC3819">[RFC3819]</dt>
+        <dd>
+<span class="refAuthor">Karn, P., Ed.</span>, <span class="refAuthor">Bormann, C.</span>, <span class="refAuthor">Fairhurst, G.</span>, <span class="refAuthor">Grossman, D.</span>, <span class="refAuthor">Ludwig, R.</span>, <span class="refAuthor">Mahdavi, J.</span>, <span class="refAuthor">Montenegro, G.</span>, <span class="refAuthor">Touch, J.</span>, and <span class="refAuthor">L. Wood</span>, <span class="refTitle">"Advice for Internet Subnetwork Designers"</span>, <span class="seriesInfo">BCP 89</span>, <span class="seriesInfo">RFC 3819</span>, <span class="seriesInfo">DOI 10.17487/RFC3819</span>, <time datetime="2004-07" class="refDate">July 2004</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc3819">https://www.rfc-editor.org/info/rfc3819</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC2983">[RFC2983]</dt>
+        <dd>
+<span class="refAuthor">Black, D.</span>, <span class="refTitle">"Differentiated Services and Tunnels"</span>, <span class="seriesInfo">RFC 2983</span>, <span class="seriesInfo">DOI 10.17487/RFC2983</span>, <time datetime="2000-10" class="refDate">October 2000</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc2983">https://www.rfc-editor.org/info/rfc2983</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC2401">[RFC2401]</dt>
+        <dd>
+<span class="refAuthor">Kent, S.</span> and <span class="refAuthor">R. Atkinson</span>, <span class="refTitle">"Security Architecture for the Internet Protocol"</span>, <span class="seriesInfo">RFC 2401</span>, <span class="seriesInfo">DOI 10.17487/RFC2401</span>, <time datetime="1998-11" class="refDate">November 1998</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc2401">https://www.rfc-editor.org/info/rfc2401</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9002">[RFC9002]</dt>
+        <dd>
+<span class="refAuthor">Iyengar, J., Ed.</span> and <span class="refAuthor">I. Swett, Ed.</span>, <span class="refTitle">"QUIC Loss Detection and Congestion Control"</span>, <span class="seriesInfo">RFC 9002</span>, <span class="seriesInfo">DOI 10.17487/RFC9002</span>, <time datetime="2021-05" class="refDate">May 2021</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc9002">https://www.rfc-editor.org/info/rfc9002</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC2661">[RFC2661]</dt>
       <dd>
-<span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc2119">https://www.rfc-editor.org/info/rfc2119</a>&gt;</span>. </dd>
+<span class="refAuthor">Townsley, W.</span>, <span class="refAuthor">Valencia, A.</span>, <span class="refAuthor">Rubens, A.</span>, <span class="refAuthor">Pall, G.</span>, <span class="refAuthor">Zorn, G.</span>, and <span class="refAuthor">B. Palter</span>, <span class="refTitle">"Layer Two Tunneling Protocol "L2TP""</span>, <span class="seriesInfo">RFC 2661</span>, <span class="seriesInfo">DOI 10.17487/RFC2661</span>, <time datetime="1999-08" class="refDate">August 1999</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc2661">https://www.rfc-editor.org/info/rfc2661</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>
