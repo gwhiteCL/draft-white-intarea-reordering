@@ -39,7 +39,7 @@
 -->
 
   <front>
-    <title abbrev="Abbreviated Title">Title</title> <!-- https://authors.ietf.org/en/rfcxml-vocabulary#title-4 -->
+    <title abbrev="Packet Reordering">Proposed Updates to Guidance on Packet Reordering</title> <!-- https://authors.ietf.org/en/rfcxml-vocabulary#title-4 -->
     <!--  The abbreviated title is required if the full title is longer than 39 characters -->
 
     <seriesInfo name="Internet-Draft" value="draft-white-intarea-reordering-latest"/> <!-- https://authors.ietf.org/en/rfcxml-vocabulary#seriesinfo -->
@@ -82,8 +82,8 @@
          * If the year is not the current one, it is necessary to specify at least a month and day="1" will be used.
     -->
 
-    <area>General</area>
-    <workgroup>Internet Engineering Task Force</workgroup>
+    <area>Internet</area>
+    <workgroup>Internet Area Working Group</workgroup>
     <!-- "Internet Engineering Task Force" is fine for individual submissions.  If this element is
           not present, the default is "Network Working Group", which is used by the RFC Editor as
           a nod to the history of the RFC Series. -->
@@ -93,7 +93,9 @@
          use by search engines. -->
 
     <abstract>
-      <t>Abstract</t>
+      <t>Several link technology standards mandate that equipment guarantee in-order delivery of layer 2 frames, apparently due to a belief that this is required by higher layer protocols.  In addition, certain link types can introduce out-of-order arrivals at the end of the layer 2 link, which the receiving equipment is required to rectify by delaying higher sequenced frames until all lower sequenced frames can be delivered or are deemed lost.  The delaying of higher sequenced frames is generally done without any knowledge of the higher layer protocols in use, let alone any knowledge of higher layer protocol contexts (e.g. TCP connections) in the case that the layer 2 link is carrying a multiplex of such contexts. It could, for example, be the case that all of the higher sequenced frames being delayed are carrying packets for different layer 4 contexts than a single lower-sequenced frame that triggered the delay. The result is that this "re-sequencing" operation can introduce delays that result in degradation of performance rather than improving it.  Moreover, modern, performant TCP and QUIC implementations support features that significantly improve their tolerance to out-of-order delivery.</t>
+      <t>This draft is intended to promote an analysis and discussion of the sensitivity of modern protocols to out-of-order delivery, and to potentially develop new guidance to layer 2 technology standards regarding the need to assure in-order delivery, when doing so could degrade performance.</t>
+
     </abstract>
 
   </front>
@@ -103,7 +105,7 @@
     <section>
     <!-- The default attributes for <section> are numbered="true" and toc="default" -->
       <name>Introduction</name>
-      <t>Introductory text</t>
+      <t>Section 15 of RFC3819 provides advice to Internet subnetwork designers regarding packet reordering. The advice seems to be reasonable: try to avoid packet reordering whenever possible, but not if doing so compromises efficiency, impairs reliability, or increases average packet delay.  However, along with this guidance come a couple of warnings that appear to have driven subnetwork designers towards assuring in-order delivery even if efficiency is impaired or average packet delay is increased.  These warnings relate to the potential performance cost for TCP (as it was then defined) that arises due to out-of-order arrivals, and to the fact that out-of-order delivery would cause problems for "every header compression scheme currently standardized for the Internet." </t>
 
       <section anchor="requirements">
       <!-- anchor is an optional attribute -->
@@ -123,159 +125,6 @@
       <t>Body text</t>
     </section>
 
-    <section>
-      <name>List Examples</name>
-
-      <section>
-        <name>Simple Unordered (Bullet) List</name>
-        <t>Text before the list</t>
-        <ul spacing="normal">
-          <li>First bullet</li>
-          <li>Second bullet</li>
-        </ul>
-        <t>Text after the list.</t>
-      </section>
-
-      <section>
-        <name>Ordered List With Lowercase Letters in Brackets Instead of Numbers</name>
-        <ol type="(%c)"> <!-- https://authors.ietf.org/en/rfcxml-vocabulary#type-1 -->
-          <li>List item (a)</li>
-          <li>List item (b)</li>
-        </ol>
-      </section>
-
-      <section>
-        <name>Continuous Numbering in a List That is Split by Text or Sections</name>
-        <!-- The following two lists render as
-        Text to introduce the list
-        REQ1: This will be "REQ1:"
-        REQ2: This will be "REQ2:"
-        Some text in between
-        REQ3: This will be "REQ3:"
-        REQ4: This will be "REQ4:"
-        -->
-        <t>Text to introduce the list</t>
-        <ol type="REQ%d:" group="reqs">  <!-- value of group is user-defined https://authors.ietf.org/en/rfcxml-vocabulary#group -->
-          <li>This will be "REQ1:"</li>
-          <li>This will be "REQ2:"</li>
-        </ol>
-        <t>Some text in between</t>
-        <ol type="REQ%d:" group="reqs">  <!-- same value of group as before -->
-          <li>This will be "REQ3:"</li>
-          <li>This will be "REQ4:"</li>
-        </ol>
-        <section>
-          <name>Section in-between</name>
-          <t>More text in-between</t>
-          <ol type="REQ%d:" group="reqs">  <!-- same value of group as before -->
-            <li>This will be REQ5:</li>
-            <li>This will be REQ6:</li>
-          </ol>
-        </section>
-      </section>
-
-      <section>
-        <name>Definition Lists</name> <!-- https://authors.ietf.org/en/rfcxml-vocabulary#dl -->
-        <dl newline="true"> <!-- https://authors.ietf.org/en/rfcxml-vocabulary#newline -->
-        <!-- Omit newline="true" if you want each definition to start on the same line as the corresponding term -->
-          <dt>First term:</dt>
-          <dd>Definition of the first term</dd>
-          <dt>Second term:</dt>
-          <dd>Definition of the second term</dd>
-        </dl>
-      </section>
-
-      <section>
-        <name>Lists With Hanging Labels</name>
-        <t>the list item is indented the value of indent</t>  <!--  https://authors.ietf.org/en/rfcxml-vocabulary#indent -->
-        <dl newline="true" spacing="normal" indent="8">
-        <!-- Custom indent of 8 with the defintion starting on a new line after the term -->
-          <dt>short</dt>
-          <dd>With a label shorter than the indent.</dd>
-          <dt>fantastically long label</dt>
-          <dd>With a label longer than the indent.</dd>
-        </dl>
-      </section>
-    </section>
-
-    <section>
-      <name>Tables</name>
-      <table> <!-- https://authors.ietf.org/rfcxml-vocabulary#table -->
-        <thead> <!-- https://authors.ietf.org/rfcxml-vocabulary#thead -->
-        <!-- A table header is optional -->
-          <tr><th>Column 1</th><th>Column 2</th><th>Column 3</th></tr>
-        </thead>
-        <tbody> <!-- https://authors.ietf.org/rfcxml-vocabulary#tbody -->
-        <!-- A table body is required -->
-          <tr><td align="left">Left cell</td><td colspan="2">Colspan cell</td></tr>
-          <!-- align can be right, left or center.  colspan and rowspan work as they do in HTML -->
-          <tr><td rowspan="2">Rowspan cell</td><td align="center">Center cell</td><td align="right">Right cell</td></tr>
-          <tr><td>Cell</td><td>Cell</td></tr>
-        </tbody>
-        <tfoot> <!-- https://authors.ietf.org/rfcxml-vocabulary#tfoot -->
-        <!-- A table footer is optional -->
-          <tr><td colspan="3">Colspan footer</td></tr>
-        </tfoot>
-      </table>
-    </section>
-
-    <section>
-      <name>Source Code Examples</name>
-      <t>This is an example C program</t>
-        <sourcecode name="helloworld.c" type="c" markers="true"> <!-- https://authors.ietf.org/en/rfcxml-vocabulary#sourcecode -->
-          <![CDATA[
-#include <stdio.h>
-
-int main() {
-  printf("Hello World");
-  return 0;
-}
-          ]]>
-        </sourcecode>
-        <!-- markers="true" means that the rendered file will have <CODE BEGINS> and <CODE ENDS> added. -->
-        <!-- The CDATA wrapper is optional but is strongly recommended to avoid any unexpected processing
-             or issues with angle brackets.
-             <sourcecode></sourcecode> can optionally be wrapped in <figure></figure> -->
-    </section>
-
-    <section anchor="adding-diagrams">
-    <!-- anchor is optional and used for reference below -->
-      <name>Adding Diagrams</name>
-      <figure>
-        <name>A Box</name>
-        <artset>  <!-- https://authors.ietf.org/en/rfcxml-vocabulary#artset -->
-        <!-- This <artset> includes two <artwork> elements, each of a different type.  Both are not
-             always needed.  See https://authors.ietf.org/e/en/adding-diagrams -->
-          <artwork type="svg" name="https://www.rfc-editor.org/materials/format/svg/stream.svg">  <!-- https://authors.ietf.org/en/rfcxml-vocabulary#artwork -->
-            <!-- Inserting the SVG like this is only one way of adding an SVG diagram.  Another way is
-                 to use the src attribute to point to an external file or URI.  The name attribute
-                 recommends a filename to use if the artwork is extracted to a file. -->
-            <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 71 40">
-              <g>
-                <title>Layer 1</title>
-                <rect x="4.5" y="6.5" width="61.0" height="27.0" stroke="black" stroke-width="1.0" stroke-linecap="square" stroke-linejoin="miter" fill="none" />
-                <text x="33.883" text-anchor="middle" y="26.559">
-                  <tspan fill="black" font-size="13.0">A box</tspan>
-                </text>
-              </g>
-            </svg>
-          </artwork>
-          <artwork type="ascii-art" name="box.txt">
-            <![CDATA[
- +--------+
- | A box  |
- +--------+
-            ]]>
-          </artwork>
-        </artset>
-      </figure>
-    </section>
-
-    <section>
-      <name>Using xref</name>
-      <t>A reference to <xref target="adding-diagrams"/></t>
-      <t>A reference to <xref target="RFC8174" sectionFormat="of" section="2"/></t>
-    </section>
 
     <section anchor="IANA">
     <!-- All drafts are required to have an IANA considerations section. See RFC 8126 for a guide.-->
@@ -324,54 +173,19 @@ int main() {
           <seriesInfo name="DOI" value="10.17487/RFC2119"/>
         </reference>
 
-        <reference anchor="exampleRefMin">
-        <!-- Example minimum reference -->
-          <front>
-            <title>Title</title>
-            <author initials="Initials" surname="Surname">
-              <organization/>
-            </author>
-            <date year="2006"/>
-          </front>
-        </reference>
-
-        <reference anchor="exampleRefOrg" target="http://www.example.com/">
-        <!-- Example reference written by an organization not a person -->
-          <front>
-            <title>Title</title>
-            <author>
-              <organization>Organization</organization>
-            </author>
-            <date year="1984"/>
-          </front>
-        </reference>
-
       </references>
     </references>
-
-    <section>
-      <name>Appendix 1</name>
-      <t>This becomes an Appendix</t>
-    </section>
 
     <section anchor="Acknowledgements" numbered="false">
       <!-- an Acknowledgements section is optional -->
       <name>Acknowledgements</name>
-      <t>This template uses extracts from templates written by Pekka Savola, Elwyn Davies and
-        Henrik Levkowetz.</t>
+      <t></t>
     </section>
 
     <section anchor="Contributors" numbered="false">
       <!-- a Contributors section is optional -->
       <name>Contributors</name>
       <t>Thanks to all of the contributors.</t>
-      <contact fullname="Jane Doe" initials="J" surname="Doe"><!-- https://authors.ietf.org/en/rfcxml-vocabulary#contact-->
-        <!-- including contact information for contributors is optional -->
-        <organization>Acme</organization>
-        <address>
-          <email>jdoe@example.com</email>
-        </address>
-      </contact>
     </section>
 
  </back>
