@@ -39,7 +39,7 @@
 -->
 
   <front>
-    <title abbrev="Packet Reordering">Proposed Updates to Guidance on Packet Reordering</title> <!-- https://authors.ietf.org/en/rfcxml-vocabulary#title-4 -->
+    <title abbrev="Packet Reordering">Proposal for Updates to Guidance on Packet Reordering</title> <!-- https://authors.ietf.org/en/rfcxml-vocabulary#title-4 -->
     <!--  The abbreviated title is required if the full title is longer than 39 characters -->
 
     <seriesInfo name="Internet-Draft" value="draft-white-intarea-reordering-latest"/> <!-- https://authors.ietf.org/en/rfcxml-vocabulary#seriesinfo -->
@@ -202,13 +202,12 @@
 
       <references>
         <name>Informative References</name>
-
-        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.8985.xml"/>
-        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.3819.xml"/>
-        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.2983.xml"/>
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.2401.xml"/>
-        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.9002.xml"/>
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.2661.xml"/>
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.2983.xml"/>
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.3819.xml"/>
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.8985.xml"/>
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.9002.xml"/>
 
 
       </references>
