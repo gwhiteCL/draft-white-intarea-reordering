@@ -11,7 +11,7 @@ Expires: 4 September 2025                                       Ericsson
                                                             3 March 2025
 
 
-           Proposed Updates to Guidance on Packet Reordering
+         Proposal for Updates to Guidance on Packet Reordering
                  draft-white-intarea-reordering-latest
 
 Abstract
@@ -233,10 +233,18 @@ Table of Contents
 
 7.1.  Informative References
 
-   [RFC8985]  Cheng, Y., Cardwell, N., Dukkipati, N., and P. Jha, "The
-              RACK-TLP Loss Detection Algorithm for TCP", RFC 8985,
-              DOI 10.17487/RFC8985, February 2021,
-              <https://www.rfc-editor.org/info/rfc8985>.
+   [RFC2401]  Kent, S. and R. Atkinson, "Security Architecture for the
+              Internet Protocol", RFC 2401, DOI 10.17487/RFC2401,
+              November 1998, <https://www.rfc-editor.org/info/rfc2401>.
+
+   [RFC2661]  Townsley, W., Valencia, A., Rubens, A., Pall, G., Zorn,
+              G., and B. Palter, "Layer Two Tunneling Protocol "L2TP"",
+              RFC 2661, DOI 10.17487/RFC2661, August 1999,
+              <https://www.rfc-editor.org/info/rfc2661>.
+
+   [RFC2983]  Black, D., "Differentiated Services and Tunnels",
+              RFC 2983, DOI 10.17487/RFC2983, October 2000,
+              <https://www.rfc-editor.org/info/rfc2983>.
 
    [RFC3819]  Karn, P., Ed., Bormann, C., Fairhurst, G., Grossman, D.,
               Ludwig, R., Mahdavi, J., Montenegro, G., Touch, J., and L.
@@ -244,22 +252,14 @@ Table of Contents
               RFC 3819, DOI 10.17487/RFC3819, July 2004,
               <https://www.rfc-editor.org/info/rfc3819>.
 
-   [RFC2983]  Black, D., "Differentiated Services and Tunnels",
-              RFC 2983, DOI 10.17487/RFC2983, October 2000,
-              <https://www.rfc-editor.org/info/rfc2983>.
-
-   [RFC2401]  Kent, S. and R. Atkinson, "Security Architecture for the
-              Internet Protocol", RFC 2401, DOI 10.17487/RFC2401,
-              November 1998, <https://www.rfc-editor.org/info/rfc2401>.
+   [RFC8985]  Cheng, Y., Cardwell, N., Dukkipati, N., and P. Jha, "The
+              RACK-TLP Loss Detection Algorithm for TCP", RFC 8985,
+              DOI 10.17487/RFC8985, February 2021,
+              <https://www.rfc-editor.org/info/rfc8985>.
 
    [RFC9002]  Iyengar, J., Ed. and I. Swett, Ed., "QUIC Loss Detection
               and Congestion Control", RFC 9002, DOI 10.17487/RFC9002,
               May 2021, <https://www.rfc-editor.org/info/rfc9002>.
-
-   [RFC2661]  Townsley, W., Valencia, A., Rubens, A., Pall, G., Zorn,
-              G., and B. Palter, "Layer Two Tunneling Protocol "L2TP"",
-              RFC 2661, DOI 10.17487/RFC2661, August 1999,
-              <https://www.rfc-editor.org/info/rfc2661>.
 
 Acknowledgements
 
