@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 
+<!--
      draft-white-intarea-reordering-latest
-  
-     This template includes examples of most of the features of RFCXML with comments explaining 
+
+     This template includes examples of most of the features of RFCXML with comments explaining
      how to customise them, and examples of how to achieve specific formatting.
-     
+
      Documentation is at https://authors.ietf.org/en/templates-and-schemas
 -->
 <?xml-model href="rfc7991bis.rnc"?>  <!-- Required for schema validation and schema-aware editing -->
-<!-- <?xml-stylesheet type="text/xsl" href="rfc2629.xslt" ?> --> 
+<!-- <?xml-stylesheet type="text/xsl" href="rfc2629.xslt" ?> -->
 <!-- This third-party XSLT can be enabled for direct transformations in XML processors, including most browsers -->
 
 <!DOCTYPE rfc [
@@ -30,12 +30,12 @@
   submissionType="IETF"
   xml:lang="en"
   version="3">
-<!-- 
+<!--
     * docName should be the name of your draft
     * category should be one of std, bcp, info, exp, historic
     * ipr should be one of trust200902, noModificationTrust200902, noDerivativesTrust200902, pre5378Trust200902
     * updates can be an RFC number as NNNN
-    * obsoletes can be an RFC number as NNNN 
+    * obsoletes can be an RFC number as NNNN
 -->
 
   <front>
@@ -44,32 +44,37 @@
 
     <seriesInfo name="Internet-Draft" value="draft-white-intarea-reordering-latest"/> <!-- https://authors.ietf.org/en/rfcxml-vocabulary#seriesinfo -->
     <!-- Set value to the name of the draft  -->
-   
-    <author fullname="Author's Full Name" initials="Author's Initials" role="editor" surname="Author's Surname"> <!-- https://authors.ietf.org/en/rfcxml-vocabulary#author -->
-    <!-- initials should not include an initial for the surname -->
-    <!-- role="editor" is optional -->
-    <!-- Can have more than one author -->
-      
-    <!-- all of the following elements are optional -->
-      <organization>Organization</organization> <!-- https://authors.ietf.org/en/rfcxml-vocabulary#organization -->
+
+    <author fullname="Greg White" initials="G." surname="White">
+      <organization>CableLabs</organization> <!-- https://authors.ietf.org/en/rfcxml-vocabulary#organization -->
       <address> <!-- https://authors.ietf.org/en/rfcxml-vocabulary#address -->
         <postal>
-          <!-- Reorder these if your country does things differently -->
-          <street>Street</street>
-          <city>City</city>
-          <region>Region</region>
-          <code>Postal code</code>
-          <country>Country</country>
-          <!-- Can use two letter country code -->
-        </postal>        
-        <phone>Phone</phone>
-        <email>Email</email>  
-        <!-- Can have more than one <email> element -->
-        <uri>URI</uri>
+          <country>US</country>
+        </postal>
+        <email>g.white@cablelabs.com</email>
       </address>
     </author>
-   
-    <date year="2023" month="3" day="1"/> <!-- https://authors.ietf.org/en/rfcxml-vocabulary#date -->
+
+    <author fullname="Ingemar Johansson" initials="I." surname="Johansson">
+      <organization>Ericsson</organization> <!-- https://authors.ietf.org/en/rfcxml-vocabulary#organization -->
+      <address> <!-- https://authors.ietf.org/en/rfcxml-vocabulary#address -->
+        <postal>
+          <country>SE</country>
+        </postal>
+        <email>ingemar.s.johansson@ericsson.com</email>
+      </address>
+    </author>
+    <author fullname="Dibakar Das" initials="D." surname="Das">
+      <organization>Intel</organization> <!-- https://authors.ietf.org/en/rfcxml-vocabulary#organization -->
+      <address> <!-- https://authors.ietf.org/en/rfcxml-vocabulary#address -->
+        <postal>
+          <country>US</country>
+        </postal>
+        <email>dibakar.das@intel.com</email>
+      </address>
+    </author>
+
+    <date year="2025"/> <!-- https://authors.ietf.org/en/rfcxml-vocabulary#date -->
     <!-- On draft subbmission:
          * If only the current year is specified, the current day and month will be used.
          * If the month and year are both specified and are the current ones, the current day will
@@ -79,27 +84,27 @@
 
     <area>General</area>
     <workgroup>Internet Engineering Task Force</workgroup>
-    <!-- "Internet Engineering Task Force" is fine for individual submissions.  If this element is 
-          not present, the default is "Network Working Group", which is used by the RFC Editor as 
+    <!-- "Internet Engineering Task Force" is fine for individual submissions.  If this element is
+          not present, the default is "Network Working Group", which is used by the RFC Editor as
           a nod to the history of the RFC Series. -->
-    
-    <keyword>template</keyword>
-    <!-- Multiple keywords are allowed.  Keywords are incorporated into HTML output files for 
+
+    <keyword>reordering link subnetwork</keyword>
+    <!-- Multiple keywords are allowed.  Keywords are incorporated into HTML output files for
          use by search engines. -->
 
     <abstract>
       <t>Abstract</t>
     </abstract>
- 
+
   </front>
 
   <middle>
-    
+
     <section>
     <!-- The default attributes for <section> are numbered="true" and toc="default" -->
       <name>Introduction</name>
       <t>Introductory text</t>
-      
+
       <section anchor="requirements">
       <!-- anchor is an optional attribute -->
         <name>Requirements Language</name>
@@ -112,15 +117,15 @@
       </section>
       <!-- The 'Requirements Language' section is optional -->
     </section>
-    
+
     <section>
       <name>Body</name>
       <t>Body text</t>
     </section>
-    
+
     <section>
       <name>List Examples</name>
-      
+
       <section>
         <name>Simple Unordered (Bullet) List</name>
         <t>Text before the list</t>
@@ -130,7 +135,7 @@
         </ul>
         <t>Text after the list.</t>
       </section>
-      
+
       <section>
         <name>Ordered List With Lowercase Letters in Brackets Instead of Numbers</name>
         <ol type="(%c)"> <!-- https://authors.ietf.org/en/rfcxml-vocabulary#type-1 -->
@@ -138,10 +143,10 @@
           <li>List item (b)</li>
         </ol>
       </section>
-      
+
       <section>
         <name>Continuous Numbering in a List That is Split by Text or Sections</name>
-        <!-- The following two lists render as 
+        <!-- The following two lists render as
         Text to introduce the list
         REQ1: This will be "REQ1:"
         REQ2: This will be "REQ2:"
@@ -168,7 +173,7 @@
           </ol>
         </section>
       </section>
-      
+
       <section>
         <name>Definition Lists</name> <!-- https://authors.ietf.org/en/rfcxml-vocabulary#dl -->
         <dl newline="true"> <!-- https://authors.ietf.org/en/rfcxml-vocabulary#newline -->
@@ -179,7 +184,7 @@
           <dd>Definition of the second term</dd>
         </dl>
       </section>
-      
+
       <section>
         <name>Lists With Hanging Labels</name>
         <t>the list item is indented the value of indent</t>  <!--  https://authors.ietf.org/en/rfcxml-vocabulary#indent -->
@@ -192,7 +197,7 @@
         </dl>
       </section>
     </section>
-    
+
     <section>
       <name>Tables</name>
       <table> <!-- https://authors.ietf.org/rfcxml-vocabulary#table -->
@@ -213,14 +218,14 @@
         </tfoot>
       </table>
     </section>
-    
+
     <section>
       <name>Source Code Examples</name>
       <t>This is an example C program</t>
         <sourcecode name="helloworld.c" type="c" markers="true"> <!-- https://authors.ietf.org/en/rfcxml-vocabulary#sourcecode -->
           <![CDATA[
 #include <stdio.h>
-        
+
 int main() {
   printf("Hello World");
   return 0;
@@ -229,21 +234,21 @@ int main() {
         </sourcecode>
         <!-- markers="true" means that the rendered file will have <CODE BEGINS> and <CODE ENDS> added. -->
         <!-- The CDATA wrapper is optional but is strongly recommended to avoid any unexpected processing
-             or issues with angle brackets. 
+             or issues with angle brackets.
              <sourcecode></sourcecode> can optionally be wrapped in <figure></figure> -->
     </section>
-    
+
     <section anchor="adding-diagrams">
     <!-- anchor is optional and used for reference below -->
       <name>Adding Diagrams</name>
       <figure>
         <name>A Box</name>
         <artset>  <!-- https://authors.ietf.org/en/rfcxml-vocabulary#artset -->
-        <!-- This <artset> includes two <artwork> elements, each of a different type.  Both are not 
+        <!-- This <artset> includes two <artwork> elements, each of a different type.  Both are not
              always needed.  See https://authors.ietf.org/e/en/adding-diagrams -->
           <artwork type="svg" name="https://www.rfc-editor.org/materials/format/svg/stream.svg">  <!-- https://authors.ietf.org/en/rfcxml-vocabulary#artwork -->
-            <!-- Inserting the SVG like this is only one way of adding an SVG diagram.  Another way is 
-                 to use the src attribute to point to an external file or URI.  The name attribute 
+            <!-- Inserting the SVG like this is only one way of adding an SVG diagram.  Another way is
+                 to use the src attribute to point to an external file or URI.  The name attribute
                  recommends a filename to use if the artwork is extracted to a file. -->
             <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 71 40">
               <g>
@@ -259,31 +264,31 @@ int main() {
             <![CDATA[
  +--------+
  | A box  |
- +--------+          
+ +--------+
             ]]>
           </artwork>
-        </artset>      
+        </artset>
       </figure>
     </section>
-    
+
     <section>
       <name>Using xref</name>
       <t>A reference to <xref target="adding-diagrams"/></t>
       <t>A reference to <xref target="RFC8174" sectionFormat="of" section="2"/></t>
     </section>
-    
+
     <section anchor="IANA">
     <!-- All drafts are required to have an IANA considerations section. See RFC 8126 for a guide.-->
       <name>IANA Considerations</name>
       <t>This memo includes no request to IANA.</t>
     </section>
-    
+
     <section anchor="Security">
       <!-- All drafts are required to have a security considerations section. See RFC 3552 for a guide. -->
       <name>Security Considerations</name>
       <t>This document should not affect the security of the Internet.</t>
     </section>
-    
+
     <!-- NOTE: The Acknowledgements and Contributors sections are at the end of this template -->
   </middle>
 
@@ -292,15 +297,15 @@ int main() {
       <name>References</name>
       <references>
         <name>Normative References</name>
-        
+
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.8174.xml"/>
         <!-- The recommended and simplest way to include a well known reference -->
-        
+
       </references>
- 
+
       <references>
         <name>Informative References</name>
-       
+
         <reference anchor="RFC2119" target="https://www.rfc-editor.org/info/rfc2119">
         <!-- Manually added reference -->
           <front>
@@ -318,7 +323,7 @@ int main() {
           <seriesInfo name="RFC" value="2119"/>
           <seriesInfo name="DOI" value="10.17487/RFC2119"/>
         </reference>
-       
+
         <reference anchor="exampleRefMin">
         <!-- Example minimum reference -->
           <front>
@@ -339,11 +344,11 @@ int main() {
             </author>
             <date year="1984"/>
           </front>
-        </reference>       
-       
+        </reference>
+
       </references>
     </references>
-    
+
     <section>
       <name>Appendix 1</name>
       <t>This becomes an Appendix</t>
@@ -352,10 +357,10 @@ int main() {
     <section anchor="Acknowledgements" numbered="false">
       <!-- an Acknowledgements section is optional -->
       <name>Acknowledgements</name>
-      <t>This template uses extracts from templates written by Pekka Savola, Elwyn Davies and 
+      <t>This template uses extracts from templates written by Pekka Savola, Elwyn Davies and
         Henrik Levkowetz.</t>
     </section>
-    
+
     <section anchor="Contributors" numbered="false">
       <!-- a Contributors section is optional -->
       <name>Contributors</name>
@@ -368,6 +373,6 @@ int main() {
         </address>
       </contact>
     </section>
-    
+
  </back>
 </rfc>
