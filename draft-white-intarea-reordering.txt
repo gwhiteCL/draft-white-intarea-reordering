@@ -2,10 +2,13 @@
 
 
 
-Internet Engineering Task Force Author's Initials. Author's Surname, Ed.
-Internet-Draft                                              Organization
-Intended status: Informational                              1 March 2023
-Expires: 2 September 2023
+Internet Engineering Task Force                                 G. White
+Internet-Draft                                                 CableLabs
+Intended status: Informational                              I. Johansson
+Expires: 4 September 2025                                       Ericsson
+                                                                  D. Das
+                                                                   Intel
+                                                            3 March 2025
 
 
                                  Title
@@ -30,11 +33,11 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 2 September 2023.
+   This Internet-Draft will expire on 4 September 2025.
 
 Copyright Notice
 
-   Copyright (c) 2023 IETF Trust and the persons identified as the
+   Copyright (c) 2025 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -72,7 +75,7 @@ Table of Contents
    Appendix A.  Appendix 1
    Acknowledgements
    Contributors
-   Author's Address
+   Authors' Addresses
 
 1.  Introduction
 
@@ -240,12 +243,21 @@ Contributors
    Email: jdoe@example.com
 
 
-Author's Address
+Authors' Addresses
 
-   Author's Full Name (editor)
-   Organization
-   Street
-   City
-   Phone: Phone
-   Email: Email
-   URI:   URI
+   Greg White
+   CableLabs
+   United States of America
+   Email: g.white@cablelabs.com
+
+
+   Ingemar Johansson
+   Ericsson
+   Sweden
+   Email: ingemar.s.johansson@ericsson.com
+
+
+   Dibakar Das
+   Intel
+   United States of America
+   Email: dibakar.das@intel.com
