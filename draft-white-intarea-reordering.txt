@@ -5,10 +5,10 @@
 Internet Area Working Group                                     G. White
 Internet-Draft                                                 CableLabs
 Intended status: Informational                              I. Johansson
-Expires: 4 September 2025                                       Ericsson
+Expires: 11 September 2025                                      Ericsson
                                                                   D. Das
                                                                    Intel
-                                                            3 March 2025
+                                                           10 March 2025
 
 
          Proposal for Updates to Guidance on Packet Reordering
@@ -55,7 +55,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 4 September 2025.
+   This Internet-Draft will expire on 11 September 2025.
 
 Copyright Notice
 
@@ -183,7 +183,35 @@ Table of Contents
 
 4.2.  Wi-Fi
 
-   TBD
+   The IEEE 802.11 specification (Wi-Fi) currently supports only in-
+   order delivery.  The 802.11 protocols inherit traffic delivery
+   requirements from the 802.1Q specification (see section 6.5.3 in
+   802.1Q), which only permits only in-order delivery.
+
+   To utilize the medium efficiently, the 802.11 MAC aggregates data
+   frames of a given traffic identifier (TID) and transmits them as a
+   block.  However, due to link errors, not all frames in the block may
+   be received.  A re-order buffer at the receiver holds up delivery of
+   data frames if a frame ahead of it is missing.  A separate reorder
+   buffer is maintained for each of the 8 TIDs.  A later retransmission
+   may deliver the missing frame at which point the missing frame and
+   subsequent frames are delivered.
+
+   The process of in-order delivery is also taken advantage of as part
+   of the security protocol.  Each data frame is sequentially numbered
+   with a packet number.  To mitigate against a replay attack, the
+   receiving MAC simply checks if the packet number of a received data
+   frames is higher than the highest received one for that TID.
+
+   Allowing out-of-order delivery within the 802.11 specification for a
+   given TID would require some adjustments to the 802.11 protocol.
+   Some of the adjustments include the following:
+
+   *  The reorder buffer would need to release packets without waiting
+      for older packets to be received.
+
+   *  The replay detection mechanism would need to be updated to not
+      drop an older missing frame when it is successfully retransmitted.
 
 4.3.  DOCSIS
 
