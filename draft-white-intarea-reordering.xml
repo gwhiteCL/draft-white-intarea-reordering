@@ -164,7 +164,17 @@
 
       <section>
         <name>Wi-Fi</name>
-        <t>TBD</t>
+
+        <t>The IEEE 802.11 specification (Wi-Fi) currently supports only in-order delivery.  The 802.11 protocols inherit traffic delivery requirements from the 802.1Q specification (see section 6.5.3 in 802.1Q), which only permits only in-order delivery.</t>
+
+        <t>To utilize the medium efficiently, the 802.11 MAC aggregates data frames of a given traffic identifier (TID) and transmits them as a block. However, due to link errors, not all frames in the block may be received. A re-order buffer at the receiver holds up delivery of data frames if a frame ahead of it is missing. A separate reorder buffer is maintained for each of the 8 TIDs. A later retransmission may deliver the missing frame at which point the missing frame and subsequent frames are delivered.</t>
+
+        <t>The process of in-order delivery is also taken advantage of as part of the security protocol. Each data frame is sequentially numbered with a packet number. To mitigate against a replay attack, the receiving MAC simply checks if the packet number of a received  data frames is higher than the highest received one for that TID.</t>
+
+        <t>Allowing out-of-order delivery within the 802.11 specification for a given TID would require some adjustments to the 802.11 protocol. Some of the adjustments include the following:</t>
+          <ul><li>The reorder buffer would need to release packets without waiting for older packets to be received.</li>
+          <li>The replay detection mechanism would need to be updated to not drop an older missing frame when it is successfully retransmitted.</li></ul>
+
       </section>
 
       <section>
