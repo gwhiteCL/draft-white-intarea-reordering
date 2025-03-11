@@ -188,13 +188,16 @@ Table of Contents
    transmission can begin.  Transmission on the MAC layer can however
    have a high block error rate (BLER), 10% or more is common especially
    when the traffic pattern and radio channel varies.  Each
-   retransmission adds a few milliseconds extra delay.  This results in
-   that packets are delivered out of order up to the RLC layer on the
-   receiver side because some transmissions on the MAC layer may succeed
-   in one transmission attempt while other transmissions may need
-   several attepts, up to some given limit given by system
-   configuration.  HARQ failure is triggered when the max number of
-   retransmissions is reached.
+   retransmission adds a few milliseconds extra delay.
+
+   This results in that packets are delivered out of order up to the RLC
+   layer on the receiver side because some transmissions on the MAC
+   layer may succeed in one transmission attempt while other
+   transmissions may need several attepts, up to some given limit given
+   by system configuration.
+
+   HARQ failure is triggered when the max number of retransmissions is
+   reached.
 
    On the RLC Layer: The RLC layer is configured in two typical ways.
 
@@ -222,9 +225,10 @@ Table of Contents
    5G systems however, resequencing is left to the PDCP layer.
    Resequencing on the PDCP layer is however optional according to the
    5G standard but is mostly enabled out of concern for sensitivity to
-   packet reordering on the transport and application layer.  In
-   addition radio bearers with robust header compression (RoHC) should
-   enable resequencing.
+   packet reordering on the transport and application layer.
+
+   In addition radio bearers with robust header compression (RoHC)
+   should enable resequencing.
 
 4.2.  Wi-Fi
 
