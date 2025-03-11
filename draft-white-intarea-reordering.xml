@@ -159,7 +159,7 @@
 
       <section>
         <name>LTE/5G</name>
-           
+
         <t>Packet reordering can occur on both the MAC and the RLC layer in LTE and 5G systems. Packet resequencing occurs on the PDCP layer.</t>
       </section>
 
