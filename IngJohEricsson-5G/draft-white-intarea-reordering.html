@@ -1271,6 +1271,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
           <li class="normal" id="section-4.1-4.2">RLC Acknowledged mode (RLC-AM): Is typically used for normal internet traffic, a.k.a Mobile Broadband (MBB). Retransmissions on this layer are less common than retransmissions on the MAC layer and they occur when HARQ failure is triggered on the MAC layer, or in the case that the MAC layer erroneously decodes a NACK as an ACK. Retransmission on the RLC layer causes 10s of milliseconds on extra delay, depending on how timers are configured.<a href="#section-4.1-4.2" class="pilcrow">¶</a>
 </li>
         </ul>
+<p id="section-4.1-5">Besides the causes for packet reordering listed above, packet reordering can occur with Dual Connectivity where 2 or more radio frequency bands are combined on the RLC layer, this because there can be a time skew of a few milliseconds over transport links between the  PDCP layer and the RLC layer(s).<a href="#section-4.1-5" class="pilcrow">¶</a></p>
 </section>
 <section id="section-4.2">
         <h3 id="name-wi-fi">

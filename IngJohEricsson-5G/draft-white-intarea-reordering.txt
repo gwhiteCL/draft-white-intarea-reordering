@@ -212,6 +212,12 @@ Table of Contents
       milliseconds on extra delay, depending on how timers are
       configured.
 
+   Besides the causes for packet reordering listed above, packet
+   reordering can occur with Dual Connectivity where 2 or more radio
+   frequency bands are combined on the RLC layer, this because there can
+   be a time skew of a few milliseconds over transport links between the
+   PDCP layer and the RLC layer(s).
+
 4.2.  Wi-Fi
 
    The IEEE 802.11 specification (Wi-Fi) currently supports only in-
