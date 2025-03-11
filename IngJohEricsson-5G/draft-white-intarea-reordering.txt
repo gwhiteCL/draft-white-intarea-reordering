@@ -198,6 +198,20 @@ Table of Contents
 
    On the RLC Layer: The RLC layer is configured in two typical ways.
 
+   *  RLC Unacknowledged mode (RLC-UM): Is typically used for VoIP
+      services a.k.a VoLTE (Voice over LTE) or VoNR (Voice over NR) but
+      can also be used for the transmission of low latency video.  Data
+      blocks are not retransmitted in this mode.
+
+   *  RLC Acknowledged mode (RLC-AM): Is typically used for normal
+      internet traffic, a.k.a Mobile Broadband (MBB).  Retransmissions
+      on this layer are less common than retransmissions on the MAC
+      layer and they occur when HARQ failure is triggered on the MAC
+      layer, or in the case that the MAC layer erroneously decodes a
+      NACK as an ACK.  Retransmission on the RLC layer causes 10s of
+      milliseconds on extra delay, depending on how timers are
+      configured.
+
 4.2.  Wi-Fi
 
    The IEEE 802.11 specification (Wi-Fi) currently supports only in-
