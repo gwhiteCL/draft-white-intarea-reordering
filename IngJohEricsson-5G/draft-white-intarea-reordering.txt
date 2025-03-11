@@ -218,6 +218,14 @@ Table of Contents
    be a time skew of a few milliseconds over transport links between the
    PDCP layer and the RLC layer(s).
 
+   The RLC layer does resequencing on the RLC layer in LTE systems.  On
+   5G systems however, resequencing is left to the PDCP layer.
+   Resequencing on the PDCP layer is however optional according to the
+   5G standard but is mostly enabled out of concern for sensitivity to
+   packet reordering on the transport and application layer.  In
+   addition radio bearers with robust header compression (RoHC) should
+   enable resequencing.
+
 4.2.  Wi-Fi
 
    The IEEE 802.11 specification (Wi-Fi) currently supports only in-
