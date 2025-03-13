@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-03-11T01:10:44.281458+00:00",
+  "timestamp": "2025-03-13T01:11:12.220270+00:00",
   "repo": "gwhiteCL/draft-white-intarea-reordering",
   "labels": [
     {
@@ -50,5 +50,34 @@
     }
   ],
   "issues": [],
-  "pulls": []
+  "pulls": [
+    {
+      "number": 1,
+      "id": "PR_kwDOOAwCW86OLqni",
+      "title": "Text on LTE/5G",
+      "url": "https://github.com/gwhiteCL/draft-white-intarea-reordering/pull/1",
+      "state": "MERGED",
+      "author": "IngJohEricsson",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-03-11T14:56:11Z",
+      "updatedAt": "2025-03-11T15:14:14Z",
+      "baseRepository": "gwhiteCL/draft-white-intarea-reordering",
+      "baseRefName": "main",
+      "baseRefOid": "d009556b68fb9126d139d523572276584c807bc0",
+      "headRepository": "gwhiteCL/draft-white-intarea-reordering",
+      "headRefName": "IngJohEricsson-5G",
+      "headRefOid": "e3f5c104ced93dfd7dabad75ff6a54562f5fcc90",
+      "closedAt": "2025-03-11T15:14:14Z",
+      "mergedAt": "2025-03-11T15:14:14Z",
+      "mergedBy": "gwhiteCL",
+      "mergeCommit": {
+        "oid": "78fa04dc2151687f9c89bce65acd8b86fab65fb5"
+      },
+      "comments": [],
+      "reviews": []
+    }
+  ]
 }
