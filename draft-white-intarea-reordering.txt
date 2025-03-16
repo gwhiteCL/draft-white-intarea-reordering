@@ -137,16 +137,15 @@ Table of Contents
    guidance on implementing ROHC over channels that can reorder header-
    compressed packets, and explains different ways of implementing the
    profiles found in [RFC3095] over reordering channels.  Subsequent to
-   the publication of [RFC3819] the issue of re-ordering intolerance by
+   the publication of [RFC3819] the issue of reordering intolerance by
    ROHC was addressed by the development of ROHCv2 [RFC5225], which
    lists tolerance to reordering as one of its significant improvements
    over ROHC.
 
-   In addition to the warnings about TCP and header compression
-   discussed in [RFC3819], there may be other protocols that are
-   sensitive to reordering.  For instance, Section 4.1 of [RFC2983]
-   discusses IPSec [RFC2401] and L2TP [RFC2661] as being sensitive to
-   packet reordering.
+   There may be other protocols or protocol implementations that are
+   sensitive to reordering to some degree.  For instance, Section 4.1 of
+   [RFC2983] discusses IPSec [RFC2401] and L2TP [RFC2661] as being
+   sensitive to packet reordering.
 
    TODO: describe "resequencing" generally
 
