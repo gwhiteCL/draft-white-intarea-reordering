@@ -112,7 +112,15 @@
       <t>The text of <xref target="RFC3819"/> does mention that research on improving TCP behavior in the face of packet reordering was underway.
       In the intervening 20+ years, that research has resulted in the definition of <xref target="RFC8985">RACK</xref> which significantly reduces TCP's sensitivity to out-of-order arrivals.
       In addition, <xref target="RFC9002" section="6.1"/> discusses the usefulness of implementing similar mechanisms in QUIC, and provides the protocol tools to do so.
-      Moreover, neither TCP nor QUIC fail in the presence of some out-of-order packets, even if they don't implement RACK. The may see reduced performance, but both protocols have the ability to correctly handle the receipt of packets out of order.</t>
+      The result is that having the link-layer delay packets to provide them in-order to the transport layer was helpful multiple decades ago when TCP implementations had more naive algorithms and were very resource-constrained. 
+      Given how modern implementations work, resequencing at the link-layer is almost always harmful. 
+      Modern TCP and QUIC stacks can handle reordering well, thanks to both protocol features and implementations having more memory to work with. 
+      For these implementations, the delay induced by L2 resequencing will generally cause more harm than good. 
+      Furthermore, one of the biggest motivators for QUIC was to break head-of-line blocking and allow out-of-order delivery to the application layer. 
+      At this point we have large bodies of data showing that this improves real-world performance.
+      Moreover, older implementations of TCP that don't implement RACK don't fail in the presence of some out-of-order packets. 
+      They may see reduced performance, but they do have the ability to correctly handle the receipt of packets out of order.</t>
+
 
       <t>TODO: discuss current state of header compression</t>
       <t>In addition to the warnings about TCP and header compression discussed in <xref target="RFC3819"/>, there may be other protocols that are sensitive to reordering.  For instance, <xref target="RFC2983" section="4.1"/> discusses <xref target="RFC2401">IPSec</xref> and <xref target="RFC2661">L2TP</xref> as being sensitive to packet reordering.</t>
