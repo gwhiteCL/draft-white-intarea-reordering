@@ -123,9 +123,9 @@
 
       <t>At the time of publication of <xref target="RFC3819"/>, the "ROHC" header compression framework defined in <xref target="RFC3095"/> stated an operating assumption that the network would provide in-order delivery.
       This assumption is discussed in detail in <xref target="RFC4224"/>, which provides guidance on implementing ROHC over channels that can reorder header-compressed packets, and explains different ways of implementing the profiles found in <xref target="RFC3095"/> over reordering channels.
-      Subsequent to the publication of <xref target="RFC3819"/> the issue of re-ordering intolerance by ROHC was addressed by the development of ROHCv2 <xref target="RFC5225"/>, which lists tolerance to reordering as one of its significant improvements over ROHC.</t>
+      Subsequent to the publication of <xref target="RFC3819"/> the issue of reordering intolerance by ROHC was addressed by the development of ROHCv2 <xref target="RFC5225"/>, which lists tolerance to reordering as one of its significant improvements over ROHC.</t>
 
-      <t>In addition to the warnings about TCP and header compression discussed in <xref target="RFC3819"/>, there may be other protocols that are sensitive to reordering.  For instance, <xref target="RFC2983" section="4.1"/> discusses <xref target="RFC2401">IPSec</xref> and <xref target="RFC2661">L2TP</xref> as being sensitive to packet reordering.</t>
+      <t>There may be other protocols or protocol implementations that are sensitive to reordering to some degree.  For instance, <xref target="RFC2983" section="4.1"/> discusses <xref target="RFC2401">IPSec</xref> and <xref target="RFC2661">L2TP</xref> as being sensitive to packet reordering.</t>
 
       <t>TODO: describe "resequencing" generally</t>
 
