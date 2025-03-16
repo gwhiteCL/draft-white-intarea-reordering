@@ -5,10 +5,10 @@
 Internet Area Working Group                                     G. White
 Internet-Draft                                                 CableLabs
 Intended status: Informational                              I. Johansson
-Expires: 12 September 2025                                      Ericsson
+Expires: 17 September 2025                                      Ericsson
                                                                   D. Das
                                                                    Intel
-                                                           11 March 2025
+                                                           16 March 2025
 
 
          Proposal for Updates to Guidance on Packet Reordering
@@ -36,9 +36,10 @@ Abstract
    significantly improve their tolerance to out-of-order delivery.
 
    This draft is intended to promote an analysis and discussion of the
-   sensitivity of modern protocols to out-of-order delivery, and to
-   potentially develop new guidance to layer 2 technology standards
-   regarding the need to assure in-order delivery.
+   sensitivity of modern IETF protocols to out-of-order delivery, and to
+   potentially develop new information for layer 2 technology standards
+   regarding the need to assure in-order delivery to support IETF
+   protocols.
 
 Status of This Memo
 
@@ -55,7 +56,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 12 September 2025.
+   This Internet-Draft will expire on 17 September 2025.
 
 Copyright Notice
 
@@ -111,13 +112,35 @@ Table of Contents
    of RACK [RFC8985] which significantly reduces TCP's sensitivity to
    out-of-order arrivals.  In addition, Section 6.1 of [RFC9002]
    discusses the usefulness of implementing similar mechanisms in QUIC,
-   and provides the protocol tools to do so.  Moreover, neither TCP nor
-   QUIC fail in the presence of some out-of-order packets, even if they
-   don't implement RACK.  The may see reduced performance, but both
-   protocols have the ability to correctly handle the receipt of packets
-   out of order.
+   and provides the protocol tools to do so.  The result is that having
+   the link-layer delay packets to provide them in-order to the
+   transport layer was helpful multiple decades ago when TCP
+   implementations had more naive algorithms and were very resource-
+   constrained.  Given how modern implementations work, resequencing at
+   the link-layer is almost always harmful.  Modern TCP and QUIC stacks
+   can handle reordering well, thanks to both protocol features and
+   implementations having more memory to work with.  For these
+   implementations, the delay induced by L2 resequencing will generally
+   cause more harm than good.  Furthermore, one of the biggest
+   motivators for QUIC was to break head-of-line blocking and allow out-
+   of-order delivery to the application layer.  At this point we have
+   large bodies of data showing that this improves real-world
+   performance.  Moreover, older implementations of TCP that don't
+   implement RACK don't fail in the presence of some out-of-order
+   packets.  They may see reduced performance, but they do have the
+   ability to correctly handle the receipt of packets out of order.
 
-   TODO: discuss current state of header compression
+   At the time of publication of [RFC3819], the "ROHC" header
+   compression framework defined in [RFC3095] stated an operating
+   assumption that the network would provide in-order delivery.  This
+   assumption is discussed in detail in [RFC4224], which provides
+   guidance on implementing ROHC over channels that can reorder header-
+   compressed packets, and explains different ways of implementing the
+   profiles found in [RFC3095] over reordering channels.  Subsequent to
+   the publication of [RFC3819] the issue of re-ordering intolerance by
+   ROHC was addressed by the development of ROHCv2 [RFC5225], which
+   lists tolerance to reordering as one of its significant improvements
+   over ROHC.
 
    In addition to the warnings about TCP and header compression
    discussed in [RFC3819], there may be other protocols that are
@@ -337,6 +360,24 @@ Table of Contents
    [RFC9002]  Iyengar, J., Ed. and I. Swett, Ed., "QUIC Loss Detection
               and Congestion Control", RFC 9002, DOI 10.17487/RFC9002,
               May 2021, <https://www.rfc-editor.org/info/rfc9002>.
+
+   [RFC5225]  Pelletier, G. and K. Sandlund, "RObust Header Compression
+              Version 2 (ROHCv2): Profiles for RTP, UDP, IP, ESP and
+              UDP-Lite", RFC 5225, DOI 10.17487/RFC5225, April 2008,
+              <https://www.rfc-editor.org/info/rfc5225>.
+
+   [RFC3095]  Bormann, C., Burmeister, C., Degermark, M., Fukushima, H.,
+              Hannu, H., Jonsson, L., Hakenberg, R., Koren, T., Le, K.,
+              Liu, Z., Martensson, A., Miyazaki, A., Svanbro, K.,
+              Wiebke, T., Yoshimura, T., and H. Zheng, "RObust Header
+              Compression (ROHC): Framework and four profiles: RTP, UDP,
+              ESP, and uncompressed", RFC 3095, DOI 10.17487/RFC3095,
+              July 2001, <https://www.rfc-editor.org/info/rfc3095>.
+
+   [RFC4224]  Pelletier, G., Jonsson, L., and K. Sandlund, "RObust
+              Header Compression (ROHC): ROHC over Channels That Can
+              Reorder Packets", RFC 4224, DOI 10.17487/RFC4224, January
+              2006, <https://www.rfc-editor.org/info/rfc4224>.
 
 Acknowledgements
 
