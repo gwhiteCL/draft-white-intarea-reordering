@@ -113,7 +113,7 @@
       In the intervening 20+ years, that research has resulted in the definition of <xref target="RFC8985">RACK</xref> which significantly reduces TCP's sensitivity to out-of-order arrivals.
       In addition, <xref target="RFC9002" section="6.1"/> discusses the usefulness of implementing similar mechanisms in QUIC, and provides the protocol tools to do so.
       The result is that having the link-layer delay packets to provide them in-order to the transport layer was helpful multiple decades ago when TCP implementations had more naive algorithms and were very resource-constrained.
-      Given how modern implementations work, resequencing at the link-layer is almost always harmful.
+      Given how modern implementations work, this "resequencing" at the link-layer is almost always harmful.
       Modern TCP and QUIC stacks can handle reordering well, thanks to both protocol features and implementations having more memory to work with.
       For these implementations, the delay induced by L2 resequencing will generally cause more harm than good.
       Furthermore, one of the biggest motivators for QUIC was to break head-of-line blocking and allow out-of-order delivery to the application layer.
@@ -126,8 +126,6 @@
       Subsequent to the publication of <xref target="RFC3819"/> the issue of reordering intolerance by ROHC was addressed by the development of ROHCv2 <xref target="RFC5225"/>, which lists tolerance to reordering as one of its significant improvements over ROHC.</t>
 
       <t>There may be other protocols or protocol implementations that are sensitive to reordering to some degree.  For instance, <xref target="RFC2983" section="4.1"/> discusses <xref target="RFC2401">IPSec</xref> and <xref target="RFC2661">L2TP</xref> as being sensitive to packet reordering.</t>
-
-      <t>TODO: describe "resequencing" generally</t>
 
       <t>The current situation seems to be that several layer 2 technologies implement resequencing functions that increase cost and complexity of equipment, and may in many cases degrade network performance rather than improving it.  Any benefits of resequencing may be primarily limited to older protocol implementations e.g. maintaining the performance of older TCP implementations that are no longer widely used and may not be particularly performant by modern standards.</t>
 
@@ -143,6 +141,40 @@
           <dd>The process where an out-of-order packet/frame sequence is returned to the originally transmitted order.</dd>
         </dl>
       </section>
+
+
+    <section>
+      <name>Proposed Updates to RFC3819 Guidance on Packet Reordering</name>
+      <t>This draft proposes to replace the contents of <xref target="RFC3819" section="15"/> with the following text.</t>
+
+      <t>The Internet architecture does not guarantee that packets will arrive
+      in the same order in which they were originally transmitted;
+      transport protocols must take this into account.</t>
+
+      <t>An earlier definition of TCP <xref target="RFC2581"/><xref target="RFC3517"/><xref target="RFC5681"/><xref target="RFC6675"/> defined the "fast retransmit" algorithm,
+      which recommended that a TCP receiver send an immediate duplicate ACK when an out-of-order segment arrives,
+      and it recommended that the TCP sender use the arrival of 3 duplicate ACKs as an indication that a segment has been lost.
+      This loss determination triggers a retransmission and a reduction of the congestion window.
+      In the presence of packet reordering, this duplicate-ACK-based loss detection mechanism can incorrectly deem a packet lost, and thus trigger a spurious retransmission and an unnecessary congestion window reduction, both of which can negatively impact the performance of the connection.
+      Thus, one outcome of the implementation and deployment of the fast retransmit algorithm is that TCPs became significantly more sensitive to network reordering.</t>
+
+      <t>A more recent update to TCP <xref target="RFC8985"/> addresses this sensitivity by performing loss detection via time-based inferences derived from the ACK feedback, rather than using duplicate ACKs.
+      In addition, <xref target="RFC9002" section="6.1"/> discusses the usefulness of implementing similar mechanisms in QUIC, and provides the protocol tools to do so.
+      Implementations of these time-based loss detection methods have now been widely deployed.</t>
+
+      <t> [BPS99] cites reasons why it may undesirable to eliminate
+      reordering.  There are situations where average packet latency can be
+      reduced, link efficiency can be increased, and/or reliability can be
+      improved if reordering is permitted.  Examples include certain high
+      speed switches within the Internet backbone and the parallel links
+      used over many Internet paths for load splitting and redundancy.</t>
+
+      <t>Nonetheless, there may exist implementations of network protocols that do not work well in the presence of a significant amount of packet reordering.</t>
+
+      <t>This suggests that subnetwork implementers should try to avoid packet
+      reordering when possible, but not if doing so compromises
+      efficiency, impairs reliability, or increases average packet delay.</t>
+    </section>
 
 
     <section>
@@ -215,8 +247,6 @@
 
     </section>
 
-
-
     <section anchor="IANA">
     <!-- All drafts are required to have an IANA considerations section. See RFC 8126 for a guide.-->
       <name>IANA Considerations</name>
@@ -247,7 +277,10 @@
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.5225.xml"/>
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.8985.xml"/>
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.9002.xml"/>
-
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.2581.xml"/>
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.3517.xml"/>
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.5681.xml"/>
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.6675.xml"/>
       </references>
     </references>
 
