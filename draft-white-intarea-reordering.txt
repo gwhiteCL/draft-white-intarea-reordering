@@ -5,10 +5,10 @@
 Internet Area Working Group                                     G. White
 Internet-Draft                                                 CableLabs
 Intended status: Informational                              I. Johansson
-Expires: 2 April 2026                                           Ericsson
+Expires: 4 April 2026                                           Ericsson
                                                                   D. Das
                                                                    Intel
-                                                       29 September 2025
+                                                          1 October 2025
 
 
          Proposal for Updates to Guidance on Packet Reordering
@@ -30,7 +30,7 @@ Abstract
    case that all of the higher sequenced frames being delayed are
    carrying packets for different layer 4 contexts than a single lower-
    sequenced frame that triggered the delay.  The result is that this
-   "re-sequencing" operation can introduce delays that result in
+   "resequencing" operation can introduce delays that result in
    degradation of performance rather than improving it.  Moreover,
    modern, performant TCP and QUIC implementations support features that
    significantly improve their tolerance to out-of-order delivery.
@@ -56,7 +56,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 2 April 2026.
+   This Internet-Draft will expire on 4 April 2026.
 
 Copyright Notice
 
