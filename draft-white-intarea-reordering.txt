@@ -5,10 +5,10 @@
 Internet Area Working Group                                     G. White
 Internet-Draft                                                 CableLabs
 Intended status: Informational                              I. Johansson
-Expires: 4 April 2026                                           Ericsson
+Expires: 19 April 2026                                          Ericsson
                                                                   D. Das
                                                                    Intel
-                                                          1 October 2025
+                                                         16 October 2025
 
 
          Proposal for Updates to Guidance on Packet Reordering
@@ -56,7 +56,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 4 April 2026.
+   This Internet-Draft will expire on 19 April 2026.
 
 Copyright Notice
 
@@ -345,7 +345,7 @@ Table of Contents
    individual IP packets are encapsulated in layer 2 frames that
    generally include a 20-bit Downstream Service ID (DSID), a 1-bit
    Sequence Change Count, and a 16-bit Packet Sequence Number.  The
-   specifications include detailed, manadatory, requirements on the
+   specifications include detailed, mandatory, requirements on the
    handling of these fields, including a requirement that cable modems
    support at least 16 simultaneous resequencing contexts, each of which
    having sufficient memory to hold packets for up to 13 ms (18 ms in
