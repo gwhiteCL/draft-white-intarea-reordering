@@ -73,6 +73,15 @@
         <email>dibakar.das@intel.com</email>
       </address>
     </author>
+    <author fullname="Chris Box" initials="C." surname="Box">
+      <organization>BT Group</organization> <!-- https://authors.ietf.org/en/rfcxml-vocabulary#organization -->
+      <address> <!-- https://authors.ietf.org/en/rfcxml-vocabulary#address -->
+        <postal>
+          <country>GB</country>
+        </postal>
+        <email>chris.box@bt.com</email>
+      </address>
+    </author>
 
     <date year="2025"/> <!-- https://authors.ietf.org/en/rfcxml-vocabulary#date -->
     <!-- On draft subbmission:
