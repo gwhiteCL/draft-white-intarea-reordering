@@ -183,8 +183,8 @@
       <section>
         <name>Multi-Link Aggregation</name>
         <t>Some link technologies support the aggregation (within L2) of multiple links between a pair of nodes for the purpose of increasing the total capacity of the link.
-        In some cases the individual links within the aggregation could have different capacities and/or latencies from one another.
-        When this is the case, the frame reception order can differ from the frame transmission order.</t>
+        In many cases the individual links within the aggregation have different capacities and/or latencies from one another.
+        When this is the case, the frame reception order differs from the frame transmission order.</t>
       </section>
       <section>
         <name>Layer 2 Retransmissions</name>
