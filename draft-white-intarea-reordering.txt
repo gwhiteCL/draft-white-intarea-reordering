@@ -5,10 +5,10 @@
 Internet Area Working Group                                     G. White
 Internet-Draft                                                 CableLabs
 Intended status: Informational                              I. Johansson
-Expires: 19 April 2026                                          Ericsson
+Expires: 20 April 2026                                          Ericsson
                                                                   D. Das
                                                                    Intel
-                                                         16 October 2025
+                                                         17 October 2025
 
 
          Proposal for Updates to Guidance on Packet Reordering
@@ -56,7 +56,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 19 April 2026.
+   This Internet-Draft will expire on 20 April 2026.
 
 Copyright Notice
 
@@ -76,14 +76,14 @@ Table of Contents
 
    1.  Introduction
    2.  Terminology
-   3.  Proposed Updates to RFC3819 Guidance on Packet Reordering
-   4.  Reordering in L2 Links
-     4.1.  Multi-Link Aggregation
-     4.2.  Layer 2 Retransmissions
-   5.  Resequencing in L2 Standards
-     5.1.  LTE/5G
-     5.2.  Wi-Fi
-     5.3.  DOCSIS
+   3.  Reordering in L2 Links
+     3.1.  Multi-Link Aggregation
+     3.2.  Layer 2 Retransmissions
+   4.  Resequencing in L2 Standards
+     4.1.  LTE/5G
+     4.2.  Wi-Fi
+     4.3.  DOCSIS
+   5.  Proposed Updates to RFC3819 Guidance on Packet Reordering
    6.  IANA Considerations
    7.  Security Considerations
    8.  References
@@ -168,58 +168,12 @@ Table of Contents
       The process where an out-of-order packet/frame sequence is
       returned to the originally transmitted order.
 
-3.  Proposed Updates to RFC3819 Guidance on Packet Reordering
-
-   This draft proposes to replace the contents of Section 15 of
-   [RFC3819] with the following text.
-
-   The Internet architecture does not guarantee that packets will arrive
-   in the same order in which they were originally transmitted;
-   transport protocols must take this into account.
-
-   An earlier definition of TCP [RFC2581][RFC3517][RFC5681][RFC6675]
-   defined the "fast retransmit" algorithm, which recommended that a TCP
-   receiver send an immediate duplicate ACK when an out-of-order segment
-   arrives, and it recommended that the TCP sender use the arrival of 3
-   duplicate ACKs as an indication that a segment has been lost.  This
-   loss determination triggers a retransmission and a reduction of the
-   congestion window.  In the presence of packet reordering, this
-   duplicate-ACK-based loss detection mechanism can incorrectly deem a
-   packet lost, and thus trigger a spurious retransmission and an
-   unnecessary congestion window reduction, both of which can negatively
-   impact the performance of the connection.  Thus, one outcome of the
-   implementation and deployment of the fast retransmit algorithm is
-   that TCPs became significantly more sensitive to network reordering.
-
-   A more recent update to TCP [RFC8985] addresses this sensitivity by
-   performing loss detection via time-based inferences derived from the
-   ACK feedback, rather than using duplicate ACKs.  In addition,
-   Section 6.1 of [RFC9002] discusses the usefulness of implementing
-   similar mechanisms in QUIC, and provides the protocol tools to do so.
-   Implementations of these time-based loss detection methods have now
-   been widely deployed.
-
-   [BPS99] cites reasons why it may undesirable to eliminate reordering.
-   There are situations where average packet latency can be reduced,
-   link efficiency can be increased, and/or reliability can be improved
-   if reordering is permitted.  Examples include certain high speed
-   switches within the Internet backbone and the parallel links used
-   over many Internet paths for load splitting and redundancy.
-
-   Nonetheless, there may exist implementations of network protocols
-   that do not work well in the presence of a significant amount of
-   packet reordering.
-
-   This suggests that subnetwork implementers should try to avoid packet
-   reordering when possible, but not if doing so compromises efficiency,
-   impairs reliability, or increases average packet delay.
-
-4.  Reordering in L2 Links
+3.  Reordering in L2 Links
 
    In current L2 link technologies, frame reordering comes from two
    primary sources: multi-link aggregation and layer-2 retransmission.
 
-4.1.  Multi-Link Aggregation
+3.1.  Multi-Link Aggregation
 
    Some link technologies support the aggregation (within L2) of
    multiple links between a pair of nodes for the purpose of increasing
@@ -228,7 +182,7 @@ Table of Contents
    from one another.  When this is the case, the frame reception order
    differs from the frame transmission order.
 
-4.2.  Layer 2 Retransmissions
+3.2.  Layer 2 Retransmissions
 
    Some link technologies (particularly wireless), are subject to noise
    and interference that would result in an unacceptably high frame
@@ -239,12 +193,12 @@ Table of Contents
    the end are unaffected, the retransmitted frames will arrive out of
    sequence from the original ordering.
 
-5.  Resequencing in L2 Standards
+4.  Resequencing in L2 Standards
 
    This section discusses functions and requirements for resequencing in
    exising layer 2 standards.
 
-5.1.  LTE/5G
+4.1.  LTE/5G
 
    Packet reordering can occur on both the MAC and the RLC layer in LTE
    and 5G systems.  Packet resequencing occurs on the PDCP layer.
@@ -297,7 +251,7 @@ Table of Contents
    In addition radio bearers with robust header compression (RoHC)
    should enable resequencing.
 
-5.2.  Wi-Fi
+4.2.  Wi-Fi
 
    The IEEE 802.11 specification (Wi-Fi) currently supports only in-
    order delivery.  The 802.11 protocols inherit traffic delivery
@@ -329,7 +283,7 @@ Table of Contents
    *  The replay detection mechanism would need to be updated to not
       drop an older missing frame when it is successfully retransmitted.
 
-5.3.  DOCSIS
+4.3.  DOCSIS
 
    The Data-Over-Cable Service Interface Specifications provide
    broadband access over hybrid fiber-coaxial networks.  The DOCSIS
@@ -364,6 +318,52 @@ Table of Contents
    segment header which contains a 13-bit sequence number.  The CMTS is
    required to reassemble the concatenated frame sequence, and forward
    the individual frames in order.
+
+5.  Proposed Updates to RFC3819 Guidance on Packet Reordering
+
+   This draft proposes to replace the contents of Section 15 of
+   [RFC3819] with the following text.
+
+   The Internet architecture does not guarantee that packets will arrive
+   in the same order in which they were originally transmitted;
+   transport protocols must take this into account.
+
+   An earlier definition of TCP [RFC2581][RFC3517][RFC5681][RFC6675]
+   defined the "fast retransmit" algorithm, which recommended that a TCP
+   receiver send an immediate duplicate ACK when an out-of-order segment
+   arrives, and it recommended that the TCP sender use the arrival of 3
+   duplicate ACKs as an indication that a segment has been lost.  This
+   loss determination triggers a retransmission and a reduction of the
+   congestion window.  In the presence of packet reordering, this
+   duplicate-ACK-based loss detection mechanism can incorrectly deem a
+   packet lost, and thus trigger a spurious retransmission and an
+   unnecessary congestion window reduction, both of which can negatively
+   impact the performance of the connection.  Thus, one outcome of the
+   implementation and deployment of the fast retransmit algorithm is
+   that TCPs became significantly more sensitive to network reordering.
+
+   A more recent update to TCP [RFC8985] addresses this sensitivity by
+   performing loss detection via time-based inferences derived from the
+   ACK feedback, rather than using duplicate ACKs.  In addition,
+   Section 6.1 of [RFC9002] discusses the usefulness of implementing
+   similar mechanisms in QUIC, and provides the protocol tools to do so.
+   Implementations of these time-based loss detection methods have now
+   been widely deployed.
+
+   [BPS99] cites reasons why it may undesirable to eliminate reordering.
+   There are situations where average packet latency can be reduced,
+   link efficiency can be increased, and/or reliability can be improved
+   if reordering is permitted.  Examples include certain high speed
+   switches within the Internet backbone and the parallel links used
+   over many Internet paths for load splitting and redundancy.
+
+   Nonetheless, there may exist implementations of network protocols
+   that do not work well in the presence of a significant amount of
+   packet reordering.
+
+   This suggests that subnetwork implementers should try to avoid packet
+   reordering when possible, but not if doing so compromises efficiency,
+   impairs reliability, or increases average packet delay.
 
 6.  IANA Considerations
 
