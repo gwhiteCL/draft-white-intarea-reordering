@@ -8,6 +8,8 @@ Intended status: Informational                              I. Johansson
 Expires: 20 April 2026                                          Ericsson
                                                                   D. Das
                                                                    Intel
+                                                                  C. Box
+                                                                BT Group
                                                          17 October 2025
 
 
@@ -468,3 +470,9 @@ Authors' Addresses
    Intel
    United States of America
    Email: dibakar.das@intel.com
+
+
+   Chris Box
+   BT Group
+   United Kingdom
+   Email: chris.box@bt.com

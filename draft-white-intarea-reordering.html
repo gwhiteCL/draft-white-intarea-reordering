@@ -8,6 +8,7 @@
 <meta content="Greg White" name="author">
 <meta content="Ingemar Johansson" name="author">
 <meta content="Dibakar Das" name="author">
+<meta content="Chris Box" name="author">
 <meta content='
        Several link technology standards mandate that equipment guarantee in-order delivery of layer 2 frames, apparently due to a belief that this is required by higher layer protocols.  In addition, certain link types can introduce out-of-order arrivals at the end of the layer 2 link, which the receiving equipment is required to rectify by delaying higher sequenced frames until all lower sequenced frames can be delivered or are deemed lost.  The delaying of higher sequenced frames is generally done without any knowledge of the higher layer protocols in use, let alone any knowledge of higher layer protocol contexts (e.g. TCP connections) in the case that the layer 2 link is carrying a multiplex of such contexts. It could, for example, be the case that all of the higher sequenced frames being delayed are carrying packets for different layer 4 contexts than a single lower-sequenced frame that triggered the delay. The result is that this "resequencing" operation can introduce delays that result in degradation of performance rather than improving it.  Moreover, modern, performant TCP and QUIC implementations support features that significantly improve their tolerance to out-of-order delivery. 
        This draft is intended to promote an analysis and discussion of the sensitivity of modern IETF protocols to out-of-order delivery, and to potentially develop new information for layer 2 technology standards regarding the need to assure in-order delivery to support IETF protocols. 
@@ -1084,6 +1085,10 @@ svg :is([fill="white"], [fill^="#fff"]) {
       <div class="author-name">D. Das</div>
 <div class="org">Intel</div>
 </div>
+<div class="author">
+      <div class="author-name">C. Box</div>
+<div class="org">BT Group</div>
+</div>
 </dd>
 </dl>
 </div>
@@ -1466,6 +1471,15 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <div class="email">
 <span>Email:</span>
 <a href="mailto:dibakar.das@intel.com" class="email">dibakar.das@intel.com</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Chris Box</span></div>
+<div dir="auto" class="left"><span class="org">BT Group</span></div>
+<div dir="auto" class="left"><span class="country-name">United Kingdom</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:chris.box@bt.com" class="email">chris.box@bt.com</a>
 </div>
 </address>
 </section>
