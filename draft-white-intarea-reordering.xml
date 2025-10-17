@@ -242,7 +242,7 @@
       In addition, <xref target="RFC9002" section="6.1"/> discusses the usefulness of implementing similar mechanisms in QUIC, and provides the protocol tools to do so.
       Implementations of these time-based loss detection methods have now been widely deployed.</t>
 
-      <t> [BPS99] cites reasons why it may undesirable to eliminate
+      <t><xref target="BPS99"/> cites reasons why it may undesirable to eliminate
       reordering.  There are situations where average packet latency can be
       reduced, link efficiency can be increased, and/or reliability can be
       improved if reordering is permitted.  Examples include certain high
@@ -293,6 +293,19 @@
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.3517.xml"/>
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.5681.xml"/>
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.6675.xml"/>
+
+        <reference anchor="BPS99" target="https://doi.org/10.1109/90.811445">
+          <front>
+            <title>Packet reordering is not pathological network behavior</title>
+            <seriesInfo name="DOI" value="10.1109/90.811445"/>
+            <seriesInfo name="IEEE/ACM Trans. Netw." value="Vol. 7, No. 6, pp. 789-798"/>
+            <author surname="Bennett" initials="J.C.R."/>
+            <author surname="Partridge" initials="C."/>
+            <author surname="Shectman" initials="N."/>
+            <date month="December" year="1999"/>
+          </front>
+        </reference>
+
       </references>
     </references>
 
