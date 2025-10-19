@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-10-16T01:13:27.521493+00:00",
+  "timestamp": "2025-10-19T01:21:28.349292+00:00",
   "repo": "gwhiteCL/draft-white-intarea-reordering",
   "labels": [
     {
@@ -49,7 +49,48 @@
       "color": "ffffff"
     }
   ],
-  "issues": [],
+  "issues": [
+    {
+      "number": 3,
+      "id": "I_kwDOOAwCW87R-FIO",
+      "title": "Document sections",
+      "url": "https://github.com/gwhiteCL/draft-white-intarea-reordering/issues/3",
+      "state": "CLOSED",
+      "author": "chris-box",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "The current order of sections is\n> Abstract\n> Introduction\n> Terminology\n> Proposed updates to RFC3819\n> Reordering in L2 links\n> Resequencing in L2 standards\n\nI think it would make more sense if we described the problem before coming to the solution.\n> Abstract\n> Introduction\n> Terminology\n> Reordering in L2 links\n> Resequencing in L2 standards\n> Experimental results\n> Proposed updates to RFC3819\n\n(At this point the results section is a placeholder)",
+      "createdAt": "2025-10-16T16:57:52Z",
+      "updatedAt": "2025-10-17T17:35:20Z",
+      "closedAt": "2025-10-17T17:35:20Z",
+      "comments": [
+        {
+          "author": "gwhiteCL",
+          "authorAssociation": "OWNER",
+          "body": "Agreed.  I will go ahead and make that change.",
+          "createdAt": "2025-10-17T17:29:56Z",
+          "updatedAt": "2025-10-17T17:29:56Z"
+        }
+      ]
+    },
+    {
+      "number": 8,
+      "id": "I_kwDOOAwCW87SLzEJ",
+      "title": "Unclear advice",
+      "url": "https://github.com/gwhiteCL/draft-white-intarea-reordering/issues/8",
+      "state": "OPEN",
+      "author": "chris-box",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "https://github.com/gwhiteCL/draft-white-intarea-reordering/blob/357bcb86a09ab97b794a03e1c05bc124458b7a14/draft-white-intarea-reordering.xml#L165-L176\n\nThe above could do with being clearer.\n\nFirst, BPS99 is not listed in this document's references. We could use https://dl.acm.org/doi/pdf/10.1109/90.811445 perhaps. It's a very readable paper.\n\nThe first paragraph is twenty years old, being unaltered from 3819. It starts from an assumption that we want to eliminate reordering, and it says that sometimes that's not ideal. However the thrust of our draft is that we want links to do less resequencing. I think this paragraph needs amending to fit with its new surrounding context.\n\nThe second paragraph says \"_Nonetheless, there may exist implementations of network protocols that do not work well in the presence of a significant amount of packet reordering._\" In another part of the document we say that IPSEC and L2TP don't like reordering. So we shouldn't say \"there may exist\", because we know they exist. There may be others too. Hopefully they are rare, and they don't break completely but just degrade.\n\nThe final paragraph is succinct and should stay.",
+      "createdAt": "2025-10-17T14:04:02Z",
+      "updatedAt": "2025-10-17T14:04:02Z",
+      "closedAt": null,
+      "comments": []
+    }
+  ],
   "pulls": [
     {
       "number": 1,
@@ -75,6 +116,200 @@
       "mergedBy": "gwhiteCL",
       "mergeCommit": {
         "oid": "78fa04dc2151687f9c89bce65acd8b86fab65fb5"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 2,
+      "id": "PR_kwDOOAwCW86uIJ1C",
+      "title": "Shorten abstract",
+      "url": "https://github.com/gwhiteCL/draft-white-intarea-reordering/pull/2",
+      "state": "OPEN",
+      "author": "chris-box",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "https://authors.ietf.org/required-content says \"_An abstract will typically be around 50-150 words in length. An abstract that is much shorter or longer is generally not acceptable._\" The existing abstract is 227 words. This is my proposal for a shorter abstract.\r\n\r\nI've also taken the liberty of redefining the intention of the document. By the time it is finished I hope we'll have good data and recommendations developed, so that the final version will contain these new recommendations. However if you think we should retain the existing smaller ambition of \"_to promote an analysis and discussion of the sensitivity of modern IETF protocols to out-of-order delivery, and to potentially develop new information_\" then we can do that.",
+      "createdAt": "2025-10-16T16:40:35Z",
+      "updatedAt": "2025-10-17T17:28:31Z",
+      "baseRepository": "gwhiteCL/draft-white-intarea-reordering",
+      "baseRefName": "main",
+      "baseRefOid": "15a50292c967497f338dba312a7389626bf44202",
+      "headRepository": "chris-box/draft-white-intarea-reordering",
+      "headRefName": "patch-1",
+      "headRefOid": "4be5abb4b45d3cc77ccf6428d064ef2e9b088ae7",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "chris-box",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Definitely, I agree it can be moved to a suitable place in the introduction.",
+          "createdAt": "2025-10-17T17:28:31Z",
+          "updatedAt": "2025-10-17T17:28:31Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOOAwCW87Hvy25",
+          "commit": {
+            "abbreviatedOid": "4be5abb"
+          },
+          "author": "gwhiteCL",
+          "authorAssociation": "OWNER",
+          "state": "CHANGES_REQUESTED",
+          "body": "Agreed that we need to shorten the abstract.  But, I'd like to not lose the explanation about the lack of knowledge of higher layer protocol contexts. I think that is an important point that even for protocols that are intolerant of reordering, the existing mechanisms aren't always beneficial.  Can we move that material into the Introduction rather than deleting it?",
+          "createdAt": "2025-10-17T17:13:39Z",
+          "updatedAt": "2025-10-17T17:13:39Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 4,
+      "id": "PR_kwDOOAwCW86uIgEN",
+      "title": "Improve multi-link wording",
+      "url": "https://github.com/gwhiteCL/draft-white-intarea-reordering/pull/4",
+      "state": "MERGED",
+      "author": "chris-box",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "In my experience it's nearly always the case that links have non-identical throughputs or latencies. So the text can be less tentative.",
+      "createdAt": "2025-10-16T17:09:17Z",
+      "updatedAt": "2025-10-16T21:53:55Z",
+      "baseRepository": "gwhiteCL/draft-white-intarea-reordering",
+      "baseRefName": "main",
+      "baseRefOid": "15a50292c967497f338dba312a7389626bf44202",
+      "headRepository": "chris-box/draft-white-intarea-reordering",
+      "headRefName": "patch-2",
+      "headRefOid": "b910fa933dd9482fd6bf5b4bec9bf3ec558bbe7e",
+      "closedAt": "2025-10-16T21:53:55Z",
+      "mergedAt": "2025-10-16T21:53:55Z",
+      "mergedBy": "gwhiteCL",
+      "mergeCommit": {
+        "oid": "357bcb86a09ab97b794a03e1c05bc124458b7a14"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 5,
+      "id": "PR_kwDOOAwCW86uIv-C",
+      "title": "LTE/5G updates",
+      "url": "https://github.com/gwhiteCL/draft-white-intarea-reordering/pull/5",
+      "state": "OPEN",
+      "author": "chris-box",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Miscellaneous tweaks and improvements to this section.\r\n\r\nI have chosen to delete the \"low latency video\" text because I have not heard such a use case in our network. As far as I know all video is delivered over the best effort internet bearer which uses AM.",
+      "createdAt": "2025-10-16T17:29:02Z",
+      "updatedAt": "2025-10-17T17:22:07Z",
+      "baseRepository": "gwhiteCL/draft-white-intarea-reordering",
+      "baseRefName": "main",
+      "baseRefOid": "15a50292c967497f338dba312a7389626bf44202",
+      "headRepository": "chris-box/draft-white-intarea-reordering",
+      "headRefName": "patch-3",
+      "headRefOid": "d62f9ef1d585482280535b3b71e6e2aedfa65c1f",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "gwhiteCL",
+          "authorAssociation": "OWNER",
+          "body": "These updates look good to me.  Since that text came from @IngJohEricsson I'll wait for him to check that he's ok with the changes. ",
+          "createdAt": "2025-10-17T17:22:03Z",
+          "updatedAt": "2025-10-17T17:22:03Z"
+        }
+      ],
+      "reviews": []
+    },
+    {
+      "number": 6,
+      "id": "PR_kwDOOAwCW86uIyi2",
+      "title": "Fix typo",
+      "url": "https://github.com/gwhiteCL/draft-white-intarea-reordering/pull/6",
+      "state": "MERGED",
+      "author": "chris-box",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-10-16T17:32:46Z",
+      "updatedAt": "2025-10-16T21:48:46Z",
+      "baseRepository": "gwhiteCL/draft-white-intarea-reordering",
+      "baseRefName": "main",
+      "baseRefOid": "15a50292c967497f338dba312a7389626bf44202",
+      "headRepository": "chris-box/draft-white-intarea-reordering",
+      "headRefName": "patch-4",
+      "headRefOid": "23c93b3cf34b8e1bf012eb334670714f7ffa6925",
+      "closedAt": "2025-10-16T21:48:46Z",
+      "mergedAt": "2025-10-16T21:48:46Z",
+      "mergedBy": "gwhiteCL",
+      "mergeCommit": {
+        "oid": "70ed8254e6764db61673d59d870cea72493bae9f"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 7,
+      "id": "PR_kwDOOAwCW86uI2sC",
+      "title": "Add co-author",
+      "url": "https://github.com/gwhiteCL/draft-white-intarea-reordering/pull/7",
+      "state": "MERGED",
+      "author": "chris-box",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-10-16T17:38:34Z",
+      "updatedAt": "2025-10-17T17:37:02Z",
+      "baseRepository": "gwhiteCL/draft-white-intarea-reordering",
+      "baseRefName": "main",
+      "baseRefOid": "15a50292c967497f338dba312a7389626bf44202",
+      "headRepository": "chris-box/draft-white-intarea-reordering",
+      "headRefName": "patch-5",
+      "headRefOid": "9d2c74dbfa6ad8c71e6733a594744420f5908fc6",
+      "closedAt": "2025-10-17T17:37:02Z",
+      "mergedAt": "2025-10-17T17:37:02Z",
+      "mergedBy": "gwhiteCL",
+      "mergeCommit": {
+        "oid": "a927dfc39a332f0c8be227dfa755cf46daee3e98"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 9,
+      "id": "PR_kwDOOAwCW86uWri6",
+      "title": "Move Proposed Updates section",
+      "url": "https://github.com/gwhiteCL/draft-white-intarea-reordering/pull/9",
+      "state": "MERGED",
+      "author": "gwhiteCL",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "Fixes #3 ",
+      "createdAt": "2025-10-17T17:33:51Z",
+      "updatedAt": "2025-10-17T17:35:19Z",
+      "baseRepository": "gwhiteCL/draft-white-intarea-reordering",
+      "baseRefName": "main",
+      "baseRefOid": "357bcb86a09ab97b794a03e1c05bc124458b7a14",
+      "headRepository": "gwhiteCL/draft-white-intarea-reordering",
+      "headRefName": "change-section-order",
+      "headRefOid": "0f3a9ead2ae17e919f629b1c39bf72a4a3322388",
+      "closedAt": "2025-10-17T17:35:19Z",
+      "mergedAt": "2025-10-17T17:35:19Z",
+      "mergedBy": "gwhiteCL",
+      "mergeCommit": {
+        "oid": "f173b55736dff33cafed1d658a3e16ff52bb65a8"
       },
       "comments": [],
       "reviews": []
