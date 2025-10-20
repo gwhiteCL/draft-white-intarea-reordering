@@ -102,9 +102,7 @@
          use by search engines. -->
 
     <abstract>
-      <t>Several link technology standards mandate that equipment guarantee in-order delivery of layer 2 frames, apparently due to a belief that this is required by higher layer protocols.  In addition, certain link types can introduce out-of-order arrivals at the end of the layer 2 link, which the receiving equipment is required to rectify by delaying higher sequenced frames until all lower sequenced frames can be delivered or are deemed lost.  The delaying of higher sequenced frames is generally done without any knowledge of the higher layer protocols in use, let alone any knowledge of higher layer protocol contexts (e.g. TCP connections) in the case that the layer 2 link is carrying a multiplex of such contexts. It could, for example, be the case that all of the higher sequenced frames being delayed are carrying packets for different layer 4 contexts than a single lower-sequenced frame that triggered the delay. The result is that this "resequencing" operation can introduce delays that result in degradation of performance rather than improving it.  Moreover, modern, performant TCP and QUIC implementations support features that significantly improve their tolerance to out-of-order delivery.</t>
-      <t>This draft is intended to promote an analysis and discussion of the sensitivity of modern IETF protocols to out-of-order delivery, and to potentially develop new information for layer 2 technology standards regarding the need to assure in-order delivery to support IETF protocols.</t>
-
+      <t>Several link technology standards mandate that equipment guarantee in-order delivery of layer 2 frames, apparently due to a belief that this is required by higher layer protocols. To meet this requirement they implement a "resequencing" operation to restore the original packet order. This can introduce delays that result in net degradation of performance. Modern TCP and QUIC implementations support features that significantly improve their tolerance to out-of-order delivery. This draft is intended to provide new information for layer 2 technology standards regarding the need to assure in-order delivery to support IETF protocols.</t>
     </abstract>
 
   </front>
@@ -114,6 +112,14 @@
     <section>
     <!-- The default attributes for <section> are numbered="true" and toc="default" -->
       <name>Introduction</name>
+
+      <t>Several link technology standards mandate that equipment guarantee in-order delivery of layer 2 frames, apparently due to a belief that this is required by higher layer protocols.
+      In addition, certain link types can introduce out-of-order arrivals at the end of the layer 2 link, which the receiving equipment is required to rectify by delaying higher sequenced frames until all lower sequenced frames can be delivered or are deemed lost.
+      The delaying of higher sequenced frames is generally done without any knowledge of the higher layer protocols in use, let alone any knowledge of higher layer protocol contexts (e.g. TCP connections) in the case that the layer 2 link is carrying a multiplex of such contexts.
+      It could, for example, be the case that all of the higher sequenced frames being delayed are carrying packets for different layer 4 contexts than a single lower-sequenced frame that triggered the delay.
+      The result is that this "resequencing" operation can introduce delays that result in degradation of performance rather than improving it.
+      Moreover, modern, performant TCP and QUIC implementations support features that significantly improve their tolerance to out-of-order delivery.</t>
+
       <t><xref target="RFC3819" section="15"/> provides advice to Internet subnetwork designers regarding packet reordering.
       The advice seems reasonable: "try to avoid packet reordering whenever possible, but not if doing so compromises efficiency, impairs reliability, or increases average packet delay."
       However, along with this guidance come a couple of warnings that appear to have driven subnetwork designers towards assuring in-order delivery even if efficiency is impaired or average packet delay is increased.
