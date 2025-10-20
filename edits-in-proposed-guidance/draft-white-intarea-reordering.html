@@ -1,0 +1,1488 @@
+<!DOCTYPE html>
+<html lang="en" class="Internet-Draft">
+<head>
+<meta charset="utf-8">
+<meta content="Common,Latin" name="scripts">
+<meta content="initial-scale=1.0" name="viewport">
+<title>Proposal for Updates to Guidance on Packet Reordering</title>
+<meta content="Greg White" name="author">
+<meta content="Ingemar Johansson" name="author">
+<meta content="Dibakar Das" name="author">
+<meta content="Chris Box" name="author">
+<meta content='
+       Several link technology standards mandate that equipment guarantee in-order delivery of layer 2 frames, apparently due to a belief that this is required by higher layer protocols.  In addition, certain link types can introduce out-of-order arrivals at the end of the layer 2 link, which the receiving equipment is required to rectify by delaying higher sequenced frames until all lower sequenced frames can be delivered or are deemed lost.  The delaying of higher sequenced frames is generally done without any knowledge of the higher layer protocols in use, let alone any knowledge of higher layer protocol contexts (e.g. TCP connections) in the case that the layer 2 link is carrying a multiplex of such contexts. It could, for example, be the case that all of the higher sequenced frames being delayed are carrying packets for different layer 4 contexts than a single lower-sequenced frame that triggered the delay. The result is that this "resequencing" operation can introduce delays that result in degradation of performance rather than improving it.  Moreover, modern, performant TCP and QUIC implementations support features that significantly improve their tolerance to out-of-order delivery. 
+       This draft is intended to promote an analysis and discussion of the sensitivity of modern IETF protocols to out-of-order delivery, and to potentially develop new information for layer 2 technology standards regarding the need to assure in-order delivery to support IETF protocols. 
+    ' name="description">
+<meta content="xml2rfc 3.31.0" name="generator">
+<meta content="reordering link subnetwork" name="keyword">
+<meta content="draft-white-intarea-reordering-latest" name="ietf.draft">
+<!-- Generator version information:
+  xml2rfc 3.31.0
+    Python 3.12.12
+    ConfigArgParse 1.7
+    google-i18n-address 3.1.1
+    intervaltree 3.1.0
+    Jinja2 3.1.6
+    lxml 5.3.1
+    platformdirs 4.5.0
+    pycountry 24.6.1
+    PyYAML 6.0.2
+    requests 2.32.5
+    wcwidth 0.2.14
+-->
+<link href="draft-white-intarea-reordering.xml" rel="alternate" type="application/rfc+xml">
+<link href="#copyright" rel="license">
+<style type="text/css">@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-cyrillic.woff2') format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-cyrillic.woff2') format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Lora SemiBold'), local('Lora-SemiBold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-semibold-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Oxygen Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Oxygen Mono'), local('OxygenMono-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/oxygenmono-regular-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Oxygen Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Oxygen Mono'), local('OxygenMono-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/oxygenmono-regular-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Sofia Sans Semi Condensed';
+  font-style: italic;
+  font-weight: 1 1000;
+  src: url('https://martinthomson.github.io/rfc-css/fonts/sofiasanssemicondensed-italic-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Sofia Sans Semi Condensed';
+  font-style: italic;
+  font-weight: 1 1000;
+  src: url('https://martinthomson.github.io/rfc-css/fonts/sofiasanssemicondensed-italic-cyrillic.woff2') format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Sofia Sans Semi Condensed';
+  font-style: italic;
+  font-weight: 1 1000;
+  src: url('https://martinthomson.github.io/rfc-css/fonts/sofiasanssemicondensed-italic-greek.woff2') format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+@font-face {
+  font-family: 'Sofia Sans Semi Condensed';
+  font-style: italic;
+  font-weight: 1 1000;
+  src: url('https://martinthomson.github.io/rfc-css/fonts/sofiasanssemicondensed-italic-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Sofia Sans Semi Condensed';
+  font-style: italic;
+  font-weight: 1 1000;
+  src: url('https://martinthomson.github.io/rfc-css/fonts/sofiasanssemicondensed-italic-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Sofia Sans Semi Condensed';
+  font-style: normal;
+  font-weight: 1 1000;
+  src: url('https://martinthomson.github.io/rfc-css/fonts/sofiasanssemicondensed-regular-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Sofia Sans Semi Condensed';
+  font-style: normal;
+  font-weight: 1 1000;
+  src: url('https://martinthomson.github.io/rfc-css/fonts/sofiasanssemicondensed-regular-cyrillic.woff2') format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Sofia Sans Semi Condensed';
+  font-style: normal;
+  font-weight: 1 1000;
+  src: url('https://martinthomson.github.io/rfc-css/fonts/sofiasanssemicondensed-regular-greek.woff2') format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+@font-face {
+  font-family: 'Sofia Sans Semi Condensed';
+  font-style: normal;
+  font-weight: 1 1000;
+  src: url('https://martinthomson.github.io/rfc-css/fonts/sofiasanssemicondensed-regular-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Sofia Sans Semi Condensed';
+  font-style: normal;
+  font-weight: 1 1000;
+  src: url('https://martinthomson.github.io/rfc-css/fonts/sofiasanssemicondensed-regular-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+:root {
+  color-scheme: light dark;
+  --background-color: #fff;
+  --text-color: #222;
+  --title-color: #191919;
+  --link-color: #2a6496;
+  --highlight-color: #f9f9f9;
+  --line-color: #eee;
+  --pilcrow-weak: #ddd;
+  --pilcrow-strong: #bbb;
+  --small-font-size: 14.5px;
+  --font-mono: 'Oxygen Mono', monospace;
+  --font-title: "Sofia Sans Semi Condensed", sans-serif;
+  scrollbar-color: #bbb #eee;
+}
+body {
+  max-width: 600px;
+  margin: 75px auto;
+  padding: 0 5px;
+  color: var(--text-color);
+  background-color: var(--background-color);
+  font: 16px/22px "Lora", serif;
+  scroll-behavior: smooth;
+}
+
+.ears {
+  display: none;
+}
+
+/* headings */
+section {
+  clear: both;
+}
+.section-number {
+  padding-right: 0.5em;
+}
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-title);
+  font-weight: 680;
+  margin: 0.8em 0 0.3em;
+  font-size-adjust: 0.5;
+  color: var(--title-color);
+}
+h1#title {
+  font-size: 32px;
+  line-height: 40px;
+  clear: both;
+}
+h1#title, h1#rfcnum {
+  margin: 1.5em 0 0.2em;
+}
+h1#rfcnum + h1#title {
+  margin: 0.2em 0;
+}
+
+h1, h2, h3 {
+  font-size: 22px;
+  line-height: 27px;
+}
+h4, h5, h6 {
+  font-size: 20px;
+  line-height: 24px;
+}
+
+/* general structure */
+.author {
+  padding-bottom: 0.3em;
+  vertical-align: top;
+}
+#abstract+p {
+  font-size: 18px;
+  line-height: 24px;
+}
+#abstract+p code, #abstract+p samp, #abstract+p tt {
+  font-size: 16px;
+  line-height: 0;
+}
+
+p {
+  padding: 0;
+  margin: 0.5em 0;
+  text-align: left;
+}
+div {
+  margin: 0;
+}
+.alignRight.art-text {
+  background-color: var(--highlight-color);
+  border: 1px solid var(--line-color);
+  border-radius: 3px;
+  padding: 0.5em 1em 0;
+  margin-bottom: 0.5em;
+}
+.alignRight.art-text pre {
+  padding: 0;
+  width: auto;
+}
+.alignRight {
+  margin: 1em 0;
+}
+.alignRight > *:first-child {
+  border: none;
+  margin: 0;
+  float: right;
+  clear: both;
+}
+.alignRight > *:nth-child(2) {
+  clear: both;
+  display: block;
+  border: none;
+}
+svg {
+  display: block;
+}
+/* font-family isn't space-separated, but =~ will have to do */
+svg[font-family~="monospace" i], svg [font-family~="monospace" i] {
+  font-family: var(--font-mono);
+}
+.alignCenter.art-text {
+  background-color: var(--highlight-color);
+  border: 1px solid var(--line-color);
+  border-radius: 3px;
+  padding: 0.5em 1em 0;
+  margin-bottom: 0.5em;
+}
+.alignCenter.art-text pre {
+  padding: 0;
+  width: auto;
+}
+.alignCenter {
+  margin: 1em 0;
+}
+.alignCenter > *:first-child {
+  border: none;
+  /* this isn't optimal, but it's an existence proof.  PrinceXML doesn't
+     support flexbox yet.
+  */
+  display: table;
+  margin: 0 auto;
+}
+
+/* lists */
+ol, ul {
+  padding: 0;
+  margin: 0 0 0.5em 2em;
+  & :is(ol, ul) {
+    margin-left: 1em;
+  }
+}
+li {
+  margin: 0 0 0.25em 0;
+}
+ul.empty, .ulEmpty {
+  list-style-type: none;
+  & li {
+    margin-top: 0.5em;
+  }
+}
+:is(ul, ol).compact, .ulCompact, .olCompact {
+  margin: 0 0 0 2em;
+  & li {
+    margin: 0;
+    & :first-child { margin-top: 0; }
+    & :last-child { margin-bottom: 0; }
+  }
+}
+
+/* definition lists */
+dl {
+  clear: left;
+  --indent: 3ch;
+  /* --indent: attr(indent ch); not supported in any browser, but we can dream */
+  &.olPercent {
+    --indent: 5ch;
+    & > dt {
+      min-width: calc(var(--indent) - 2ch);
+    }
+  }
+  &.olPercent > dt {
+    float: none;
+  }
+
+  dl > dd > & {
+    margin-top: 0.5em;
+    margin-bottom: 0;
+  }
+}
+dl:not(.dlNewline) > dt {
+  float: left;
+  margin-right: 2ch;
+  min-width: 8ch;
+}
+dl > dd {
+  margin-bottom: .8em;
+  margin-left: var(--indent) !important; /* stupid element overrides */
+  min-height: 2ex;
+}
+:is(dl.compact, .dlCompact) > dd {
+  margin-bottom: 0;
+  & > :is(:first-child, .break:first-child + *) {
+    margin-top: 0;
+  }
+  & > :is(:last-child) {
+    margin-bottom: 0;
+  }
+}
+:is(dd, span).break {
+  display: none;
+}
+
+/* links */
+a, a[href].selfRef:hover {
+  text-decoration: none;
+}
+a[href] {
+  color: var(--link-color);
+}
+a[href].selfRef, .iref + a[href].internal {
+  color: var(--text-color);
+}
+a[href]:hover {
+  text-decoration: underline;
+}
+a[href].selfRef:hover {
+  background-color: var(--highlight-color);
+}
+a.xref:is(.cite, .auto), :is(#status-of-memo, #copyright) a {
+  white-space: nowrap;
+}
+
+/* Figures */
+tt, code, pre {
+  background-color: var(--highlight-color);
+  font: 14px/22px var(--font-mono);
+}
+tt, code {
+  /* changing the font for inline elements leads to different ascender
+     and descender heights; as we want to retain baseline alignment,
+     remove leading to avoid altering the final height of lines
+     note: this fails if these blocks take an entire line,
+     a different solution would be great */
+  line-height: 0;
+}
+:is(h1, h2, h3, h4, h5, h6) :is(tt, code) {
+  font-size: 84%;
+}
+pre {
+  border: 1px solid var(--line-color);
+  font-size: 13.5px;
+  line-height: 16px;
+  letter-spacing: -0.2px;
+  margin: 5px;
+  padding: 5px;
+}
+img {
+  max-width: 100%;
+}
+figure {
+  margin: 0.5em 0;
+  padding: 0;
+}
+figure blockquote {
+  margin: 0.8em 0.4em 0.4em;
+}
+figcaption, caption {
+  font-style: italic;
+  margin: 0.5em 1.5em;
+  text-align: left;
+  caption-side: bottom;
+}
+@media screen {
+  /* Auto-collapse boilerplate. */
+  :is(#status-of-memo, #copyright) p {
+    margin: -2px 0;
+    max-height: 0;
+    transition: max-height 2s ease, margin 0.5s ease 0.5s;
+    overflow: hidden;
+  }
+  :is(#status-of-memo, #copyright):hover p,
+  :is(#status-of-memo, #copyright) h2:target ~ p {
+    margin: 0.5em 0;
+    max-height: 500px;
+    overflow: auto;
+  }
+  pre, svg {
+    display: inline-block;
+    /* In the horizontal direction, sometimes people make over-sized figures.
+       Scrollbars for those is therefore necessary: auto adds them as necessary..
+       In the vertical direction, the line-height can combine with the font
+       asender/descender height to produce scrollbars: hidden avoids that. */
+    overflow: auto hidden;
+  }
+  pre {
+    max-width: 100%;
+    width: calc(100% - 22px - 1em);
+  }
+  svg {
+    max-width: calc(100% - 22px - 1em);
+  }
+  figure pre {
+    display: block;
+    width: calc(100% - 25px);
+  }
+  :is(pre, svg) + .pilcrow {
+    display: inline-block;
+    vertical-align: text-bottom;
+    padding-bottom: 8px;
+  }
+}
+
+/* aside, blockquote */
+aside, blockquote {
+  margin-left: 0;
+  padding: 0 2em;
+  font-style: italic;
+}
+blockquote {
+  margin: 1em 0;
+}
+cite {
+  display: block;
+  text-align: right;
+  font-style: italic;
+}
+
+/* tables */
+table {
+  width: auto;
+  max-width: 100%;
+  margin: 0 0 1em;
+  border-collapse: collapse;
+}
+table.right {
+  margin-left: auto;
+}
+table.center {
+  margin-left: auto;
+  margin-right: auto;
+}
+table.left {
+  margin-right: auto;
+}
+table .text-left {
+  text-align: left;
+}
+table .text-center {
+  text-align: center;
+}
+table .text-right {
+  text-align: right;
+}
+
+thead, tbody {
+  border: 1px solid var(--line-color);
+}
+th, td {
+  text-align: left;
+  vertical-align: top;
+  padding: 5px 10px;
+}
+th {
+  background-color: var(--line-color);
+}
+:is(tr:nth-child(2n), thead+tbody > tr:nth-child(2n+1)) > td {
+  background-color: var(--background-color);
+}
+:is(tr:nth-child(2n+1), thead+tbody > tr:nth-child(2n)) > td {
+  background-color: var(--highlight-color);
+}
+table caption {
+  margin: 0;
+  padding: 3px 0 3px 1em;
+}
+table p {
+  margin: 0;
+}
+
+/* pilcrow */
+a.pilcrow {
+  margin-left: 3px;
+  opacity: 0.2;
+  user-select: none;
+  &[href] {
+    color: var(--pilcrow-weak);
+    &:hover { text-decoration: none; }
+  }
+}
+@media not print {
+  :hover > a.pilcrow {
+    opacity: 1;
+  }
+  a.pilcrow[href]:hover {
+    color: var(--pilcrow-strong);
+    background-color: transparent;
+  }
+}
+@media print {
+  a.pilcrow {
+    display: none;
+  }
+}
+
+/* misc */
+hr {
+  border: 0;
+  border-top: 1px solid var(--line-color);
+}
+.bcp14 {
+  font-variant: small-caps;
+  font-weight: 600;
+  font-size: var(--small-font-size);
+}
+.role {
+  font-variant: all-small-caps;
+}
+sub, sup {
+  line-height: 1;
+  font-size: 80%;
+}
+
+/* info block */
+#identifiers {
+  margin: 0;
+  font-size: var(--small-font-size);
+  line-height: 18px;
+  --identifier-width: 15ch;
+  & dt {
+    width: var(--identifier-width);
+    min-width: var(--identifier-width);
+    clear: left;
+    float: left;
+    text-align: right;
+    margin-right: 1ch;
+  }
+  & dd {
+    margin: 0;
+    margin-left: calc(1em + var(--identifier-width)) !important;
+    min-width: 5em;
+  }
+  & .authors {
+    & .author {
+      display: inline-block;
+      margin-right: 1.5em;
+    }
+    & .org {
+      font-style: italic;
+    }
+  }
+}
+
+/* The prepared/rendered info at the very bottom of the page */
+.docInfo {
+  color: #999;
+  font-size: 0.9em;
+  font-style: italic;
+  margin-top: 2em;
+}
+.docInfo .prepared {
+  float: right;
+}
+
+/* table of contents */
+#toc {
+  padding: 0.75em 0 2em 0;
+  margin-bottom: 1em;
+
+  & nav {
+    & ul {
+      margin: 0 0.5em 0 0;
+      padding: 0;
+      list-style: none;
+    }
+    & li {
+      line-height: 1.3em;
+      margin: 2px 0;
+      padding-left: 1.2em;
+      text-indent: -1.2em;
+    }
+  }
+  & a.xref {
+    white-space: normal;
+  }
+}
+
+.references {
+  & > dt {
+    text-align: right;
+    font-weight: bold;
+    min-width: 10ch;
+    margin-right: 1.5ch;
+    &:target::before {
+      content: "⇒";
+      margin: 0 10px 0 -25px;
+    }
+  }
+  & > dd {
+    margin-left: 12ch !important;
+    overflow: visible;
+    & .refInstance {
+      margin-bottom: 0.8em;
+    }
+    & .ascii {
+      margin-bottom: 0.25em;
+    }
+  }
+}
+
+#rfc\.index\.index + ul {
+  margin-left: 0;
+}
+
+/* authors */
+address.vcard {
+  font-style: normal;
+  max-width: 20em;
+  margin: 1em auto 1em 0;
+
+  & .nameRole {
+    font-weight: 700;
+    margin-left: 0;
+  }
+  & .label {
+    margin: 0.5em 0;
+  }
+  & .type {
+    display: none;
+  }
+  & .alternative-contact {
+    margin: 0.5em 0 0.25em 0;
+  }
+  & .non-ascii {
+    margin: 0 0 0 2em;
+  }
+  & div.left {
+    text-align: left;
+  }
+  & div.right {
+    text-align: right;
+  }
+}
+
+hr.addr {
+  border-top: 1px dashed;
+  margin: 0;
+  color: #ddd;
+  max-width: calc(100% - 16px);
+}
+@media (min-width: 500px) {
+  #authors-addresses > section {
+    column-count: 2;
+    column-gap: 20px;
+  }
+  #authors-addresses > section > h2 {
+    column-span: all;
+  }
+  /* hack for break-inside: avoid-column */
+  #authors-addresses address {
+    display: inline-block;
+    break-inside: avoid-column;
+  }
+}
+
+/* Comments */
+.rfcEditorRemove p:first-of-type {
+  font-style: italic;
+}
+.cref {
+  background-color: rgba(249, 232, 105, 0.3);
+  padding: 2px 4px;
+}
+.crefSource {
+  font-style: italic;
+}
+
+@media screen {
+  #toc nav {
+    font-family: var(--font-title);
+    font-weight: 360;
+    & > ul { margin-bottom: 2em; }
+    & ul {
+      margin: 0 0 0 4px;
+      & :is(p, li) {
+        margin: 2px 0;
+      }
+    }
+  }
+  #toc a.toplink {
+    float: right;
+  }
+}
+@media not screen {
+  #toc a.toplink {
+    display: none;
+  }
+}
+
+
+/* TOC layout for smaller screens */
+@media screen and (max-width: 929px) {
+  #toc {
+    position: fixed;
+    z-index: 2;
+    top: 0;
+    right: 0;
+    padding: 1px 0 0 0;
+    margin: 0;
+    border-bottom: 1px solid #ccc;
+    opacity: 0.6;
+  }
+  #toc h2 {
+    margin: 0;
+    padding: 2px 0 2px 6px;
+    padding-right: 1em;
+    font-size: 18px;
+    line-height: 24px;
+    min-width: 190px;
+    text-align: right;
+    background-color: #444;
+    color: white;
+    cursor: pointer;
+    &::before { /* css hamburger */
+      float: right;
+      position: relative;
+      width: 1em;
+      height: 1px;
+      left: -164px;
+      margin: 8px 0 0 0;
+      background: white none repeat scroll 0 0;
+      box-shadow: 0 4px 0 0 white, 0 8px 0 0 white;
+      content: "";
+    }
+  }
+  #toc nav {
+    display: none;
+    background-color: var(--background-color);
+    padding: 0.5em 1em 1em;
+    overflow: auto;
+    overscroll-behavior: contain;
+    height: calc(100vh - 48px);
+    border-left: 1px solid #ddd;
+  }
+  #toc.active {
+    opacity: 1;
+    & nav { display: block; }
+  }
+  /* Make the collapsed ToC header render white on gray also when it's a link */
+  #toc h2 a,
+  #toc h2 a:is(:link, :focus, :hover),
+  #toc a.toplink,
+  #toc a.toplink:hover {
+    color: white;
+    background-color: #444;
+    text-decoration: none;
+  }
+  #toc a.toplink {
+    margin: 2px 0.5em 0;
+  }
+}
+
+/* TOC layout for wide screens */
+@media screen and (min-width: 930px) {
+  body {
+    padding-right: 360px;
+    padding-right: calc(min(180px + 20%, 500px));
+  }
+  #toc {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    right: calc(50vw - 480px);
+    width: 312px;
+    margin: 0;
+    padding: 0;
+    z-index: 1;
+  }
+  #toc h2 {
+    margin: 0;
+    padding: 0.25em 1em 1em 0;
+  }
+  #toc nav {
+    display: block;
+    height: calc(90vh - 84px);
+    bottom: 0;
+    padding: 0.5em 0 2em;
+    overflow: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+  }
+  img { /* future proofing */
+    max-width: 100%;
+    height: auto;
+  }
+  #toc a.toplink {
+    margin: 8px 0.5em 0;
+  }
+}
+
+/* pagination */
+@media print {
+  body {
+    width: 100%;
+  }
+  p {
+    orphans: 3;
+    widows: 3;
+  }
+  #n-copyright-notice {
+    border-bottom: none;
+  }
+  #toc, #n-introduction {
+    page-break-before: always;
+  }
+  #toc {
+    border-top: none;
+    padding-top: 0;
+  }
+  figure, pre, .vcard {
+    page-break-inside: avoid;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid;
+  }
+  :is(h2, h3, h4, h5, h6)+*, dd {
+    page-break-before: avoid;
+  }
+  pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-size: 10pt;
+  }
+  table {
+    border: 1px solid #ddd;
+  }
+  td {
+    border-top: 1px solid #ddd;
+  }
+}
+
+@page :first {
+  padding-top: 0;
+  @top-left {
+    content: normal;
+    border: none;
+  }
+  @top-center {
+    content: normal;
+    border: none;
+  }
+  @top-right {
+    content: normal;
+    border: none;
+  }
+}
+
+@page {
+  size: A4;
+  margin-bottom: 45mm;
+  padding-top: 20px;
+}
+
+/* Dark mode. */
+@media (prefers-color-scheme: dark) {
+:root {
+  --background-color: #121212;
+  --text-color: #f0f0f0;
+  --title-color: #fff;
+  --link-color: #4da4f0;
+  --highlight-color: #282828;
+  --line-color: #444;
+  --pilcrow-weak: #444;
+  --pilcrow-strong: #666;
+  scrollbar-color: #777 #333;
+}
+}
+
+/* SVG Trick: a prefix match works because only black and white are allowed */
+svg :is([stroke="black"], [stroke^="#000"]) {
+  stroke: var(--text-color);
+}
+svg :is([stroke="white"], [stroke^="#fff"]) {
+  stroke: var(--background-color);
+}
+svg :is([fill="black"], [fill^="#000"], :not([fill])) {
+  fill: var(--text-color);
+}
+svg :is([fill="white"], [fill^="#fff"]) {
+  fill: var(--background-color);
+}
+</style>
+
+</head>
+<body class="xml2rfc">
+<table class="ears">
+<thead><tr>
+<td class="left">Internet-Draft</td>
+<td class="center">Packet Reordering</td>
+<td class="right">October 2025</td>
+</tr></thead>
+<tfoot><tr>
+<td class="left">White, et al.</td>
+<td class="center">Expires 23 April 2026</td>
+<td class="right">[Page]</td>
+</tr></tfoot>
+</table>
+<div id="external-metadata" class="document-information"></div>
+<div id="internal-metadata" class="document-information">
+<dl id="identifiers">
+<dt class="label-workgroup">Workgroup:</dt>
+<dd class="workgroup">Internet Area Working Group</dd>
+<dt class="label-internet-draft">Internet-Draft:</dt>
+<dd class="internet-draft">draft-white-intarea-reordering-latest</dd>
+<dt class="label-published">Published:</dt>
+<dd class="published">
+<time datetime="2025-10-20" class="published">20 October 2025</time>
+    </dd>
+<dt class="label-intended-status">Intended Status:</dt>
+<dd class="intended-status">Informational</dd>
+<dt class="label-expires">Expires:</dt>
+<dd class="expires"><time datetime="2026-04-23">23 April 2026</time></dd>
+<dt class="label-authors">Authors:</dt>
+<dd class="authors">
+<div class="author">
+      <div class="author-name">G. White</div>
+<div class="org">CableLabs</div>
+</div>
+<div class="author">
+      <div class="author-name">I. Johansson</div>
+<div class="org">Ericsson</div>
+</div>
+<div class="author">
+      <div class="author-name">D. Das</div>
+<div class="org">Intel</div>
+</div>
+<div class="author">
+      <div class="author-name">C. Box</div>
+<div class="org">BT Group</div>
+</div>
+</dd>
+</dl>
+</div>
+<h1 id="title">Proposal for Updates to Guidance on Packet Reordering</h1>
+<section id="section-abstract">
+      <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
+<p id="section-abstract-1">Several link technology standards mandate that equipment guarantee in-order delivery of layer 2 frames, apparently due to a belief that this is required by higher layer protocols.  In addition, certain link types can introduce out-of-order arrivals at the end of the layer 2 link, which the receiving equipment is required to rectify by delaying higher sequenced frames until all lower sequenced frames can be delivered or are deemed lost.  The delaying of higher sequenced frames is generally done without any knowledge of the higher layer protocols in use, let alone any knowledge of higher layer protocol contexts (e.g. TCP connections) in the case that the layer 2 link is carrying a multiplex of such contexts. It could, for example, be the case that all of the higher sequenced frames being delayed are carrying packets for different layer 4 contexts than a single lower-sequenced frame that triggered the delay. The result is that this "resequencing" operation can introduce delays that result in degradation of performance rather than improving it.  Moreover, modern, performant TCP and QUIC implementations support features that significantly improve their tolerance to out-of-order delivery.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+<p id="section-abstract-2">This draft is intended to promote an analysis and discussion of the sensitivity of modern IETF protocols to out-of-order delivery, and to potentially develop new information for layer 2 technology standards regarding the need to assure in-order delivery to support IETF protocols.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
+</section>
+<div id="status-of-memo">
+<section id="section-boilerplate.1">
+        <h2 id="name-status-of-this-memo">
+<a href="#name-status-of-this-memo" class="section-name selfRef">Status of This Memo</a>
+        </h2>
+<p id="section-boilerplate.1-1">
+        This Internet-Draft is submitted in full conformance with the
+        provisions of BCP 78 and BCP 79.<a href="#section-boilerplate.1-1" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-2">
+        Internet-Drafts are working documents of the Internet Engineering Task
+        Force (IETF). Note that other groups may also distribute working
+        documents as Internet-Drafts. The list of current Internet-Drafts is
+        at <span><a href="https://datatracker.ietf.org/drafts/current/">https://datatracker.ietf.org/drafts/current/</a></span>.<a href="#section-boilerplate.1-2" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-3">
+        Internet-Drafts are draft documents valid for a maximum of six months
+        and may be updated, replaced, or obsoleted by other documents at any
+        time. It is inappropriate to use Internet-Drafts as reference
+        material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-4">
+        This Internet-Draft will expire on 23 April 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="copyright">
+<section id="section-boilerplate.2">
+        <h2 id="name-copyright-notice">
+<a href="#name-copyright-notice" class="section-name selfRef">Copyright Notice</a>
+        </h2>
+<p id="section-boilerplate.2-1">
+            Copyright (c) 2025 IETF Trust and the persons identified as the
+            document authors. All rights reserved.<a href="#section-boilerplate.2-1" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.2-2">
+            This document is subject to BCP 78 and the IETF Trust's Legal
+            Provisions Relating to IETF Documents
+            (<span><a href="https://trustee.ietf.org/license-info">https://trustee.ietf.org/license-info</a></span>) in effect on the date of
+            publication of this document. Please review these documents
+            carefully, as they describe your rights and restrictions with
+            respect to this document. Code Components extracted from this
+            document must include Revised BSD License text as described in
+            Section 4.e of the Trust Legal Provisions and are provided without
+            warranty as described in the Revised BSD License.<a href="#section-boilerplate.2-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="toc">
+<section id="section-toc.1">
+        <a href="#" onclick="scroll(0,0)" class="toplink">▲</a><h2 id="name-table-of-contents">
+<a href="#name-table-of-contents" class="section-name selfRef">Table of Contents</a>
+        </h2>
+<nav class="toc"><ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1">
+            <p id="section-toc.1-1.1.1" class="keepWithNext"><a href="#section-1" class="auto internal xref">1</a>.  <a href="#name-introduction" class="internal xref">Introduction</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2">
+            <p id="section-toc.1-1.2.1" class="keepWithNext"><a href="#section-2" class="auto internal xref">2</a>.  <a href="#name-terminology" class="internal xref">Terminology</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3">
+            <p id="section-toc.1-1.3.1"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-reordering-in-l2-links" class="internal xref">Reordering in L2 Links</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1">
+                <p id="section-toc.1-1.3.2.1.1" class="keepWithNext"><a href="#section-3.1" class="auto internal xref">3.1</a>.  <a href="#name-multi-link-aggregation" class="internal xref">Multi-Link Aggregation</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.2">
+                <p id="section-toc.1-1.3.2.2.1"><a href="#section-3.2" class="auto internal xref">3.2</a>.  <a href="#name-layer-2-retransmissions" class="internal xref">Layer 2 Retransmissions</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4">
+            <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-resequencing-in-l2-standard" class="internal xref">Resequencing in L2 Standards</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.1">
+                <p id="section-toc.1-1.4.2.1.1"><a href="#section-4.1" class="auto internal xref">4.1</a>.  <a href="#name-lte-5g" class="internal xref">LTE/5G</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.2">
+                <p id="section-toc.1-1.4.2.2.1"><a href="#section-4.2" class="auto internal xref">4.2</a>.  <a href="#name-wi-fi" class="internal xref">Wi-Fi</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.3">
+                <p id="section-toc.1-1.4.2.3.1"><a href="#section-4.3" class="auto internal xref">4.3</a>.  <a href="#name-docsis" class="internal xref">DOCSIS</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5">
+            <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-proposed-updates-to-rfc3819" class="internal xref">Proposed Updates to RFC3819 Guidance on Packet Reordering</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
+            <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
+            <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
+            <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref">8</a>.  <a href="#name-references" class="internal xref">References</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.1">
+                <p id="section-toc.1-1.8.2.1.1"><a href="#section-8.1" class="auto internal xref">8.1</a>.  <a href="#name-informative-references" class="internal xref">Informative References</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9">
+            <p id="section-toc.1-1.9.1"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-acknowledgements" class="internal xref">Acknowledgements</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10">
+            <p id="section-toc.1-1.10.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-contributors" class="internal xref">Contributors</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11">
+            <p id="section-toc.1-1.11.1"><a href="#appendix-C" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
+</li>
+        </ul>
+</nav>
+</section>
+</div>
+<section id="section-1">
+      <h2 id="name-introduction">
+<a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
+      </h2>
+<p id="section-1-1"><span><a href="https://rfc-editor.org/rfc/rfc3819#section-15" class="relref">Section 15</a> of [<a href="#RFC3819" class="cite xref">RFC3819</a>]</span> provides advice to Internet subnetwork designers regarding packet reordering.
+      The advice seems reasonable: "try to avoid packet reordering whenever possible, but not if doing so compromises efficiency, impairs reliability, or increases average packet delay."
+      However, along with this guidance come a couple of warnings that appear to have driven subnetwork designers towards assuring in-order delivery even if efficiency is impaired or average packet delay is increased.
+      These warnings relate to the potential performance cost for TCP (as it was then defined) that arises due to out-of-order arrivals, and to the fact that out-of-order delivery would cause problems for "every header compression scheme currently standardized for the Internet."<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-2">The text of <span>[<a href="#RFC3819" class="cite xref">RFC3819</a>]</span> does mention that research on improving TCP behavior in the face of packet reordering was underway.
+      In the intervening 20+ years, that research has resulted in the definition of <span><a href="#RFC8985" class="internal xref">RACK</a> [<a href="#RFC8985" class="cite xref">RFC8985</a>]</span> which significantly reduces TCP's sensitivity to out-of-order arrivals.
+      In addition, <span><a href="https://rfc-editor.org/rfc/rfc9002#section-6.1" class="relref">Section 6.1</a> of [<a href="#RFC9002" class="cite xref">RFC9002</a>]</span> discusses the usefulness of implementing similar mechanisms in QUIC, and provides the protocol tools to do so.
+      The result is that having the link-layer delay packets to provide them in-order to the transport layer was helpful multiple decades ago when TCP implementations had more naive algorithms and were very resource-constrained.
+      Given how modern implementations work, this "resequencing" at the link-layer is almost always harmful.
+      Modern TCP and QUIC stacks can handle reordering well, thanks to both protocol features and implementations having more memory to work with.
+      For these implementations, the delay induced by L2 resequencing will generally cause more harm than good.
+      Furthermore, one of the biggest motivators for QUIC was to break head-of-line blocking and allow out-of-order delivery to the application layer.
+      At this point we have large bodies of data showing that this improves real-world performance.
+      Moreover, older implementations of TCP that don't implement RACK don't fail in the presence of some out-of-order packets.
+      They may see reduced performance, but they do have the ability to correctly handle the receipt of packets out of order.<a href="#section-1-2" class="pilcrow">¶</a></p>
+<p id="section-1-3">At the time of publication of <span>[<a href="#RFC3819" class="cite xref">RFC3819</a>]</span>, the "ROHC" header compression framework defined in <span>[<a href="#RFC3095" class="cite xref">RFC3095</a>]</span> stated an operating assumption that the network would provide in-order delivery.
+      This assumption is discussed in detail in <span>[<a href="#RFC4224" class="cite xref">RFC4224</a>]</span>, which provides guidance on implementing ROHC over channels that can reorder header-compressed packets, and explains different ways of implementing the profiles found in <span>[<a href="#RFC3095" class="cite xref">RFC3095</a>]</span> over reordering channels.
+      Subsequent to the publication of <span>[<a href="#RFC3819" class="cite xref">RFC3819</a>]</span> the issue of reordering intolerance by ROHC was addressed by the development of ROHCv2 <span>[<a href="#RFC5225" class="cite xref">RFC5225</a>]</span>, which lists tolerance to reordering as one of its significant improvements over ROHC.<a href="#section-1-3" class="pilcrow">¶</a></p>
+<p id="section-1-4">There may be other protocols or protocol implementations that are sensitive to reordering to some degree.  For instance, <span><a href="https://rfc-editor.org/rfc/rfc2983#section-4.1" class="relref">Section 4.1</a> of [<a href="#RFC2983" class="cite xref">RFC2983</a>]</span> discusses <span><a href="#RFC2401" class="internal xref">IPSec</a> [<a href="#RFC2401" class="cite xref">RFC2401</a>]</span> and <span><a href="#RFC2661" class="internal xref">L2TP</a> [<a href="#RFC2661" class="cite xref">RFC2661</a>]</span> as being sensitive to packet reordering.<a href="#section-1-4" class="pilcrow">¶</a></p>
+<p id="section-1-5">The current situation seems to be that several layer 2 technologies implement resequencing functions that increase cost and complexity of equipment, and may in many cases degrade network performance rather than improving it.  Any benefits of resequencing may be primarily limited to older protocol implementations e.g. maintaining the performance of older TCP implementations that are no longer widely used and may not be particularly performant by modern standards.<a href="#section-1-5" class="pilcrow">¶</a></p>
+</section>
+<section id="section-2">
+      <h2 id="name-terminology">
+<a href="#section-2" class="section-number selfRef">2. </a><a href="#name-terminology" class="section-name selfRef">Terminology</a>
+      </h2>
+<p id="section-2-1">In this document, we adopt the following terminology.<a href="#section-2-1" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlNewline" id="section-2-2">
+        <dt id="section-2-2.1">Reordering:</dt>
+        <dd style="margin-left: 1.5em" id="section-2-2.2">The process where the packet/frame sequence is made out-of-order from the originally transmitted order.<a href="#section-2-2.2" class="pilcrow">¶</a>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-2-2.3">Resequencing:</dt>
+        <dd style="margin-left: 1.5em" id="section-2-2.4">The process where an out-of-order packet/frame sequence is returned to the originally transmitted order.<a href="#section-2-2.4" class="pilcrow">¶</a>
+</dd>
+      <dd class="break"></dd>
+</dl>
+</section>
+<section id="section-3">
+      <h2 id="name-reordering-in-l2-links">
+<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-reordering-in-l2-links" class="section-name selfRef">Reordering in L2 Links</a>
+      </h2>
+<p id="section-3-1">In current L2 link technologies, frame reordering comes from two primary sources: multi-link aggregation and layer-2 retransmission.<a href="#section-3-1" class="pilcrow">¶</a></p>
+<section id="section-3.1">
+        <h3 id="name-multi-link-aggregation">
+<a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-multi-link-aggregation" class="section-name selfRef">Multi-Link Aggregation</a>
+        </h3>
+<p id="section-3.1-1">Some link technologies support the aggregation (within L2) of multiple links between a pair of nodes for the purpose of increasing the total capacity of the link.
+        In many cases the individual links within the aggregation have different capacities and/or latencies from one another.
+        When this is the case, the frame reception order differs from the frame transmission order.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
+</section>
+<section id="section-3.2">
+        <h3 id="name-layer-2-retransmissions">
+<a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-layer-2-retransmissions" class="section-name selfRef">Layer 2 Retransmissions</a>
+        </h3>
+<p id="section-3.2-1">Some link technologies (particularly wireless), are subject to noise and interference that would result in an unacceptably high frame error rate if it were not corrected.
+        These links commonly implement a method of acknowledgement and retransmission of lost frames, referred to as Automatic Repeat Request (ARQ).  When a frame loss affects one or more frames within a transmission, and the frame(s) at the end are unaffected, the retransmitted frames will arrive out of sequence from the original ordering.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
+</section>
+</section>
+<section id="section-4">
+      <h2 id="name-resequencing-in-l2-standard">
+<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-resequencing-in-l2-standard" class="section-name selfRef">Resequencing in L2 Standards</a>
+      </h2>
+<p id="section-4-1">This section discusses functions and requirements for resequencing in exising layer 2 standards.<a href="#section-4-1" class="pilcrow">¶</a></p>
+<section id="section-4.1">
+        <h3 id="name-lte-5g">
+<a href="#section-4.1" class="section-number selfRef">4.1. </a><a href="#name-lte-5g" class="section-name selfRef">LTE/5G</a>
+        </h3>
+<p id="section-4.1-1">Packet reordering can occur on both the MAC and the RLC layer in LTE and 5G systems. Packet resequencing occurs on the PDCP layer.<a href="#section-4.1-1" class="pilcrow">¶</a></p>
+<p id="section-4.1-2">On the MAC layer: An RLC packet data unit (RLC-PDU) is transmitted in one of up to 16 Hybrid ARQ processes on the MAC layer. This avoids the stop and wait for one transmission to succed before a new transmission can begin. Transmission on the MAC layer can however have a high block error rate (BLER), 10% or more is common especially when the traffic pattern and radio channel varies. Each retransmission adds a few milliseconds extra delay.<a href="#section-4.1-2" class="pilcrow">¶</a></p>
+<p id="section-4.1-3">This results in that packets are delivered out of order up to the RLC layer on the receiver side because some transmissions on the MAC layer may succeed in one transmission attempt while other transmissions may need several attepts, up to some given limit given by system configuration.<a href="#section-4.1-3" class="pilcrow">¶</a></p>
+<p id="section-4.1-4">HARQ failure is triggered when the max number of retransmissions is reached.<a href="#section-4.1-4" class="pilcrow">¶</a></p>
+<p id="section-4.1-5">On the RLC Layer: The RLC layer is configured in two typical ways.<a href="#section-4.1-5" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-4.1-6.1">RLC Unacknowledged mode (RLC-UM): Is typically used for VoIP services a.k.a VoLTE (Voice over LTE) or VoNR (Voice over NR) but can also be used for the transmission of low latency video. Data blocks are not retransmitted in this mode.<a href="#section-4.1-6.1" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-4.1-6.2">RLC Acknowledged mode (RLC-AM): Is typically used for normal internet traffic, a.k.a Mobile Broadband (MBB). Retransmissions on this layer are less common than retransmissions on the MAC layer and they occur when HARQ failure is triggered on the MAC layer, or in the case that the MAC layer erroneously decodes a NACK as an ACK. Retransmission on the RLC layer causes 10s of milliseconds on extra delay, depending on how timers are configured.<a href="#section-4.1-6.2" class="pilcrow">¶</a>
+</li>
+        </ul>
+<p id="section-4.1-7">Besides the causes for packet reordering listed above, packet reordering can occur with Dual Connectivity where 2 or more radio frequency bands are combined on the RLC layer, this because there can be a time skew of a few milliseconds over transport links between the  PDCP layer and the RLC layer(s).<a href="#section-4.1-7" class="pilcrow">¶</a></p>
+<p id="section-4.1-8">The RLC layer does resequencing on the RLC layer in LTE systems. On 5G systems however, resequencing is left to the PDCP layer. Resequencing on the PDCP layer is however optional according to the 5G standard but is mostly enabled out of concern for sensitivity to packet reordering on the transport and application layer.<a href="#section-4.1-8" class="pilcrow">¶</a></p>
+<p id="section-4.1-9">In addition radio bearers with robust header compression (RoHC) should enable resequencing.<a href="#section-4.1-9" class="pilcrow">¶</a></p>
+</section>
+<section id="section-4.2">
+        <h3 id="name-wi-fi">
+<a href="#section-4.2" class="section-number selfRef">4.2. </a><a href="#name-wi-fi" class="section-name selfRef">Wi-Fi</a>
+        </h3>
+<p id="section-4.2-1">The IEEE 802.11 specification (Wi-Fi) currently supports only in-order delivery.  The 802.11 protocols inherit traffic delivery requirements from the 802.1Q specification (see section 6.5.3 in 802.1Q), which only permits only in-order delivery.<a href="#section-4.2-1" class="pilcrow">¶</a></p>
+<p id="section-4.2-2">To utilize the medium efficiently, the 802.11 MAC aggregates data frames of a given traffic identifier (TID) and transmits them as a block. However, due to link errors, not all frames in the block may be received. A re-order buffer at the receiver holds up delivery of data frames if a frame ahead of it is missing. A separate reorder buffer is maintained for each of the 8 TIDs. A later retransmission may deliver the missing frame at which point the missing frame and subsequent frames are delivered.<a href="#section-4.2-2" class="pilcrow">¶</a></p>
+<p id="section-4.2-3">The process of in-order delivery is also taken advantage of as part of the security protocol. Each data frame is sequentially numbered with a packet number. To mitigate against a replay attack, the receiving MAC simply checks if the packet number of a received  data frames is higher than the highest received one for that TID.<a href="#section-4.2-3" class="pilcrow">¶</a></p>
+<p id="section-4.2-4">Allowing out-of-order delivery within the 802.11 specification for a given TID would require some adjustments to the 802.11 protocol. Some of the adjustments include the following:<a href="#section-4.2-4" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-4.2-5.1">The reorder buffer would need to release packets without waiting for older packets to be received.<a href="#section-4.2-5.1" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-4.2-5.2">The replay detection mechanism would need to be updated to not drop an older missing frame when it is successfully retransmitted.<a href="#section-4.2-5.2" class="pilcrow">¶</a>
+</li>
+        </ul>
+</section>
+<section id="section-4.3">
+        <h3 id="name-docsis">
+<a href="#section-4.3" class="section-number selfRef">4.3. </a><a href="#name-docsis" class="section-name selfRef">DOCSIS</a>
+        </h3>
+<p id="section-4.3-1">The Data-Over-Cable Service Interface Specifications provide broadband access over hybrid fiber-coaxial networks. The DOCSIS protocol does not support layer 2 retransmissions, but since the introduction of "channel bonding" functionality (a form of multi-link aggregation) in DOCSIS 3.0 in 2006, reordering can occur due to differences in capacity or latency between the bonded channels.  All equipment built to that and later versions of DOCSIS (including DOCSIS 3.1 and DOCSIS 4.0) is required to support specific resequencing features to guarantee in-order delivery.<a href="#section-4.3-1" class="pilcrow">¶</a></p>
+<p id="section-4.3-2">In the downstream direction (i.e. from the network to end-user) individual IP packets are encapsulated in layer 2 frames that generally include a 20-bit Downstream Service ID (DSID), a 1-bit Sequence Change Count, and a 16-bit Packet Sequence Number. The specifications include detailed, mandatory, requirements on the handling of these fields, including a requirement that cable modems support at least 16 simultaneous resequencing contexts, each of which having sufficient memory to hold packets for up to 13 ms (18 ms in older equipment) at the maximum forwarding rate of the device, mechanisms for rapid loss detection, and significant management and configuration mechanisms to support the feature.<a href="#section-4.3-2" class="pilcrow">¶</a></p>
+<p id="section-4.3-3">In the upstream direction (i.e. from the end-user to the network) individual IP packets are encapsulated in layer 2 frames, then concatenated together and fragmented into "segments" for transmission. The segment boundaries are determined by the size of the transmission opportunities (grants) and generally do not relate to the internal frame or packet boundaries. So, in general a segment could begin with the tail of one L2 frame, then have zero or more full L2 frames, then the head of a final frame. Each segment has a segment header which contains a 13-bit sequence number. The CMTS is required to reassemble the concatenated frame sequence, and forward the individual frames in order.<a href="#section-4.3-3" class="pilcrow">¶</a></p>
+</section>
+</section>
+<section id="section-5">
+      <h2 id="name-proposed-updates-to-rfc3819">
+<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-proposed-updates-to-rfc3819" class="section-name selfRef">Proposed Updates to RFC3819 Guidance on Packet Reordering</a>
+      </h2>
+<p id="section-5-1">This draft proposes to replace the contents of <span><a href="https://rfc-editor.org/rfc/rfc3819#section-15" class="relref">Section 15</a> of [<a href="#RFC3819" class="cite xref">RFC3819</a>]</span> with the following text.<a href="#section-5-1" class="pilcrow">¶</a></p>
+<p id="section-5-2">The Internet architecture does not guarantee that packets will arrive
+      in the same order in which they were originally transmitted;
+      transport protocols must take this into account.<a href="#section-5-2" class="pilcrow">¶</a></p>
+<p id="section-5-3">An earlier definition of TCP <span>[<a href="#RFC2581" class="cite xref">RFC2581</a>]</span><span>[<a href="#RFC3517" class="cite xref">RFC3517</a>]</span><span>[<a href="#RFC5681" class="cite xref">RFC5681</a>]</span><span>[<a href="#RFC6675" class="cite xref">RFC6675</a>]</span> defined the "fast retransmit" algorithm,
+      which recommended that a TCP receiver send an immediate duplicate ACK when an out-of-order segment arrives,
+      and it recommended that the TCP sender use the arrival of 3 duplicate ACKs as an indication that a segment has been lost.
+      This loss determination triggers a retransmission and a reduction of the congestion window.
+      In the presence of packet reordering, this duplicate-ACK-based loss detection mechanism can incorrectly deem a packet lost, and thus trigger a spurious retransmission and an unnecessary congestion window reduction, both of which can negatively impact the performance of the connection.
+      Thus, one outcome of the implementation and deployment of the fast retransmit algorithm is that TCPs became significantly more sensitive to network reordering.<a href="#section-5-3" class="pilcrow">¶</a></p>
+<p id="section-5-4">A more recent update to TCP <span>[<a href="#RFC8985" class="cite xref">RFC8985</a>]</span> addresses this sensitivity by performing loss detection via time-based inferences derived from the ACK feedback, rather than using duplicate ACKs.
+      In addition, <span><a href="https://rfc-editor.org/rfc/rfc9002#section-6.1" class="relref">Section 6.1</a> of [<a href="#RFC9002" class="cite xref">RFC9002</a>]</span> discusses the usefulness of implementing similar mechanisms in QUIC, and provides the protocol tools to do so.
+      Implementations of these time-based loss detection methods have now been widely deployed.<a href="#section-5-4" class="pilcrow">¶</a></p>
+<p id="section-5-5">Nonetheless, there do exist implementations of network protocols that do not work well in the presence of a significant amount of packet reordering.<a href="#section-5-5" class="pilcrow">¶</a></p>
+<p id="section-5-6">This suggests that subnetwork implementers should try to avoid packet
+      reordering when possible, but not if doing so compromises
+      efficiency, impairs reliability, or increases average packet delay.<a href="#section-5-6" class="pilcrow">¶</a></p>
+</section>
+<div id="IANA">
+<section id="section-6">
+      <h2 id="name-iana-considerations">
+<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
+      </h2>
+<p id="section-6-1">This memo includes no request to IANA.<a href="#section-6-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="Security">
+<section id="section-7">
+      <h2 id="name-security-considerations">
+<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
+      </h2>
+<p id="section-7-1">This document should not affect the security of the Internet.<a href="#section-7-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<section id="section-8">
+      <h2 id="name-references">
+<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-references" class="section-name selfRef">References</a>
+      </h2>
+<section id="section-8.1">
+        <h3 id="name-informative-references">
+<a href="#section-8.1" class="section-number selfRef">8.1. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
+        </h3>
+<dl class="references">
+<dt id="RFC2401">[RFC2401]</dt>
+        <dd>
+<span class="refAuthor">Kent, S.</span> and <span class="refAuthor">R. Atkinson</span>, <span class="refTitle">"Security Architecture for the Internet Protocol"</span>, <span class="seriesInfo">RFC 2401</span>, <span class="seriesInfo">DOI 10.17487/RFC2401</span>, <time datetime="1998-11" class="refDate">November 1998</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc2401">https://www.rfc-editor.org/info/rfc2401</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC2661">[RFC2661]</dt>
+        <dd>
+<span class="refAuthor">Townsley, W.</span>, <span class="refAuthor">Valencia, A.</span>, <span class="refAuthor">Rubens, A.</span>, <span class="refAuthor">Pall, G.</span>, <span class="refAuthor">Zorn, G.</span>, and <span class="refAuthor">B. Palter</span>, <span class="refTitle">"Layer Two Tunneling Protocol "L2TP""</span>, <span class="seriesInfo">RFC 2661</span>, <span class="seriesInfo">DOI 10.17487/RFC2661</span>, <time datetime="1999-08" class="refDate">August 1999</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc2661">https://www.rfc-editor.org/info/rfc2661</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC2983">[RFC2983]</dt>
+        <dd>
+<span class="refAuthor">Black, D.</span>, <span class="refTitle">"Differentiated Services and Tunnels"</span>, <span class="seriesInfo">RFC 2983</span>, <span class="seriesInfo">DOI 10.17487/RFC2983</span>, <time datetime="2000-10" class="refDate">October 2000</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc2983">https://www.rfc-editor.org/info/rfc2983</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC3095">[RFC3095]</dt>
+        <dd>
+<span class="refAuthor">Bormann, C.</span>, <span class="refAuthor">Burmeister, C.</span>, <span class="refAuthor">Degermark, M.</span>, <span class="refAuthor">Fukushima, H.</span>, <span class="refAuthor">Hannu, H.</span>, <span class="refAuthor">Jonsson, L.</span>, <span class="refAuthor">Hakenberg, R.</span>, <span class="refAuthor">Koren, T.</span>, <span class="refAuthor">Le, K.</span>, <span class="refAuthor">Liu, Z.</span>, <span class="refAuthor">Martensson, A.</span>, <span class="refAuthor">Miyazaki, A.</span>, <span class="refAuthor">Svanbro, K.</span>, <span class="refAuthor">Wiebke, T.</span>, <span class="refAuthor">Yoshimura, T.</span>, and <span class="refAuthor">H. Zheng</span>, <span class="refTitle">"RObust Header Compression (ROHC): Framework and four profiles: RTP, UDP, ESP, and uncompressed"</span>, <span class="seriesInfo">RFC 3095</span>, <span class="seriesInfo">DOI 10.17487/RFC3095</span>, <time datetime="2001-07" class="refDate">July 2001</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc3095">https://www.rfc-editor.org/info/rfc3095</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC3819">[RFC3819]</dt>
+        <dd>
+<span class="refAuthor">Karn, P., Ed.</span>, <span class="refAuthor">Bormann, C.</span>, <span class="refAuthor">Fairhurst, G.</span>, <span class="refAuthor">Grossman, D.</span>, <span class="refAuthor">Ludwig, R.</span>, <span class="refAuthor">Mahdavi, J.</span>, <span class="refAuthor">Montenegro, G.</span>, <span class="refAuthor">Touch, J.</span>, and <span class="refAuthor">L. Wood</span>, <span class="refTitle">"Advice for Internet Subnetwork Designers"</span>, <span class="seriesInfo">BCP 89</span>, <span class="seriesInfo">RFC 3819</span>, <span class="seriesInfo">DOI 10.17487/RFC3819</span>, <time datetime="2004-07" class="refDate">July 2004</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc3819">https://www.rfc-editor.org/info/rfc3819</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC4224">[RFC4224]</dt>
+        <dd>
+<span class="refAuthor">Pelletier, G.</span>, <span class="refAuthor">Jonsson, L.</span>, and <span class="refAuthor">K. Sandlund</span>, <span class="refTitle">"RObust Header Compression (ROHC): ROHC over Channels That Can Reorder Packets"</span>, <span class="seriesInfo">RFC 4224</span>, <span class="seriesInfo">DOI 10.17487/RFC4224</span>, <time datetime="2006-01" class="refDate">January 2006</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc4224">https://www.rfc-editor.org/info/rfc4224</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC5225">[RFC5225]</dt>
+        <dd>
+<span class="refAuthor">Pelletier, G.</span> and <span class="refAuthor">K. Sandlund</span>, <span class="refTitle">"RObust Header Compression Version 2 (ROHCv2): Profiles for RTP, UDP, IP, ESP and UDP-Lite"</span>, <span class="seriesInfo">RFC 5225</span>, <span class="seriesInfo">DOI 10.17487/RFC5225</span>, <time datetime="2008-04" class="refDate">April 2008</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc5225">https://www.rfc-editor.org/info/rfc5225</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8985">[RFC8985]</dt>
+        <dd>
+<span class="refAuthor">Cheng, Y.</span>, <span class="refAuthor">Cardwell, N.</span>, <span class="refAuthor">Dukkipati, N.</span>, and <span class="refAuthor">P. Jha</span>, <span class="refTitle">"The RACK-TLP Loss Detection Algorithm for TCP"</span>, <span class="seriesInfo">RFC 8985</span>, <span class="seriesInfo">DOI 10.17487/RFC8985</span>, <time datetime="2021-02" class="refDate">February 2021</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8985">https://www.rfc-editor.org/info/rfc8985</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9002">[RFC9002]</dt>
+        <dd>
+<span class="refAuthor">Iyengar, J., Ed.</span> and <span class="refAuthor">I. Swett, Ed.</span>, <span class="refTitle">"QUIC Loss Detection and Congestion Control"</span>, <span class="seriesInfo">RFC 9002</span>, <span class="seriesInfo">DOI 10.17487/RFC9002</span>, <time datetime="2021-05" class="refDate">May 2021</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc9002">https://www.rfc-editor.org/info/rfc9002</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC2581">[RFC2581]</dt>
+        <dd>
+<span class="refAuthor">Allman, M.</span>, <span class="refAuthor">Paxson, V.</span>, and <span class="refAuthor">W. Stevens</span>, <span class="refTitle">"TCP Congestion Control"</span>, <span class="seriesInfo">RFC 2581</span>, <span class="seriesInfo">DOI 10.17487/RFC2581</span>, <time datetime="1999-04" class="refDate">April 1999</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc2581">https://www.rfc-editor.org/info/rfc2581</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC3517">[RFC3517]</dt>
+        <dd>
+<span class="refAuthor">Blanton, E.</span>, <span class="refAuthor">Allman, M.</span>, <span class="refAuthor">Fall, K.</span>, and <span class="refAuthor">L. Wang</span>, <span class="refTitle">"A Conservative Selective Acknowledgment (SACK)-based Loss Recovery Algorithm for TCP"</span>, <span class="seriesInfo">RFC 3517</span>, <span class="seriesInfo">DOI 10.17487/RFC3517</span>, <time datetime="2003-04" class="refDate">April 2003</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc3517">https://www.rfc-editor.org/info/rfc3517</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC5681">[RFC5681]</dt>
+        <dd>
+<span class="refAuthor">Allman, M.</span>, <span class="refAuthor">Paxson, V.</span>, and <span class="refAuthor">E. Blanton</span>, <span class="refTitle">"TCP Congestion Control"</span>, <span class="seriesInfo">RFC 5681</span>, <span class="seriesInfo">DOI 10.17487/RFC5681</span>, <time datetime="2009-09" class="refDate">September 2009</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc5681">https://www.rfc-editor.org/info/rfc5681</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC6675">[RFC6675]</dt>
+        <dd>
+<span class="refAuthor">Blanton, E.</span>, <span class="refAuthor">Allman, M.</span>, <span class="refAuthor">Wang, L.</span>, <span class="refAuthor">Jarvinen, I.</span>, <span class="refAuthor">Kojo, M.</span>, and <span class="refAuthor">Y. Nishida</span>, <span class="refTitle">"A Conservative Loss Recovery Algorithm Based on Selective Acknowledgment (SACK) for TCP"</span>, <span class="seriesInfo">RFC 6675</span>, <span class="seriesInfo">DOI 10.17487/RFC6675</span>, <time datetime="2012-08" class="refDate">August 2012</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc6675">https://www.rfc-editor.org/info/rfc6675</a>&gt;</span>. </dd>
+<dd class="break"></dd></dl>
+</section>
+</section>
+<div id="Acknowledgements">
+<section id="appendix-A">
+      <h2 id="name-acknowledgements">
+<a href="#name-acknowledgements" class="section-name selfRef">Acknowledgements</a>
+      </h2>
+<p id="appendix-A-1"></p>
+</section>
+</div>
+<div id="Contributors">
+<section id="appendix-B">
+      <h2 id="name-contributors">
+<a href="#name-contributors" class="section-name selfRef">Contributors</a>
+      </h2>
+<p id="appendix-B-1">Thanks to all of the contributors.<a href="#appendix-B-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="authors-addresses">
+<section id="appendix-C">
+      <h2 id="name-authors-addresses">
+<a href="#name-authors-addresses" class="section-name selfRef">Authors' Addresses</a>
+      </h2>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Greg White</span></div>
+<div dir="auto" class="left"><span class="org">CableLabs</span></div>
+<div dir="auto" class="left"><span class="country-name">United States of America</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:g.white@cablelabs.com" class="email">g.white@cablelabs.com</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Ingemar Johansson</span></div>
+<div dir="auto" class="left"><span class="org">Ericsson</span></div>
+<div dir="auto" class="left"><span class="country-name">Sweden</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:ingemar.s.johansson@ericsson.com" class="email">ingemar.s.johansson@ericsson.com</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Dibakar Das</span></div>
+<div dir="auto" class="left"><span class="org">Intel</span></div>
+<div dir="auto" class="left"><span class="country-name">United States of America</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:dibakar.das@intel.com" class="email">dibakar.das@intel.com</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Chris Box</span></div>
+<div dir="auto" class="left"><span class="org">BT Group</span></div>
+<div dir="auto" class="left"><span class="country-name">United Kingdom</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:chris.box@bt.com" class="email">chris.box@bt.com</a>
+</div>
+</address>
+</section>
+</div>
+<script>const toc = document.getElementById("toc");
+toc.querySelector("h2").addEventListener("click", e => {
+  toc.classList.toggle("active");
+});
+toc.querySelector("nav").addEventListener("click", e => {
+  toc.classList.remove("active");
+});
+</script>
+</body>
+</html>
