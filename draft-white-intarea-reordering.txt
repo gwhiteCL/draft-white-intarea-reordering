@@ -5,12 +5,12 @@
 Internet Area Working Group                                     G. White
 Internet-Draft                                                 CableLabs
 Intended status: Informational                              I. Johansson
-Expires: 20 April 2026                                          Ericsson
+Expires: 23 April 2026                                          Ericsson
                                                                   D. Das
                                                                    Intel
                                                                   C. Box
                                                                 BT Group
-                                                         17 October 2025
+                                                         20 October 2025
 
 
          Proposal for Updates to Guidance on Packet Reordering
@@ -58,7 +58,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 20 April 2026.
+   This Internet-Draft will expire on 23 April 2026.
 
 Copyright Notice
 
@@ -352,16 +352,9 @@ Table of Contents
    Implementations of these time-based loss detection methods have now
    been widely deployed.
 
-   [BPS99] cites reasons why it may undesirable to eliminate reordering.
-   There are situations where average packet latency can be reduced,
-   link efficiency can be increased, and/or reliability can be improved
-   if reordering is permitted.  Examples include certain high speed
-   switches within the Internet backbone and the parallel links used
-   over many Internet paths for load splitting and redundancy.
-
-   Nonetheless, there may exist implementations of network protocols
-   that do not work well in the presence of a significant amount of
-   packet reordering.
+   Nonetheless, there do exist implementations of network protocols that
+   do not work well in the presence of a significant amount of packet
+   reordering.
 
    This suggests that subnetwork implementers should try to avoid packet
    reordering when possible, but not if doing so compromises efficiency,
