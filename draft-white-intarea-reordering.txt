@@ -202,8 +202,10 @@ Table of Contents
 
 4.1.  LTE/5G
 
-   Packet reordering can occur on both the MAC and the RLC layer in LTE
-   and 5G systems.  Packet resequencing occurs on the PDCP layer.
+   The layers involved in data transmission, from top to bottom, are
+   PDCP, RLC, MAC and PHY.  Packet reordering can occur on both the MAC
+   and the RLC layer in LTE and 5G systems.  Packet resequencing occurs
+   on the PDCP layer.
 
    On the MAC layer: An RLC packet data unit (RLC-PDU) is transmitted in
    one of up to 16 Hybrid ARQ processes on the MAC layer.  This avoids
@@ -213,21 +215,19 @@ Table of Contents
    when the traffic pattern and radio channel varies.  Each
    retransmission adds a few milliseconds extra delay.
 
-   This results in that packets are delivered out of order up to the RLC
-   layer on the receiver side because some transmissions on the MAC
-   layer may succeed in one transmission attempt while other
-   transmissions may need several attepts, up to some given limit given
-   by system configuration.
+   This results in packets delivered out of order to the RLC layer on
+   the receiver side because some transmissions on the MAC layer succeed
+   in one attempt while others may need several attempts, up to a
+   configured limit.
 
    HARQ failure is triggered when the max number of retransmissions is
    reached.
 
    On the RLC Layer: The RLC layer is configured in two typical ways.
 
-   *  RLC Unacknowledged mode (RLC-UM): Is typically used for VoIP
-      services a.k.a VoLTE (Voice over LTE) or VoNR (Voice over NR) but
-      can also be used for the transmission of low latency video.  Data
-      blocks are not retransmitted in this mode.
+   *  RLC Unacknowledged mode (RLC-UM): Is typically used for voice
+      services a.k.a VoLTE (Voice over LTE) or VoNR (Voice over NR).
+      Data blocks are not retransmitted in this mode.
 
    *  RLC Acknowledged mode (RLC-AM): Is typically used for normal
       internet traffic, a.k.a Mobile Broadband (MBB).  Retransmissions
@@ -248,10 +248,9 @@ Table of Contents
    5G systems however, resequencing is left to the PDCP layer.
    Resequencing on the PDCP layer is however optional according to the
    5G standard but is mostly enabled out of concern for sensitivity to
-   packet reordering on the transport and application layer.
-
-   In addition radio bearers with robust header compression (RoHC)
-   should enable resequencing.
+   packet reordering on the transport and application layer.  In
+   addition radio bearers with robust header compression (RoHC) should
+   enable resequencing.
 
 4.2.  Wi-Fi
 
