@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-10-21T01:15:32.187344+00:00",
+  "timestamp": "2025-11-04T01:16:20.415749+00:00",
   "repo": "gwhiteCL/draft-white-intarea-reordering",
   "labels": [
     {
@@ -113,6 +113,44 @@
       "updatedAt": "2025-10-20T19:33:09Z",
       "closedAt": null,
       "comments": []
+    },
+    {
+      "number": 13,
+      "id": "I_kwDOOAwCW87VaPJO",
+      "title": "What should the draft say about L4 awareness?",
+      "url": "https://github.com/gwhiteCL/draft-white-intarea-reordering/issues/13",
+      "state": "OPEN",
+      "author": "gwhiteCL",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "Different (largely historic) protocols do have out-of-order sensitivities.   Should the draft acknowledge that L2 networks could identify such protocols (by IP protocol /Next Header, or by port number) and selectively resequence?",
+      "createdAt": "2025-11-03T03:37:08Z",
+      "updatedAt": "2025-11-03T19:09:34Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "IngJohEricsson",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I think that perhaps it be brought up in the draft, but I am not convinced that it is a way forward. Identification of services/protocols that are sensitive to packet reordering is a challenge on its own. How do you from an L2 perspective determine that a VPN tunnel is sensitive to large amounts packet reordering, and as a followup, if said VPN exposes this trait, does it open up a vulnerability? and is it better to upgrade the VPN with better (adaptive?) replay protection ? \nFootnote.. I am not an IPSEC expert so expect large holes in my argumentation \n",
+          "createdAt": "2025-11-03T07:01:37Z",
+          "updatedAt": "2025-11-03T07:01:37Z"
+        },
+        {
+          "author": "gwhiteCL",
+          "authorAssociation": "OWNER",
+          "body": "From an architecture and standards viewpoint, I definitely share the concern with trying to build L3+ \"intelligence\" into L2 protocols.  I could see this as a workaround to address certain problematic cases if they exist, but I would see this as a vendor-proprietary implementation rather than something that gets standardized in any way.  I don't think we want to (for example) register certain port numbers or protocols that are expected to be resequenced by L2 protocols.  I am also not an IPSEC expert, but I recall hearing that some implementations (or maybe some configurations?) are already more tolerant of reordering than others. \n",
+          "createdAt": "2025-11-03T18:57:40Z",
+          "updatedAt": "2025-11-03T18:57:40Z"
+        },
+        {
+          "author": "chris-box",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "We have choices. I think there are three general approaches we could take.\n\n| Option | Default policy | Exceptions | Policy for the exceptions | Effect on modern implementations | Effect on older implementations |\n| --- | --- | --- | --- | --- | --- |\n| One size fits all | Some reordering permitted, up to a point | None | N/A | Slightly improved | Slightly degraded |\n| Default strictly in order | Resequence all packets | Some ToS patterns (e.g. L4S or NQB) and/or some L4 ports (e.g. HTTP/3, DNS) | Larger amount of reordering permitted | Improved, if exception matched | No change |\n| Default permissive | Larger amount of reordering permitted | IPSEC, PPP, some L2TP | Resequence all packets | Improved | For the listed exceptions, no change. For pre-RACK TCP, slightly degraded. |\n\nI am not a fan of the middle one, as it would create a burden on future protocol evolution that they always to have match the exceptions if they want to benefit.\n\nI would be happy with either the first or third ones. The advantages of Default Permissive are that it has a lower operational barrier to deployment, and might deliver better latency. Its downside is the need for inspection and branching.",
+          "createdAt": "2025-11-03T19:09:34Z",
+          "updatedAt": "2025-11-03T19:09:34Z"
+        }
+      ]
     }
   ],
   "pulls": [
