@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-11-04T01:16:20.415749+00:00",
+  "timestamp": "2025-11-06T01:17:34.029561+00:00",
   "repo": "gwhiteCL/draft-white-intarea-reordering",
   "labels": [
     {
@@ -149,6 +149,105 @@
           "body": "We have choices. I think there are three general approaches we could take.\n\n| Option | Default policy | Exceptions | Policy for the exceptions | Effect on modern implementations | Effect on older implementations |\n| --- | --- | --- | --- | --- | --- |\n| One size fits all | Some reordering permitted, up to a point | None | N/A | Slightly improved | Slightly degraded |\n| Default strictly in order | Resequence all packets | Some ToS patterns (e.g. L4S or NQB) and/or some L4 ports (e.g. HTTP/3, DNS) | Larger amount of reordering permitted | Improved, if exception matched | No change |\n| Default permissive | Larger amount of reordering permitted | IPSEC, PPP, some L2TP | Resequence all packets | Improved | For the listed exceptions, no change. For pre-RACK TCP, slightly degraded. |\n\nI am not a fan of the middle one, as it would create a burden on future protocol evolution that they always to have match the exceptions if they want to benefit.\n\nI would be happy with either the first or third ones. The advantages of Default Permissive are that it has a lower operational barrier to deployment, and might deliver better latency. Its downside is the need for inspection and branching.",
           "createdAt": "2025-11-03T19:09:34Z",
           "updatedAt": "2025-11-03T19:09:34Z"
+        }
+      ]
+    },
+    {
+      "number": 14,
+      "id": "I_kwDOOAwCW87V1TWV",
+      "title": "Fragmentation",
+      "url": "https://github.com/gwhiteCL/draft-white-intarea-reordering/issues/14",
+      "state": "OPEN",
+      "author": "IngJohEricsson",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "At the INTAREA session the issue with fragmentation was raised. Do I interpret it like they envision a case where IP packets are fragmented in L2 and then concatenated in the wrong way ?",
+      "createdAt": "2025-11-04T17:18:45Z",
+      "updatedAt": "2025-11-05T03:31:48Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "gwhiteCL",
+          "authorAssociation": "OWNER",
+          "body": "I didn't interpret it that way.  I think they were referring to the receiving IP endpoint being unable to handle receiving fragments out of order.  ",
+          "createdAt": "2025-11-04T17:54:37Z",
+          "updatedAt": "2025-11-04T17:54:37Z"
+        },
+        {
+          "author": "dibakard",
+          "authorAssociation": "NONE",
+          "body": "What are the fragments ? In WiFi, layer-2 typically doesnt fragment packets received from upper layers.",
+          "createdAt": "2025-11-04T20:40:43Z",
+          "updatedAt": "2025-11-04T20:40:43Z"
+        },
+        {
+          "author": "IngJohEricsson",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I don't see that 5G RAN would fragment  IP packets either. And besides, I have some real bad experience with fragmented IPv4 packets in 4G/5G networks. We stumbled on these issues with too large packets from video coders in an industrial project. \nAnd IPv6 fragmentation is limited to only in NICs on the server side I think ? ",
+          "createdAt": "2025-11-04T21:15:05Z",
+          "updatedAt": "2025-11-04T21:15:05Z"
+        },
+        {
+          "author": "gwhiteCL",
+          "authorAssociation": "OWNER",
+          "body": "Nor does DOCSIS.  But, I think the concern is that a sender (or maybe a VPN tunnel encap.) could fragment IP packets.  Then if the L2 link reorders those fragments, the IP fragment reassembly at the receiver (or tunnel decap.) might have issues. ",
+          "createdAt": "2025-11-04T21:17:17Z",
+          "updatedAt": "2025-11-04T21:17:17Z"
+        },
+        {
+          "author": "IngJohEricsson",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Yes, that sounds like a plausible explanation. \nIt is actually the GTP-U overhead that caused the segmentation and we had all sorts of issues with crap video before we realized that we needed to turn down the MTU to avoid IPv4 fragmentation. \nAlso TCP Linux has MTU discovery built in and there is also an MTU discover RFC for RTP/UDP  ",
+          "createdAt": "2025-11-04T21:23:44Z",
+          "updatedAt": "2025-11-04T21:23:44Z"
+        },
+        {
+          "author": "gwhiteCL",
+          "authorAssociation": "OWNER",
+          "body": "There isn't a protocol issue that I can see with IP fragmentation.  It seems to fully support out-of-order arrivals, so maybe there are some implementations that are broken (or were broken in the past)?\n\nI've definitely heard multiple times that IP fragmentation should be avoided if at all possible. ",
+          "createdAt": "2025-11-05T03:31:48Z",
+          "updatedAt": "2025-11-05T03:31:48Z"
+        }
+      ]
+    },
+    {
+      "number": 15,
+      "id": "I_kwDOOAwCW87V14Fl",
+      "title": "IP Translators",
+      "url": "https://github.com/gwhiteCL/draft-white-intarea-reordering/issues/15",
+      "state": "OPEN",
+      "author": "gwhiteCL",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "At Intarea IETF124, it was mentioned that translators like CG-NAT might be sensitive to out-of-order arrivals.",
+      "createdAt": "2025-11-04T17:57:58Z",
+      "updatedAt": "2025-11-04T17:57:58Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 16,
+      "id": "I_kwDOOAwCW87V7Nge",
+      "title": "IPsec sensitivity to reordering",
+      "url": "https://github.com/gwhiteCL/draft-white-intarea-reordering/issues/16",
+      "state": "OPEN",
+      "author": "gwhiteCL",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "\nFrom Yoav Nir <ynir.ietf@gmail.com>\n\n> My 2 cents about the subject is that IPsec (that\u2019s the one correct capitalization) is sensitive to re-ordering. Packets are numbered, and you\u2019re not supposed to forward the decrypted packet #19 to the network until you\u2019ve already forwarded packet #18, so that internal protocols that are sensitive to packet re-ordering may work.  In practice most implementations keep a sliding window (typically 64 packets) and will decrypt and forward anything within that sliding window.  But then I have not worked on an actual IPsec implementation in 8 years, so people in the working group might have better insights. \n\n\nFrom Tero Kivinen <kivinen@iki.fi>\n\n> EESP and g-ikev2 are changing how the replay windows work, mostly to get rid of them, as if you forward packets with very different paths, there might be huge differences in the packet delay times, thus some of them might be received out of the replay window.",
+      "createdAt": "2025-11-05T03:40:11Z",
+      "updatedAt": "2025-11-05T03:55:33Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "gwhiteCL",
+          "authorAssociation": "OWNER",
+          "body": "Per Lorenzo Colitti (during TSVWG @ IETF124):  Linux IPsec by default uses a 32 packet window for replay protection, but has a \"bitmap\" feature which can be enabled that extends this to 4k.",
+          "createdAt": "2025-11-05T03:55:32Z",
+          "updatedAt": "2025-11-05T03:55:32Z"
         }
       ]
     }
