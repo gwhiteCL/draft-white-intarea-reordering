@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-11-06T01:17:34.029561+00:00",
+  "timestamp": "2025-11-11T01:17:54.014205+00:00",
   "repo": "gwhiteCL/draft-white-intarea-reordering",
   "labels": [
     {
@@ -239,7 +239,7 @@
       "labels": [],
       "body": "\nFrom Yoav Nir <ynir.ietf@gmail.com>\n\n> My 2 cents about the subject is that IPsec (that\u2019s the one correct capitalization) is sensitive to re-ordering. Packets are numbered, and you\u2019re not supposed to forward the decrypted packet #19 to the network until you\u2019ve already forwarded packet #18, so that internal protocols that are sensitive to packet re-ordering may work.  In practice most implementations keep a sliding window (typically 64 packets) and will decrypt and forward anything within that sliding window.  But then I have not worked on an actual IPsec implementation in 8 years, so people in the working group might have better insights. \n\n\nFrom Tero Kivinen <kivinen@iki.fi>\n\n> EESP and g-ikev2 are changing how the replay windows work, mostly to get rid of them, as if you forward packets with very different paths, there might be huge differences in the packet delay times, thus some of them might be received out of the replay window.",
       "createdAt": "2025-11-05T03:40:11Z",
-      "updatedAt": "2025-11-05T03:55:33Z",
+      "updatedAt": "2025-11-09T12:50:57Z",
       "closedAt": null,
       "comments": [
         {
@@ -248,6 +248,13 @@
           "body": "Per Lorenzo Colitti (during TSVWG @ IETF124):  Linux IPsec by default uses a 32 packet window for replay protection, but has a \"bitmap\" feature which can be enabled that extends this to 4k.",
           "createdAt": "2025-11-05T03:55:32Z",
           "updatedAt": "2025-11-05T03:55:32Z"
+        },
+        {
+          "author": "IngJohEricsson",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Hi\nI attended the IPSECME session, tried to understand the discussion but am not sure it made me much wiser. On the one had the chair (Tero?) said that issues with reordering was quite common these days, one the other hand I did not really understand if that is a show stopper. I any case it was quite a short discussion. ",
+          "createdAt": "2025-11-09T12:50:23Z",
+          "updatedAt": "2025-11-09T12:50:57Z"
         }
       ]
     }
