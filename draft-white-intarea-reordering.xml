@@ -136,6 +136,8 @@
       Moreover, older implementations of TCP that don't implement RACK don't fail in the presence of some out-of-order packets.
       They may see reduced performance, but they do have the ability to correctly handle the receipt of packets out of order.</t>
 
+      <t><xref target="RFC2406"/> specifies out of order handling. A sliding window scheme is used with a minimum size of 32 and a default of 64 packets. A conforming implementation will handle a fair amount of out of sequence delivery, how much is up to implementation choice and can possibly be set as a parameter. The impression is that, based on email on ipsec IETF reflector by Paul Koning 2026-03-26, is not sensitive to reordering.</>       
+
       <t>At the time of publication of <xref target="RFC3819"/>, the "ROHC" header compression framework defined in <xref target="RFC3095"/> stated an operating assumption that the network would provide in-order delivery.
       This assumption is discussed in detail in <xref target="RFC4224"/>, which provides guidance on implementing ROHC over channels that can reorder header-compressed packets, and explains different ways of implementing the profiles found in <xref target="RFC3095"/> over reordering channels.
       Subsequent to the publication of <xref target="RFC3819"/> the issue of reordering intolerance by ROHC was addressed by the development of ROHCv2 <xref target="RFC5225"/>, which lists tolerance to reordering as one of its significant improvements over ROHC.</t>
@@ -222,8 +224,7 @@
 
         <t>In the upstream direction (i.e. from the end-user to the network) individual IP packets are encapsulated in layer 2 frames, then concatenated together and fragmented into "segments" for transmission. The segment boundaries are determined by the size of the transmission opportunities (grants) and generally do not relate to the internal frame or packet boundaries. So, in general a segment could begin with the tail of one L2 frame, then have zero or more full L2 frames, then the head of a final frame. Each segment has a segment header which contains a 13-bit sequence number. The CMTS is required to reassemble the concatenated frame sequence, and forward the individual frames in order.</t>
       </section>
-
-
+         
     </section>
 
     <section>
@@ -277,6 +278,7 @@
       <references>
         <name>Informative References</name>
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.2401.xml"/>
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.2406.xml"/>
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.2661.xml"/>
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.2983.xml"/>
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.3095.xml"/>
