@@ -136,7 +136,7 @@
       Moreover, older implementations of TCP that don't implement RACK don't fail in the presence of some out-of-order packets.
       They may see reduced performance, but they do have the ability to correctly handle the receipt of packets out of order.</t>
 
-      <t><xref target="RFC2406"/> specifies out of order handling. A sliding window scheme is used with a minimum size of 32 and a default of 64 packets. A conforming implementation will handle a fair amount of out of sequence delivery, how much is up to implementation choice and can possibly be set as a parameter. The impression is that, based on email on ipsec IETF reflector by Paul Koning 2026-03-26, is not sensitive to reordering.</>       
+      <t><xref target="RFC2406"/> specifies out of order handling. A sliding window scheme is used with a minimum size of 32 and a default of 64 packets. A conforming implementation will handle a fair amount of out of sequence delivery, how much is up to implementation choice and can possibly be set as a parameter. The impression is that IP-SEC, based on email on ipsec IETF reflector by Paul Koning 2026-03-26, is not sensitive to reordering.</>       
 
       <t>At the time of publication of <xref target="RFC3819"/>, the "ROHC" header compression framework defined in <xref target="RFC3095"/> stated an operating assumption that the network would provide in-order delivery.
       This assumption is discussed in detail in <xref target="RFC4224"/>, which provides guidance on implementing ROHC over channels that can reorder header-compressed packets, and explains different ways of implementing the profiles found in <xref target="RFC3095"/> over reordering channels.
