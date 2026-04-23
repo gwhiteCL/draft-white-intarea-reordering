@@ -5,12 +5,12 @@
 Internet Area Working Group                                     G. White
 Internet-Draft                                                 CableLabs
 Intended status: Informational                              I. Johansson
-Expires: 11 October 2025                                        Ericsson
+Expires: 25 October 2025                                        Ericsson
                                                                   D. Das
                                                                    Intel
                                                                   C. Box
                                                                 BT Group
-                                                            9 April 2025
+                                                           23 April 2025
 
 
          Proposal for Updates to Guidance on Packet Reordering
@@ -44,7 +44,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 11 October 2025.
+   This Internet-Draft will expire on 25 October 2025.
 
 Copyright Notice
 
@@ -138,13 +138,14 @@ Table of Contents
    packets.  They may see reduced performance, but they do have the
    ability to correctly handle the receipt of packets out of order.
 
-   [RFC2406] specifies out of order handling.  A sliding window scheme
-   is used with a minimum size of 32 and a default of 64 packets.  A
-   conforming implementation will handle a fair amount of out of
-   sequence delivery, how much is up to implementation choice and can
-   possibly be set as a parameter.  The impression is that IP-SEC, based
-   on email on ipsec IETF reflector by Paul Koning 2026-03-26, is not
-   sensitive to reordering.
+   [RFC4303] (and the obsoleted [RFC2406]) specifies out of order
+   handling for IPsec encryption (ESP).  A sliding window scheme is used
+   with a minimum size of 32 and a default of 64 packets.  A conforming
+   implementation will handle a fair amount of out of sequence delivery,
+   how much is up to implementation choice and can possibly be set as a
+   parameter.  The impression is that IPsec, based on email on ipsec
+   IETF reflector by Paul Koning 2026-03-26, is not sensitive to
+   reordering.
 
    At the time of publication of [RFC3819], the "ROHC" header
    compression framework defined in [RFC3095] stated an operating
@@ -391,6 +392,10 @@ Table of Contents
    [RFC2406]  Kent, S. and R. Atkinson, "IP Encapsulating Security
               Payload (ESP)", RFC 2406, DOI 10.17487/RFC2406, November
               1998, <https://www.rfc-editor.org/info/rfc2406>.
+
+   [RFC4303]  Kent, S., "IP Encapsulating Security Payload (ESP)",
+              RFC 4303, DOI 10.17487/RFC4303, December 2005,
+              <https://www.rfc-editor.org/info/rfc4303>.
 
    [RFC2661]  Townsley, W., Valencia, A., Rubens, A., Pall, G., Zorn,
               G., and B. Palter, "Layer Two Tunneling Protocol "L2TP"",
