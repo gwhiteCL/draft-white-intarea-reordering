@@ -138,15 +138,6 @@ Table of Contents
    packets.  They may see reduced performance, but they do have the
    ability to correctly handle the receipt of packets out of order.
 
-   [RFC4303] (and the obsoleted [RFC2406]) specifies out of order
-   handling for IPsec encryption (ESP).  A sliding window scheme is used
-   with a minimum size of 32 and a default of 64 packets.  A conforming
-   implementation will handle a fair amount of out of sequence delivery,
-   how much is up to implementation choice and can possibly be set as a
-   parameter.  The impression is that IPsec, based on email on ipsec
-   IETF reflector by Paul Koning 2026-03-26, is not sensitive to
-   reordering.
-
    At the time of publication of [RFC3819], the "ROHC" header
    compression framework defined in [RFC3095] stated an operating
    assumption that the network would provide in-order delivery.  This
@@ -163,6 +154,16 @@ Table of Contents
    sensitive to reordering to some degree.  For instance, Section 4.1 of
    [RFC2983] discusses IPSec [RFC2401] and L2TP [RFC2661] as being
    sensitive to packet reordering.
+
+   [RFC4303] (and the obsoleted [RFC2406]) specifies out of order
+   handling for IPsec encryption (ESP).  A sliding window scheme is used
+   with a minimum size of 32 and a default of 64 packets.  A conforming
+   implementation will handle a fair amount of out of sequence delivery,
+   how much is up to implementation choice and can possibly be set as a
+   parameter.  The impression is that IPsec, based on email on ipsec
+   IETF reflector by Paul Koning 2026-03-26
+   (https://mailarchive.ietf.org/arch/msg/ipsec/
+   nPntT13UfrbEF5Hl36T9xAFoYP4/), is not sensitive to reordering.
 
    The current situation seems to be that several layer 2 technologies
    implement resequencing functions that increase cost and complexity of
