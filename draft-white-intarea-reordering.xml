@@ -140,9 +140,16 @@
       This assumption is discussed in detail in <xref target="RFC4224"/>, which provides guidance on implementing ROHC over channels that can reorder header-compressed packets, and explains different ways of implementing the profiles found in <xref target="RFC3095"/> over reordering channels.
       Subsequent to the publication of <xref target="RFC3819"/> the issue of reordering intolerance by ROHC was addressed by the development of ROHCv2 <xref target="RFC5225"/>, which lists tolerance to reordering as one of its significant improvements over ROHC.</t>
 
-      <t>There may be other protocols or protocol implementations that are sensitive to reordering to some degree.  For instance, <xref target="RFC2983" section="4.1"/> discusses <xref target="RFC2401">IPSec</xref> and <xref target="RFC2661">L2TP</xref> as being sensitive to packet reordering.</t>
+      <t>There may be other protocols or protocol implementations that are sensitive to reordering to some degree.
+      For instance, <xref target="RFC2983" section="4.1"/> discusses <xref target="RFC2401">IPSec</xref> and <xref target="RFC2661">L2TP</xref> as being sensitive to packet reordering.</t>
 
-      <t>The current situation seems to be that several layer 2 technologies implement resequencing functions that increase cost and complexity of equipment, and may in many cases degrade network performance rather than improving it.  Any benefits of resequencing may be primarily limited to older protocol implementations e.g. maintaining the performance of older TCP implementations that are no longer widely used and may not be particularly performant by modern standards.</t>
+      <t><xref target="RFC4303"/> (and the obsoleted <xref target="RFC2406"/>) specifies out of order handling for IPsec encryption (ESP).
+      A sliding window scheme is used with a minimum size of 32 and a default of 64 packets.
+      A conforming implementation will handle a fair amount of out of sequence delivery, how much is up to implementation choice and can possibly be set as a parameter.
+      The impression is that IPsec, based on <eref target="https://mailarchive.ietf.org/arch/msg/ipsec/nPntT13UfrbEF5Hl36T9xAFoYP4/">email on ipsec IETF reflector by Paul Koning 2026-03-26</eref>, is not sensitive to reordering.</t>
+
+      <t>The current situation seems to be that several layer 2 technologies implement resequencing functions that increase cost and complexity of equipment, and may in many cases degrade network performance rather than improving it.
+      Any benefits of resequencing may be primarily limited to older protocol implementations e.g. maintaining the performance of older TCP implementations that are no longer widely used and may not be particularly performant by modern standards.</t>
 
     </section>
 
@@ -222,8 +229,6 @@
 
         <t>In the upstream direction (i.e. from the end-user to the network) individual IP packets are encapsulated in layer 2 frames, then concatenated together and fragmented into "segments" for transmission. The segment boundaries are determined by the size of the transmission opportunities (grants) and generally do not relate to the internal frame or packet boundaries. So, in general a segment could begin with the tail of one L2 frame, then have zero or more full L2 frames, then the head of a final frame. Each segment has a segment header which contains a 13-bit sequence number. The CMTS is required to reassemble the concatenated frame sequence, and forward the individual frames in order.</t>
       </section>
-
-
     </section>
 
     <section>
@@ -277,6 +282,8 @@
       <references>
         <name>Informative References</name>
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.2401.xml"/>
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.2406.xml"/>
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.4303.xml"/>
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.2661.xml"/>
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.2983.xml"/>
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.3095.xml"/>
