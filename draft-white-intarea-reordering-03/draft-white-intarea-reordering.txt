@@ -6,11 +6,11 @@ Internet Area Working Group                                     G. White
 Internet-Draft                                                 CableLabs
 Updates: 3819 (if approved)                                 I. Johansson
 Intended status: Informational                                  Ericsson
-Expires: 25 October 2025                                          D. Das
+Expires: 25 October 2026                                          D. Das
                                                                    Intel
                                                                   C. Box
                                                                 BT Group
-                                                           23 April 2025
+                                                           23 April 2026
 
 
          Proposal for Updates to Guidance on Packet Reordering
@@ -44,11 +44,11 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 25 October 2025.
+   This Internet-Draft will expire on 25 October 2026.
 
 Copyright Notice
 
-   Copyright (c) 2025 IETF Trust and the persons identified as the
+   Copyright (c) 2026 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
