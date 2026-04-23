@@ -136,13 +136,13 @@
       Moreover, older implementations of TCP that don't implement RACK don't fail in the presence of some out-of-order packets.
       They may see reduced performance, but they do have the ability to correctly handle the receipt of packets out of order.</t>
 
-      <t><xref target="RFC4303"/> (and the obsoleted <xref target="RFC2406"/>) specifies out of order handling for IPsec encryption (ESP). A sliding window scheme is used with a minimum size of 32 and a default of 64 packets. A conforming implementation will handle a fair amount of out of sequence delivery, how much is up to implementation choice and can possibly be set as a parameter. The impression is that IPsec, based on email on ipsec IETF reflector by Paul Koning 2026-03-26, is not sensitive to reordering.</t>
-
       <t>At the time of publication of <xref target="RFC3819"/>, the "ROHC" header compression framework defined in <xref target="RFC3095"/> stated an operating assumption that the network would provide in-order delivery.
       This assumption is discussed in detail in <xref target="RFC4224"/>, which provides guidance on implementing ROHC over channels that can reorder header-compressed packets, and explains different ways of implementing the profiles found in <xref target="RFC3095"/> over reordering channels.
       Subsequent to the publication of <xref target="RFC3819"/> the issue of reordering intolerance by ROHC was addressed by the development of ROHCv2 <xref target="RFC5225"/>, which lists tolerance to reordering as one of its significant improvements over ROHC.</t>
 
       <t>There may be other protocols or protocol implementations that are sensitive to reordering to some degree.  For instance, <xref target="RFC2983" section="4.1"/> discusses <xref target="RFC2401">IPSec</xref> and <xref target="RFC2661">L2TP</xref> as being sensitive to packet reordering.</t>
+
+      <t><xref target="RFC4303"/> (and the obsoleted <xref target="RFC2406"/>) specifies out of order handling for IPsec encryption (ESP). A sliding window scheme is used with a minimum size of 32 and a default of 64 packets. A conforming implementation will handle a fair amount of out of sequence delivery, how much is up to implementation choice and can possibly be set as a parameter. The impression is that IPsec, based on email on ipsec IETF reflector by Paul Koning 2026-03-26, is not sensitive to reordering.</t>
 
       <t>The current situation seems to be that several layer 2 technologies implement resequencing functions that increase cost and complexity of equipment, and may in many cases degrade network performance rather than improving it.  Any benefits of resequencing may be primarily limited to older protocol implementations e.g. maintaining the performance of older TCP implementations that are no longer widely used and may not be particularly performant by modern standards.</t>
 
