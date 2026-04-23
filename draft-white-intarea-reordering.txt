@@ -4,9 +4,9 @@
 
 Internet Area Working Group                                     G. White
 Internet-Draft                                                 CableLabs
-Intended status: Informational                              I. Johansson
-Expires: 25 October 2025                                        Ericsson
-                                                                  D. Das
+Updates: 3819 (if approved)                                 I. Johansson
+Intended status: Informational                                  Ericsson
+Expires: 25 October 2025                                          D. Das
                                                                    Intel
                                                                   C. Box
                                                                 BT Group
