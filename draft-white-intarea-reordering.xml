@@ -255,7 +255,7 @@
       <t>Modern transport protocols and many applications already incorporate mechanisms to tolerate bounded packet reordering. Performing resequencing within the subnetwork duplicates functionality that already exists at the endpoint, while introducing head-of-line blocking that increases latency and delay variation for packets that were not themselves reordered. Subnetwork resequencing SHOULD therefore only be employed where there is clear evidence that its benefits outweigh the additional latency and jitter that it introduces.</t>
 
       <t>Internet endpoints are ultimately responsible for interpreting packet ordering according to the semantics of the transport protocol or application. A subnetwork generally lacks sufficient knowledge to determine whether a particular degree of packet reordering would have been harmful, but it does know that resequencing necessarily delays packets that could otherwise have been forwarded immediately.</t>
-     
+
     </section>
 
 
