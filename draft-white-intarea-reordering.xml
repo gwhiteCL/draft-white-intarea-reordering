@@ -141,7 +141,7 @@
       Subsequent to the publication of <xref target="RFC3819"/> the issue of reordering intolerance by ROHC was addressed by the development of ROHCv2 <xref target="RFC5225"/>, which lists tolerance to reordering as one of its significant improvements over ROHC.</t>
 
       <t>There may be other protocols or protocol implementations that are sensitive to reordering to some degree.
-      For instance, <xref target="RFC2983" section="4.1"/> discusses <xref target="RFC2401">IPSec</xref> and <xref target="RFC2661">L2TP</xref> as being sensitive to packet reordering.</t>
+      For instance, <xref target="RFC2983" section="4.1"/> discusses <xref target="RFC2401">IPSec</xref> and <xref target="RFC2661">L2TP</xref> as being sensitive to packet reordering. Additionally, some have expressed a concern that IP translators (like CG-NAT) might be sensitive to packet reordering, however <xref target="RFC6888"/> and <xref target="RFC4787"/> do not appear to introduce any packet ordering sensitivity, and in fact mandate that implementations support out-of-order arrivals in the context of IP fragmentation.</t>
 
       <t><xref target="RFC4303"/> (and the obsoleted <xref target="RFC2406"/>) specifies out of order handling for IPsec encryption (ESP).
       A sliding window scheme is used with a minimum size of 32 and a default of 64 packets.
