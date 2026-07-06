@@ -153,7 +153,12 @@ Table of Contents
    There may be other protocols or protocol implementations that are
    sensitive to reordering to some degree.  For instance, Section 4.1 of
    [RFC2983] discusses IPSec [RFC2401] and L2TP [RFC2661] as being
-   sensitive to packet reordering.
+   sensitive to packet reordering.  Additionally, some have expressed a
+   concern that IP translators (like CG-NAT) might be sensitive to
+   packet reordering, however [RFC6888] and [RFC4787] do not appear to
+   introduce any packet ordering sensitivity, and in fact mandate that
+   implementations support out-of-order arrivals in the context of IP
+   fragmentation.
 
    [RFC4303] (and the obsoleted [RFC2406]) specifies out of order
    handling for IPsec encryption (ESP).  A sliding window scheme is used
@@ -279,19 +284,19 @@ Table of Contents
    block.  However, due to link errors, not all frames in the block may
    be received.  In fact, it is observed that as many as 10% of frames
    may be corrupted, depending on link conditions and Modulation and
-   Coding Scheme (MCS) selection.  A re-order buffer at the receiver
+   Coding Scheme (MCS) selection.  A resequencing buffer at the receiver
    holds up delivery of data frames if a frame ahead of it is missing.
-   A separate reorder buffer is maintained for each of the 8 TIDs.  A
-   later retransmission may deliver the missing frame at which point the
-   missing frame and subsequent frames are delivered.  The overall delay
-   experienced by a given data frame is then the sum of the channel
-   access delay of the block containing it, the stack delay and the
-   channel access delay of the block containing the missing frame ahead
-   of it.  In scenarios where the network is even moderately congested,
-   this can significantly impact the tail latency.  For example, in a
-   network with 7 other stations actively contending for channel access,
-   the additional latency caused by the reordering function is more than
-   75ms at P90, and over 400 ms at P99.
+   A separate resequencing buffer is maintained for each of the 8 TIDs.
+   A later retransmission may deliver the missing frame at which point
+   the missing frame and subsequent frames are delivered.  The overall
+   delay experienced by a given data frame is then the sum of the
+   channel access delay of the block containing it, the stack delay and
+   the channel access delay of the block containing the missing frame
+   ahead of it.  In scenarios where the network is even moderately
+   congested, this can significantly impact the tail latency.  For
+   example, in a network with 7 other stations actively contending for
+   channel access, the additional latency caused by the resequencing
+   function is more than 75ms at P90, and over 400 ms at P99.
 
    The process of in-order delivery is also taken advantage of as part
    of the security protocol.  Each data frame is sequentially numbered
@@ -469,6 +474,16 @@ Table of Contents
               Based on Selective Acknowledgment (SACK) for TCP",
               RFC 6675, DOI 10.17487/RFC6675, August 2012,
               <https://www.rfc-editor.org/info/rfc6675>.
+
+   [RFC6888]  Perreault, S., Ed., Yamagata, I., Miyakawa, S., Nakagawa,
+              A., and H. Ashida, "Common Requirements for Carrier-Grade
+              NATs (CGNs)", BCP 127, RFC 6888, DOI 10.17487/RFC6888,
+              April 2013, <https://www.rfc-editor.org/info/rfc6888>.
+
+   [RFC4787]  Audet, F., Ed. and C. Jennings, "Network Address
+              Translation (NAT) Behavioral Requirements for Unicast
+              UDP", BCP 127, RFC 4787, DOI 10.17487/RFC4787, January
+              2007, <https://www.rfc-editor.org/info/rfc4787>.
 
 Acknowledgements
 
