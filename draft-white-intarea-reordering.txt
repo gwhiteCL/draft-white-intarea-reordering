@@ -6,11 +6,11 @@ Internet Area Working Group                                     G. White
 Internet-Draft                                                 CableLabs
 Updates: 3819 (if approved)                                 I. Johansson
 Intended status: Informational                                  Ericsson
-Expires: 25 October 2026                                          D. Das
+Expires: 7 January 2027                                           D. Das
                                                                    Intel
                                                                   C. Box
                                                                 BT Group
-                                                           23 April 2026
+                                                             6 July 2026
 
 
          Proposal for Updates to Guidance on Packet Reordering
@@ -44,7 +44,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 25 October 2026.
+   This Internet-Draft will expire on 7 January 2027.
 
 Copyright Notice
 
@@ -277,11 +277,21 @@ Table of Contents
    To utilize the medium efficiently, the 802.11 MAC aggregates data
    frames of a given traffic identifier (TID) and transmits them as a
    block.  However, due to link errors, not all frames in the block may
-   be received.  A re-order buffer at the receiver holds up delivery of
-   data frames if a frame ahead of it is missing.  A separate reorder
-   buffer is maintained for each of the 8 TIDs.  A later retransmission
-   may deliver the missing frame at which point the missing frame and
-   subsequent frames are delivered.
+   be received.  In fact, it is observed that as many as 10% of frames
+   may be corrupted, depending on link conditions and Modulation and
+   Coding Scheme (MCS) selection.  A re-order buffer at the receiver
+   holds up delivery of data frames if a frame ahead of it is missing.
+   A separate reorder buffer is maintained for each of the 8 TIDs.  A
+   later retransmission may deliver the missing frame at which point the
+   missing frame and subsequent frames are delivered.  The overall delay
+   experienced by a given data frame is then the sum of the channel
+   access delay of the block containing it, the stack delay and the
+   channel access delay of the block containing the missing frame ahead
+   of it.  In scenarios where the network is even moderately congested,
+   this can significantly impact the tail latency.  For example, in a
+   network with 7 other stations actively contending for channel access,
+   the additional latency caused by the reordering function is more than
+   75ms at P90, and over 400 ms at P99.
 
    The process of in-order delivery is also taken advantage of as part
    of the security protocol.  Each data frame is sequentially numbered
