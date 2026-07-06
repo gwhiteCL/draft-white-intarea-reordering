@@ -159,8 +159,8 @@ Table of Contents
    introduce any packet ordering sensitivity, and in fact mandate that
    implementations support out-of-order arrivals in the context of IPv4
    fragmentation.  Futhermore, some have expressed concern that IPv4
-   fragmentation reassembly implementations may not support out-of-order
-   arrivals.  This is echoed by a statement in the Security
+   fragmentation reassembly implementations more broadly may not support
+   out-of-order arrivals.  This is echoed by a statement in the Security
    Considerations section of [RFC4787] that claims that many systems
    simply discard out-of-order fragments.
 
@@ -289,18 +289,19 @@ Table of Contents
    be received.  In fact, it is observed that as many as 10% of frames
    may be corrupted, depending on link conditions and Modulation and
    Coding Scheme (MCS) selection.  A resequencing buffer at the receiver
-   holds up delivery of data frames if a frame ahead of it is missing.
-   A separate resequencing buffer is maintained for each of the 8 TIDs.
-   A later retransmission may deliver the missing frame at which point
-   the missing frame and subsequent frames are delivered.  The overall
-   delay experienced by a given data frame is then the sum of the
-   channel access delay of the block containing it, the stack delay and
-   the channel access delay of the block containing the missing frame
-   ahead of it.  In scenarios where the network is even moderately
-   congested, this can significantly impact the tail latency.  For
-   example, in a network with 7 other stations actively contending for
-   channel access, the additional latency caused by the resequencing
-   function is more than 75ms at P90, and over 400 ms at P99.
+   holds up delivery of data frames if a frame ahead of them are
+   missing.  A separate resequencing buffer is maintained for each of
+   the 8 TIDs (user-priorities).  A later retransmission may deliver the
+   missing frame at which point the missing frame and subsequent frames
+   are delivered.  The overall delay experienced by a given data frame
+   is then the sum of the channel access delay of the block containing
+   it, the stack delay and the channel access delay of the block
+   containing the missing frame ahead of it.  In scenarios where the
+   network is even moderately congested, this can significantly impact
+   the tail latency.  For example, in a network with 7 other stations
+   actively contending for channel access, the additional latency caused
+   by the resequencing function is more than 75ms at P90, and over 400
+   ms at P99.
 
    The process of in-order delivery is also taken advantage of as part
    of the security protocol.  Each data frame is sequentially numbered
@@ -360,22 +361,24 @@ Table of Contents
    [RFC3819] with the following text.
 
    The Internet architecture does not guarantee that packets will arrive
-   in the same order in which they were originally transmitted;
-   transport protocols must take this into account.
+   in the same order in which they were originally transmitted.
+   Transport protocols, and applications that depend on packet ordering,
+   need to take this into account.
 
-   An earlier definition of TCP [RFC2581][RFC3517][RFC5681][RFC6675]
-   defined the "fast retransmit" algorithm, which recommended that a TCP
-   receiver send an immediate duplicate ACK when an out-of-order segment
-   arrives, and it recommended that the TCP sender use the arrival of 3
-   duplicate ACKs as an indication that a segment has been lost.  This
-   loss determination triggers a retransmission and a reduction of the
+   Earlier TCP loss detection algorithms
+   [RFC2581][RFC3517][RFC5681][RFC6675] used the "fast retransmit"
+   algorithm, which recommended that a TCP receiver send an immediate
+   duplicate ACK when an out-of-order segment arrives, and it
+   recommended that the TCP sender use the arrival of 3 duplicate ACKs
+   as an indication that a segment has been lost.  This loss
+   determination triggers a retransmission and a reduction of the
    congestion window.  In the presence of packet reordering, this
    duplicate-ACK-based loss detection mechanism can incorrectly deem a
    packet lost, and thus trigger a spurious retransmission and an
    unnecessary congestion window reduction, both of which can negatively
    impact the performance of the connection.  Thus, one outcome of the
    implementation and deployment of the fast retransmit algorithm is
-   that TCPs became significantly more sensitive to network reordering.
+   that TCPs became more sensitive to network reordering.
 
    A more recent update to TCP [RFC8985] addresses this sensitivity by
    performing loss detection via time-based inferences derived from the
@@ -393,22 +396,23 @@ Table of Contents
    generally be exposed to the receiving endpoint rather than hidden by
    subnetwork resequencing.
 
-   Modern transport protocols and many applications already incorporate
-   mechanisms to tolerate bounded packet reordering.  Performing
-   resequencing within the subnetwork duplicates functionality that
-   already exists at the endpoint, while introducing head-of-line
-   blocking that increases latency and delay variation for packets that
-   were not themselves reordered.  Subnetwork resequencing SHOULD
-   therefore only be employed where there is clear evidence that its
-   benefits outweigh the additional latency and jitter that it
-   introduces.
-
    Internet endpoints are ultimately responsible for interpreting packet
    ordering according to the semantics of the transport protocol or
    application.  A subnetwork generally lacks sufficient knowledge to
    determine whether a particular degree of packet reordering would have
-   been harmful, but it does know that resequencing necessarily delays
-   packets that could otherwise have been forwarded immediately.
+   adversely affected the receiving transport protocol or application,
+   but it does know that resequencing necessarily delays packets that
+   could otherwise have been forwarded immediately.
+
+   Modern transport protocols and many applications already incorporate
+   mechanisms to tolerate bounded levels of packet reordering.
+   Performing resequencing within the subnetwork duplicates
+   functionality that already exists at the endpoint, while introducing
+   head-of-line blocking that increases latency and delay variation for
+   packets that were not themselves reordered.  Subnetwork resequencing
+   SHOULD therefore only be employed where there is clear evidence that
+   its benefits outweigh the additional latency and jitter that it
+   introduces.
 
 6.  IANA Considerations
 
