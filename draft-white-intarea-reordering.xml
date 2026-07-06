@@ -296,7 +296,8 @@
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.3517.xml"/>
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.5681.xml"/>
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.6675.xml"/>
-
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.6888.xml"/>
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.4787.xml"/>
 <!--
         <reference anchor="BPS99" target="https://doi.org/10.1109/90.811445">
           <front>
