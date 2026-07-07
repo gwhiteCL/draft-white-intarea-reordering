@@ -6,11 +6,11 @@ Internet Area Working Group                                     G. White
 Internet-Draft                                                 CableLabs
 Updates: 3819 (if approved)                                 I. Johansson
 Intended status: Informational                                  Ericsson
-Expires: 7 January 2027                                           D. Das
+Expires: 8 January 2027                                           D. Das
                                                                    Intel
                                                                   C. Box
                                                                 BT Group
-                                                             6 July 2026
+                                                             7 July 2026
 
 
          Proposal for Updates to Guidance on Packet Reordering
@@ -44,7 +44,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 7 January 2027.
+   This Internet-Draft will expire on 8 January 2027.
 
 Copyright Notice
 
@@ -300,8 +300,8 @@ Table of Contents
    network is even moderately congested, this can significantly impact
    the tail latency.  For example, in a network with 7 other stations
    actively contending for channel access, the additional latency caused
-   by the resequencing function is more than 75ms at P90, and over 400
-   ms at P99.
+   by the resequencing function can be more than 75ms at P90, and over
+   400 ms at P99.
 
    The process of in-order delivery is also taken advantage of as part
    of the security protocol.  Each data frame is sequentially numbered
